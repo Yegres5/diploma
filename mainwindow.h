@@ -8,9 +8,7 @@
 #define ORGANIZATION_DOMAIN "localhost"
 #define APPLICATION_NAME "FindOptimalK program"
 
-#define SETTINGS_LA "LA/"
-#define SETTINGS_ROCKET "Rocket/"
-#define SETTINGS_MODEL "Model/"
+#define SETTINGS_MAINWINDOW "Mainwindow parametrs"
 
 namespace Ui {
 class MainWindow;
@@ -23,6 +21,7 @@ private:
     Ui::MainWindow *ui;
 
     QAction* m_saveSettingsAction;
+    QAction* m_loadSettingsAction;
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
@@ -30,6 +29,7 @@ public:
 
 private slots:
     void save_settings();
+    void load_settings();
 };
 
 #endif // MAINWINDOW_H

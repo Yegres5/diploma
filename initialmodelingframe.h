@@ -4,10 +4,15 @@
 #include <QObject>
 #include <QFrame>
 #include <QPushButton>
+#include <QMap>
 
 class laInitialFrame;
 class rocketInitialFrame;
 class modelingFrameParameters;
+
+namespace Ui {
+    class InitialModelingFrame;
+}
 class InitialModelingFrame: public QFrame
 {
     Q_OBJECT
@@ -19,6 +24,9 @@ private:
 public:
     explicit InitialModelingFrame(QWidget* parent = nullptr);
     virtual ~InitialModelingFrame() {}
+
+    QMap<QString, QVariant> getInitialParametrs();
+    void setInitialParametrs(QMap<QString, QVariant> parametrs);
 public slots:
     void StartModeling();
 };

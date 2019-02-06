@@ -10,13 +10,15 @@ class modelingFrameParameters;
 class modelingFrameParameters : public QFrame
 {
     Q_OBJECT
+private:
+    Ui::modelingFrameParameters *ui;
 
 public:
     explicit modelingFrameParameters(QWidget *parent = nullptr);
     ~modelingFrameParameters();
 
-private:
-    Ui::modelingFrameParameters *ui;
+    QMap<QString, double> getInitialParametrs();
+    void loadInitialParametrs(QMap<QString, double> parametrs);
 };
 
 #endif // MODELINGFRAMEPARAMENTS_H

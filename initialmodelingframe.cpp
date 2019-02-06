@@ -2,6 +2,9 @@
 
 #include <QGridLayout>
 #include <QPushButton>
+#include <QMap>
+#include <QVector>
+#include <QVariant>
 
 #include "lainitialframe.h"
 #include "rocketinitialframe.h"
@@ -33,6 +36,48 @@ InitialModelingFrame::InitialModelingFrame(QWidget *parent):
             this, SLOT(StartModeling()));
 }
 
+QMap<QString, QVariant> InitialModelingFrame::getInitialParametrs()
+{
+    QMap<QString, QVariant> iniMap;
+    QVector<QMap<QString, double>> mapVector;
+
+    mapVector.push_back(m_laFrame->getInitialParametrs());
+    mapVector.push_back(m_rocketFrame->getInitialParametrs());
+    mapVector.push_back(m_modelFrame->getInitialParametrs());
+
+    for (QVector<QMap<QString, double>>::iterator dataMap(mapVector.begin()); dataMap!=mapVector.end(); dataMap++){
+        QMap<QString, double> map(*dataMap);
+        for (QMap<QString, double>::iterator iter(map.begin());
+             iter!=map.end();
+             iter++){
+            iniMap.insert(iter.key(),iter.value());
+        }
+    }
+    return iniMap;
+}
+
+void InitialModelingFrame::setInitialParametrs(QMap<QString, QVariant> parametrs)
+{
+    QMap<QString, double> laParam;
+    QMap<QString, double> rockParam;
+    QMap<QString, double> modelParam;
+    for (QMap<QString, QVariant>::iterator iter(parametrs.begin()); iter!=parametrs.end();iter++) {
+        if (iter.key().contains("LA")){
+            laParam.insert(iter.key(),iter.value().toDouble());
+        }
+        if (iter.key().contains("Rock")){
+            rockParam.insert(iter.key(),iter.value().toDouble());
+        }
+        if (iter.key().contains("Modeling")){
+            modelParam.insert(iter.key(),iter.value().toDouble());
+        }
+    }
+    m_laFrame->loadInitialParametrs(laParam);
+    m_rocketFrame->loadInitialParametrs(rockParam);
+    m_modelFrame->loadInitialParametrs(modelParam);
+}
+
 void InitialModelingFrame::StartModeling()
 {
+    getInitialParametrs();
 }

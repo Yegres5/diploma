@@ -16,6 +16,9 @@ private:
 public:
     explicit rocketInitialFrame(QWidget* parent = nullptr);
     ~rocketInitialFrame();
+
+    QMap<QString, double> getInitialParametrs();
+    void loadInitialParametrs(QMap<QString, double> parametrs);
 };
 
 #endif // ROCKETINITIALFRAME_H
