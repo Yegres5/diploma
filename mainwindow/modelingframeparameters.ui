@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>laInitialFrame</class>
- <widget class="QFrame" name="laInitialFrame">
+ <class>modelingFrameParameters</class>
+ <widget class="QFrame" name="modelingFrameParameters">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>215</width>
-    <height>248</height>
+    <width>208</width>
+    <height>182</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,14 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="title">
-      <string>LA</string>
+      <string>Modeling parameters</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -25,25 +31,19 @@
      <property name="flat">
       <bool>true</bool>
      </property>
-     <property name="checkable">
-      <bool>false</bool>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <layout class="QHBoxLayout" name="Layout_X">
+      <item row="2" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_K1">
         <item>
-         <widget class="QLabel" name="label_X">
+         <widget class="QLabel" name="Label_K1">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="text">
-           <string>X</string>
+           <string>K1</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -51,7 +51,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="LineEdit_X">
+         <widget class="QLineEdit" name="lineEdit_K1">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -63,17 +63,17 @@
        </layout>
       </item>
       <item row="1" column="0">
-       <layout class="QHBoxLayout" name="Layout_Y">
+       <layout class="QHBoxLayout" name="horizontalLayout_K0">
         <item>
-         <widget class="QLabel" name="label_Y">
+         <widget class="QLabel" name="Label_K0">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Y</string>
+           <string>K0</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -81,7 +81,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="LineEdit_Y">
+         <widget class="QLineEdit" name="lineEdit_K0">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -92,18 +92,18 @@
         </item>
        </layout>
       </item>
-      <item row="2" column="0">
-       <layout class="QHBoxLayout" name="Layout_Z">
+      <item row="0" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLabel" name="label_Z">
+         <widget class="QLabel" name="Label_dt">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Z</string>
+           <string>dt</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -111,7 +111,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="LineEdit_Z">
+         <widget class="QLineEdit" name="lineEdit_dt">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -123,47 +123,17 @@
        </layout>
       </item>
       <item row="3" column="0">
-       <layout class="QHBoxLayout" name="Layout_V">
+       <layout class="QHBoxLayout" name="horizontalLayout_dK">
         <item>
-         <widget class="QLabel" name="label_V">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>V</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="LineEdit_V">
+         <widget class="QLabel" name="Label_dK">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="4" column="0">
-       <layout class="QHBoxLayout" name="Layout_teta">
-        <item>
-         <widget class="QLabel" name="label_teta">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
           <property name="text">
-           <string>teta</string>
+           <string>dK</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -171,37 +141,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="LineEdit_teta">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="5" column="0">
-       <layout class="QHBoxLayout" name="Layout_psi">
-        <item>
-         <widget class="QLabel" name="label_psi">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>psi</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="LineEdit_psi">
+         <widget class="QLineEdit" name="lineEdit_dK">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>

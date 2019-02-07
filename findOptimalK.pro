@@ -24,27 +24,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
-SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-    initialmodelingframe.cpp \
-    lainitialframe.cpp \
-    rocketinitialframe.cpp \
-    modelingframeparameters.cpp
-
-HEADERS += \
-        mainwindow.h \
-    initialmodelingframe.h \
-    lainitialframe.h \
-    rocketinitialframe.h \
-    modelingframeparameters.h
-
-FORMS += \
-    lainitialframe.ui \
-    rocketinitialframe.ui \
-    modelingframeparameters.ui
-
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+FORMS += \
+    mainwindow/lainitialframe.ui \
+    mainwindow/modelingframeparameters.ui \
+    mainwindow/rocketinitialframe.ui
+
+HEADERS += \
+    mainwindow/initialmodelingframe.h \
+    mainwindow/lainitialframe.h \
+    mainwindow/mainwindow.h \
+    mainwindow/modelingframeparameters.h \
+    mainwindow/rocketinitialframe.h
+
+SOURCES += \
+    mainwindow/initialmodelingframe.cpp \
+    mainwindow/lainitialframe.cpp \
+    mainwindow/mainwindow.cpp \
+    mainwindow/modelingframeparameters.cpp \
+    mainwindow/rocketinitialframe.cpp \
+    main.cpp

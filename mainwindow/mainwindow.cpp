@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    save_settings();
 }
 
 // saving settings: https://evileg.com/ru/post/61/
