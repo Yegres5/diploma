@@ -13,12 +13,16 @@ private:
     QMap<QString, QVariant>* params;
     LA* target;
     Rocket* missile;
+    double dt;
+
+
 public:
     simulator(QMap<QString, QVariant>* iniParam);
 
 public slots:
     void startSimulate(double k, double n);
     void targetReached();
+
 signals:
     void simulationEnded(double T,double n_y_max, QVector<double> n_y, double dt);
 };

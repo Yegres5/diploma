@@ -14,7 +14,8 @@ class ResultFrame : public QFrame
 public:
     explicit ResultFrame(QWidget *parent = nullptr);
     ~ResultFrame();
-
+signals:
+    void startSimulation();
 private:
     Ui::ResultFrame *ui;
 };

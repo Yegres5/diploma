@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-class Model:public QObject
+class Model : public QObject
 {
     Q_OBJECT
 
@@ -16,6 +16,9 @@ public:
 
 public slots:
     void StartModeling();
+
+signals:
+    void startSimulate(double k, double n);
 
 };
 

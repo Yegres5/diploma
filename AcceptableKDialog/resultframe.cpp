@@ -11,6 +11,9 @@ ResultFrame::ResultFrame(QWidget *parent) :
     ui(new Ui::ResultFrame)
 {
     ui->setupUi(this);
+    connect(ui->button_startSimulate,SIGNAL(clicked()),
+            this, SIGNAL(startSimulation()));
+
     ui->table_results->setRowCount(50);
     ui->table_results->setColumnCount(50);
     ui->table_results->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);

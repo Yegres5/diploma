@@ -21,11 +21,18 @@ Model::Model(QMap<QString, QVariant> *iniParam):
 
 void Model::StartModeling()
 {
-    simulator sim(params);
+    simulator* sim = new simulator(params);
+
+    connect(this, SIGNAL(startSimulate(double, double)),
+            sim, SLOT(startSimulate(double, double)),Qt::DirectConnection);
 
     for (double k(k0); k1-floor(k)>1e-4; k+=dk) {
         for (double n(n0); n1-floor(n)>1e-4; n+=dn) {
-            sim.startSimulate(k,n);
+            qDebug() << "k = " << k << "N = " << n;
+            emit startSimulate(k,n);
         }
     }
+
+    delete sim;
+
 }

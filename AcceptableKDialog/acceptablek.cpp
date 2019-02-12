@@ -20,8 +20,10 @@ AcceptableK::AcceptableK(QMap<QString, QVariant>* iniParam, QWidget* parent):
     ResultFrame* frame = new ResultFrame();
     mainLayout->addWidget(frame,1,0);
 
-    Model simulationModel(iniParam);
-    simulationModel.StartModeling();
+    Model* simulationModel = new Model(iniParam);
+
+    connect(frame,SIGNAL(startSimulation()),
+            simulationModel, SLOT(StartModeling()));
 }
 
 AcceptableK::~AcceptableK()

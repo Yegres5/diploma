@@ -5,7 +5,8 @@
 #include <QVector>
 
 simulator::simulator(QMap<QString, QVariant> *iniParam):
-    params(iniParam)
+    params(iniParam),
+    dt(iniParam->find("Modeling dt")->toDouble())
 {
 }
 
@@ -43,6 +44,6 @@ void simulator::targetReached()
 {
     delete missile;
     delete target;
-    emit simulationEnded(0,0,0,0);
+    //emit simulationEnded(0,0,0,0);
 }
 
