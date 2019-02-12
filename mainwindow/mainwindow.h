@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QAction>
+#include <QMap>
+#include <QVariant>
 
 #define ORGANIZATION_NAME "@EVGENY@"
 #define ORGANIZATION_DOMAIN "localhost"
@@ -30,6 +32,7 @@ public:
 private slots:
     void save_settings();
     void load_settings();
+    void start_modeling(QMap<QString, QVariant>* parametrs);
 };
 
 #endif // MAINWINDOW_H

@@ -3,8 +3,11 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QSettings>
+#include <QMap>
+#include <QVariant>
 
 #include "initialmodelingframe.h"
+#include "AcceptableKDialog/acceptablek.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -29,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(save_settings()));
     connect(m_loadSettingsAction, SIGNAL(triggered()),
             this, SLOT(load_settings()));
+    connect(frame,SIGNAL(startModelingPressed(QMap<QString, QVariant>*)),
+            this, SLOT(start_modeling(QMap<QString, QVariant>*)));
 
     load_settings();
 }
@@ -56,4 +61,10 @@ void MainWindow::load_settings()
     QMap<QString, QVariant> iniMap = settings.value(SETTINGS_MAINWINDOW"/initial parametrs").toMap();
     InitialModelingFrame* frame = dynamic_cast<InitialModelingFrame*>(centralWidget());
     frame->setInitialParametrs(iniMap);
+}
+
+void MainWindow::start_modeling(QMap<QString, QVariant>* parametrs)
+{
+    AcceptableK* dialog = new AcceptableK(parametrs, this);
+    dialog->exec();
 }

@@ -29,6 +29,8 @@ public:
     void setInitialParametrs(QMap<QString, QVariant> parametrs);
 public slots:
     void StartModeling();
+signals:
+    void startModelingPressed(QMap<QString, QVariant>* paramentr);
 };
 
 #endif // INITIALMODELINGFRAME_H

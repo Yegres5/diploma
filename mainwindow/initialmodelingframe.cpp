@@ -79,5 +79,6 @@ void InitialModelingFrame::setInitialParametrs(QMap<QString, QVariant> parametrs
 
 void InitialModelingFrame::StartModeling()
 {
-    getInitialParametrs();
+    QMap<QString, QVariant>* map = new QMap<QString, QVariant>(getInitialParametrs());
+    emit startModelingPressed(map);
 }

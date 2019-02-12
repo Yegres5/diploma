@@ -32,19 +32,41 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 FORMS += \
     mainwindow/lainitialframe.ui \
     mainwindow/modelingframeparameters.ui \
-    mainwindow/rocketinitialframe.ui
+    mainwindow/rocketinitialframe.ui \
+    AcceptableKDialog/resultframe.ui \
+    AcceptableKDialog/tableviewelement.ui
 
 HEADERS += \
+    AcceptableKDialog/acceptablek.h \
     mainwindow/initialmodelingframe.h \
     mainwindow/lainitialframe.h \
     mainwindow/mainwindow.h \
     mainwindow/modelingframeparameters.h \
-    mainwindow/rocketinitialframe.h
+    mainwindow/rocketinitialframe.h \
+    AcceptableKDialog/resultframe.h \
+    AcceptableKDialog/tableviewelement.h \
+    ModelClasses/model.h \
+    ModelClasses/simulator.h \
+    ModelClasses/FlyObjects/la.h \
+    ModelClasses/FlyObjects/rocket.h \
+    ModelClasses/FlyObjects/UsefulClassesForLA/angle.h
 
 SOURCES += \
+    AcceptableKDialog/acceptablek.cpp \
     mainwindow/initialmodelingframe.cpp \
     mainwindow/lainitialframe.cpp \
     mainwindow/mainwindow.cpp \
     mainwindow/modelingframeparameters.cpp \
     mainwindow/rocketinitialframe.cpp \
-    main.cpp
+    main.cpp \
+    AcceptableKDialog/resultframe.cpp \
+    AcceptableKDialog/tableviewelement.cpp \
+    ModelClasses/model.cpp \
+    ModelClasses/simulator.cpp \
+    ModelClasses/FlyObjects/la.cpp \
+    ModelClasses/FlyObjects/rocket.cpp \
+    ModelClasses/FlyObjects/UsefulClassesForLA/angle.cpp
+
+
+
+
