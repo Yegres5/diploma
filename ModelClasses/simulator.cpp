@@ -6,12 +6,17 @@
 
 simulator::simulator(QMap<QString, QVariant> *iniParam):
     params(iniParam),
-    dt(iniParam->find("Modeling dt")->toDouble())
+    current_t(0),
+    dt(iniParam->find("Modeling dt")->toDouble()),
+    n_y(new QVector<double>)
 {
+    connect(this, SIGNAL(loop()),
+            this, SLOT(update()));
 }
 
 void simulator::startSimulate(double k, double n)
 {
+    current_t = 0;
     target = new LA(params->find("LA x").value().toDouble(),
                     params->find("LA y").value().toDouble(),
                     params->find("LA z").value().toDouble(),
@@ -36,14 +41,39 @@ void simulator::startSimulate(double k, double n)
                          0,
                          target,
                          k);
+
     connect(missile,SIGNAL(targetGetReached()),
-            this, SLOT(targetReached()));
+            this, SLOT(swap()));
+
+    emit loop();
 }
 
 void simulator::targetReached()
 {
+    n_y_max = missile->n_y_max;
     delete missile;
     delete target;
-    //emit simulationEnded(0,0,0,0);
+    disconnect(this, SIGNAL(loop()),
+               this, SLOT(targetReached()));
+    connect(this, SIGNAL(loop()),
+            this, SLOT(update()));
+    emit simulationEnded();
 }
 
+void simulator::swap()
+{
+    disconnect(this, SIGNAL(loop()),
+               this, SLOT(update()));
+    connect(this, SIGNAL(loop()),
+            this, SLOT(targetReached()));
+}
+#include <QDebug>
+void simulator::update()
+{
+    qDebug() << current_t;
+    target->update(dt);
+    missile->update(dt);
+    n_y->push_back(missile->getNy());
+    current_t+=dt;
+    emit loop();
+}

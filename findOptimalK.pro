@@ -34,7 +34,8 @@ FORMS += \
     mainwindow/modelingframeparameters.ui \
     mainwindow/rocketinitialframe.ui \
     AcceptableKDialog/resultframe.ui \
-    AcceptableKDialog/tableviewelement.ui
+    AcceptableKDialog/tableviewelement.ui \
+    AcceptableKDialog/headeritem.ui
 
 HEADERS += \
     AcceptableKDialog/acceptablek.h \
@@ -49,7 +50,9 @@ HEADERS += \
     ModelClasses/simulator.h \
     ModelClasses/FlyObjects/la.h \
     ModelClasses/FlyObjects/rocket.h \
-    ModelClasses/FlyObjects/UsefulClassesForLA/angle.h
+    ModelClasses/FlyObjects/UsefulClassesForLA/angle.h \
+    AcceptableKDialog/headeritem.h \
+    AcceptableKDialog/tabledelegate.h
 
 SOURCES += \
     AcceptableKDialog/acceptablek.cpp \
@@ -65,7 +68,9 @@ SOURCES += \
     ModelClasses/simulator.cpp \
     ModelClasses/FlyObjects/la.cpp \
     ModelClasses/FlyObjects/rocket.cpp \
-    ModelClasses/FlyObjects/UsefulClassesForLA/angle.cpp
+    ModelClasses/FlyObjects/UsefulClassesForLA/angle.cpp \
+    AcceptableKDialog/headeritem.cpp \
+    AcceptableKDialog/tabledelegate.cpp
 
 
 

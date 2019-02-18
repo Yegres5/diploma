@@ -2,6 +2,7 @@
 #define SIMULATOR_H
 
 #include <QObject>
+#include <QVector>
 
 #include "FlyObjects/la.h"
 #include "FlyObjects/rocket.h"
@@ -13,18 +14,21 @@ private:
     QMap<QString, QVariant>* params;
     LA* target;
     Rocket* missile;
-    double dt;
-
-
 public:
+
     simulator(QMap<QString, QVariant>* iniParam);
+    double current_t,n_y_max,dt;
+    QVector<double>* n_y;
 
 public slots:
     void startSimulate(double k, double n);
     void targetReached();
+    void update();
+    void swap();
 
 signals:
-    void simulationEnded(double T,double n_y_max, QVector<double> n_y, double dt);
+    void simulationEnded();
+    void loop();
 };
 
 #endif // SIMULATOR_H

@@ -10,7 +10,7 @@ LA::LA()
 
 LA::LA(double x, double y, double z, double V, double n_xv,
        double n_yv, double teta, double psi, double gamma, double n_manouver, double n_t0, double n_dt, const char *name):
-        x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta),psi(psi),gamma(gamma),n_manouver(n_manouver),n_t0(n_t0),n_dt(n_dt)
+        x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta/180*M_PI),psi(psi/180*M_PI),gamma(gamma/180*M_PI),n_manouver(n_manouver),n_t0(n_t0),n_dt(n_dt),t(0)
 {
     setObjectName(name);
 }
@@ -71,7 +71,6 @@ void LA::update(double dt)
     }
     n_yv += 0;
     double n_roll = 0;
-    static double t = 0;
     t += dt;
     if (t > n_t0){
         n_roll = n_manouver;

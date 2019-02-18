@@ -2,6 +2,7 @@
 #define RESULTFRAME_H
 
 #include <QFrame>
+#include <QVector>
 
 namespace Ui {
 class ResultFrame;
@@ -16,6 +17,10 @@ public:
     ~ResultFrame();
 signals:
     void startSimulation();
+public slots:
+    void pasteData(double k, double n, double t, double dt, double n_y_max, QVector<double> *n_y);
+private slots:
+    void drawNy();
 private:
     Ui::ResultFrame *ui;
 };

@@ -16,6 +16,7 @@ protected:
     double n_xv,n_yv;
     Angle teta,psi,gamma;
     double n_manouver,n_t0,n_dt;
+    double t;
 
 public:
     LA(double x,double y,double z,double V,double n_xv,

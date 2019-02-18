@@ -2,7 +2,8 @@
 
 #include <QMap>
 #include <QVariant>
-#include "math.h"
+#include <math.h>
+#include <QEventLoop>
 
 #include "simulator.h"
 
@@ -26,10 +27,11 @@ void Model::StartModeling()
     connect(this, SIGNAL(startSimulate(double, double)),
             sim, SLOT(startSimulate(double, double)),Qt::DirectConnection);
 
-    for (double k(k0); k1-floor(k)>1e-4; k+=dk) {
-        for (double n(n0); n1-floor(n)>1e-4; n+=dn) {
-            qDebug() << "k = " << k << "N = " << n;
+
+    for (double k(k0); k1-k+dk>1e-4; k+=dk) {
+        for (double n(n0); n1-n+dn>1e-4; n+=dn) {
             emit startSimulate(k,n);
+            emit sendData(k, n, sim->current_t, sim->dt, sim->n_y_max, sim->n_y);
         }
     }
 

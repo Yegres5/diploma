@@ -2,9 +2,7 @@
 #define ROCKET_H
 
 #include "la.h"
-#include <vector>
-
-using std::vector;
+#include <QVector>
 
 class Rocket: public QObject
 {
@@ -15,7 +13,9 @@ public:
            double n_yv, double teta, double psi, double gamma, LA* target, double K,
            const char* name = "Rocket");
 
-    vector<double> TargetCoordinatesInSpeed;
+    QVector<double> TargetCoordinatesInSpeed;
+    double n_y_max;
+    double getNy();
 
 private:
     double x,y,z;
@@ -26,22 +26,22 @@ private:
     double GetSigmaT();
     double CalcLambdaXZ();         //Book
     double CalcLambdaYX();
-    vector<double> CalcV_XYprojection(vector<double> speed);
+    QVector<double> CalcV_XYprojection(QVector<double> speed);
     double GetVT();             //Target speed
     double CalcXY_Angle();      //Book XY lambda
 
     bool checkForRoll();      //if |teta|>M_PI_2
 
-    vector<double> toSpeedCoordinateSystem(vector<double> vec);
-    vector<double> toTrajectoryCoordinateSystem(vector<double> vec);
+    QVector<double> toSpeedCoordinateSystem(QVector<double> vec);
+    QVector<double> toTrajectoryCoordinateSystem(QVector<double> vec);
 
     LA* target;//Target.
     double K;
-    vector<double> TargetCoor;  //Coordinates of target in Speed System.
+    QVector<double> TargetCoor;  //Coordinates of target in Speed System.
+    double distance_to_target;
     double r;  //Distance to target XZ.
     double r_XY; //Distance to target XY.
     double r_explode; //Distance to target to explode
-
 signals:
     void targetGetReached();
 

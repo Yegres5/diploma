@@ -5,6 +5,7 @@
 #include <QSettings>
 #include <QMap>
 #include <QVariant>
+#include <QThread>
 
 #include "initialmodelingframe.h"
 #include "AcceptableKDialog/acceptablek.h"

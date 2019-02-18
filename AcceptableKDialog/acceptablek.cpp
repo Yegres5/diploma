@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QLabel>
+#include <QThread>
 
 #include "resultframe.h"
 #include "ModelClasses/model.h"
@@ -22,8 +23,15 @@ AcceptableK::AcceptableK(QMap<QString, QVariant>* iniParam, QWidget* parent):
 
     Model* simulationModel = new Model(iniParam);
 
+//    QThread *thread= new QThread();
+//    simulationModel->moveToThread(thread);
+//    thread->start();
+
     connect(frame,SIGNAL(startSimulation()),
             simulationModel, SLOT(StartModeling()));
+
+    connect(simulationModel, SIGNAL(sendData(double, double, double, double, double, QVector<double>*)),
+            frame, SLOT(pasteData(double, double, double, double, double, QVector<double>*)));
 }
 
 AcceptableK::~AcceptableK()
