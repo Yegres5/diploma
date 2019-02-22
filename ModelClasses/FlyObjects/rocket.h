@@ -23,14 +23,14 @@ private:
     double n_xv,n_yv;
     Angle teta,psi,gamma;
 
-    double GetSigmaT();
+//    double GetSigmaT();
     double CalcLambdaXZ();         //Book
     double CalcLambdaYX();
-    QVector<double> CalcV_XYprojection(QVector<double> speed);
-    double GetVT();             //Target speed
-    double CalcXY_Angle();      //Book XY lambda
+//    QVector<double> CalcV_XYprojection(QVector<double> speed);
+//    double GetVT();             //Target speed
+//    double CalcXY_Angle();      //Book XY lambda
 
-    bool checkForRoll();      //if |teta|>M_PI_2
+//    bool checkForRoll();
 
     QVector<double> toSpeedCoordinateSystem(QVector<double> vec);
     QVector<double> toTrajectoryCoordinateSystem(QVector<double> vec);

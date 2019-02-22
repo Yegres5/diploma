@@ -153,28 +153,6 @@ void Rocket::update(double dt)
     }
 }
 
-double Rocket::GetSigmaT()
-{
-    double dx = sqrt(pow(target->getX()-x,2)+pow(target->getZ()-z,2));
-    double dy = target->getY()-y;
-
-    if (isDoubleEqualToZero(dx)){
-        if (dy>0){
-            return M_PI_2;
-        }else{
-            return -M_PI_2;
-        }
-    }
-
-    if (isDoubleEqualToZero(dy)){
-        if (dx>0){
-            return 0;
-        }
-    }
-
-    return atan(dy/dx);
-}
-
 double Rocket::CalcLambdaXZ()
 {
     double dx = TargetCoor[0];  //X
@@ -189,75 +167,6 @@ double Rocket::CalcLambdaYX()
     double dy = TargetCoor[1];  //Z
 
     return CalcAngle(dx,dy);
-}
-
-QVector<double> Rocket::CalcV_XYprojection(QVector<double> speed)
-{
-  QVector<double> resultSpeed(2);
-  resultSpeed[0] = sqrt(pow(speed[0]*cos(speed[1])*cos(speed[2]),2)+
-                        pow(speed[0]*sin(speed[1]),2));
-  resultSpeed[1] = CalcAngle(speed[0]*cos(speed[1])*cos(speed[2]),
-                             speed[0]*sin(speed[1]));
-  return resultSpeed;
-}
-
-double Rocket::GetVT()
-{
-  return target->GetV();
-}
-
-double Rocket::CalcXY_Angle()
-{
-    double dx = target->getX()-x;
-    double dy = target->getY()-y;
-
-    if (isDoubleEqualToZero(dx)){
-        if (dy>0){
-            return M_PI_2;
-        }else{
-            return M_PI+M_PI_2;
-        }
-    }
-
-    if (isDoubleEqualToZero(dy)){
-        if (dx>0){
-            return 0;
-        }else{
-            return M_PI;
-        }
-    }
-
-    if (dx < 0){
-        if(dy < 0){
-            return atan(dy/dx)+M_PI;
-        }else{
-            return atan(dy/dx)+M_PI;
-        }
-    }else{
-        if (dy < 0){
-            return 2*M_PI-atan(dy/dx);
-        }else{
-            return atan(dy/dx);
-        }
-    }
-}
-
-bool Rocket::checkForRoll()
-{
-
-    if(teta.getValue() > M_PI_2){
-        teta = M_PI-teta.getValue();
-        psi.incValue(M_PI);
-        return true;
-    }else{
-        if(teta.getValue() < -M_PI_2){
-            teta = -M_PI-teta.getValue();
-            psi.incValue(M_PI);
-            return true;
-        }
-    }
-    return false;
-
 }
 
 QVector<double> Rocket::toSpeedCoordinateSystem(QVector<double> vec)

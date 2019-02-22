@@ -7,13 +7,14 @@
 #include <math.h>
 #include <QString>
 
-#include "tableviewelement.h"
+#include "tabledrawingdata.h"
 #include "headeritem.h"
 #include "tabledelegate.h"
 
 #include <QStandardItemModel>
 #include <QTableView>
 #include <QDebug>
+
 ResultFrame::ResultFrame(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::ResultFrame)
@@ -24,26 +25,12 @@ ResultFrame::ResultFrame(QWidget *parent) :
     connect(ui->button_draw_ny,SIGNAL(clicked()),
             this, SLOT(drawNy()));
 
-//    QTableView* view = ui->table_results;
-//    view->setSelectionMode(QAbstractItemView::ExtendedSelection);
-//    view->setDragEnabled(true);
-//    view->setAcceptDrops(true);
-//    view->setDropIndicatorShown(true);
-//    tableDelegate *delegate = new tableDelegate (this);
-    ui->table_results->setItemDelegate(new tableDelegate);
-
-    QStandardItemModel* model = static_cast<QStandardItemModel*>(ui->table_results->model());
-    model->setRowCount(2);
-    model->setColumnCount(2);
-
-    QTableWidgetItem* item = new QTableWidgetItem();
-    item->setData(_t,10);
-    ui->table_results->setItem(0, 0, item);
-
+    tableDelegate* delegate = new tableDelegate(ui->table_results);
+    ui->table_results->setItemDelegate(delegate);
+    ui->table_results->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->table_results->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->table_results->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
-    //ui->table_results->selectedItems();
+    ui->table_results->setMinimumSize(600,400);
 }
 
 ResultFrame::~ResultFrame()
@@ -92,15 +79,14 @@ void ResultFrame::pasteData(double k, double n, double t, double dt, double n_y_
         item->setData(Qt::UserRole, data);
         ui->table_results->setVerticalHeaderItem(rowNum, item);
     }
+    QTableWidgetItem* item = new QTableWidgetItem;
+    //tabledrawingdata* data = new tabledrawingdata(t,n_y_max);
+    item->setData(Qt::DisplayRole, QVariant::fromValue(tabledrawingdata(t,n_y_max)));
+    ui->table_results->setItem(rowNum, headerNum, item);
 
-//    tableViewElement* elem = new tableViewElement();
-//    ui->table_results->setCellWidget(rowNum, headerNum, elem);
-//    QTableWidgetItem item;
+    ui->table_results->verticalHeader()->setMinimumSectionSize(50);
+    ui->table_results->horizontalHeader()->setMinimumSectionSize(175);
 
-//    ui->table_results->verticalHeader()->setMinimumSectionSize(elem->size().height());
-//    ui->table_results->horizontalHeader()->setMinimumSectionSize(elem->size().width());
-
-    qDebug();
 }
 
 void ResultFrame::drawNy()
