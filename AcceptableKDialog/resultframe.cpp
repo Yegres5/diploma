@@ -6,14 +6,18 @@
 #include <QTableWidgetItem>
 #include <math.h>
 #include <QString>
+#include <QStandardItemModel>
+#include <QTableView>
+#include <QDebug>
+#include <QtCharts>
+#include <QList>
 
 #include "tabledrawingdata.h"
 #include "headeritem.h"
 #include "tabledelegate.h"
 
-#include <QStandardItemModel>
-#include <QTableView>
-#include <QDebug>
+#define Role_Map Qt::UserRole
+#define Role_Ny Qt::UserRole+1
 
 ResultFrame::ResultFrame(QWidget *parent) :
     QFrame(parent),
@@ -80,8 +84,15 @@ void ResultFrame::pasteData(double k, double n, double t, double dt, double n_y_
         ui->table_results->setVerticalHeaderItem(rowNum, item);
     }
     QTableWidgetItem* item = new QTableWidgetItem;
-    //tabledrawingdata* data = new tabledrawingdata(t,n_y_max);
     item->setData(Qt::DisplayRole, QVariant::fromValue(tabledrawingdata(t,n_y_max)));
+    QMap<QString, double> dataMap;
+    dataMap.insert("k", k);
+    dataMap.insert("t", t);
+    dataMap.insert("dt" ,dt);
+    dataMap.insert("n", n);
+    dataMap.insert("n_y_max", n_y_max);
+    item->setData(Role_Map, QVariant::fromValue(dataMap));
+    item->setData(Role_Ny, QVariant::fromValue(n_y->toList()));
     ui->table_results->setItem(rowNum, headerNum, item);
 
     ui->table_results->verticalHeader()->setMinimumSectionSize(50);
@@ -93,12 +104,44 @@ void ResultFrame::drawNy()
 {
     QList<QTableWidgetItem*> items = ui->table_results->selectedItems();
 
-    QItemSelectionModel *itemModel = ui->table_results->selectionModel();
-    QModelIndexList indexList = itemModel->selectedRows();
-    qDebug()<<Q_FUNC_INFO<<"IndexList Count"<<indexList.count();
+    qDebug()<<Q_FUNC_INFO<<"Items Count"<<items.count();
 
-    if (!indexList.isEmpty())
+    if (!items.count())
     {
-        int row = indexList.at(0).row();
+        qDebug() << "Return";
+        return;
+    }
+
+    QLineSeries *series = new QLineSeries();
+    for (QList<QTableWidgetItem*>::iterator it(items.begin()); it != items.end(); it++){
+        QTableWidgetItem* item = *it;
+
+        QList<double> n_y = qvariant_cast<QList<double>>(item->data(Role_Ny));
+        double dt = qvariant_cast<QMap<QString,double>>(item->data(Role_Map)).find("dt").value();
+        double t(0);
+
+        for (QList<double>::iterator ListIter(n_y.begin()); ListIter != n_y.end(); ListIter++) {
+            series->append(t, *ListIter);
+            t += dt;
+        }
+        QChart *chart= new QChart();
+        chart->addSeries(series);
+        chart->setTitle("График зависимости перегрузки ЛА от времени");
+
+        QValueAxis *axisX = new QValueAxis;
+        axisX->setTickCount(10);
+        axisX->setTitleText("dZ");
+        chart->addAxis(axisX, Qt::AlignBottom);
+        series->attachAxis(axisX);
+
+        QChartView* v = new QChartView;
+        v->setChart(chart);
+        QDialog* dia = new QDialog();
+        QVBoxLayout* layout = new QVBoxLayout(dia);
+        dia->setLayout(layout);
+        layout->addWidget(v);
+
+        dia->exec();
+
     }
 }
