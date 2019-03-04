@@ -19,6 +19,7 @@ public slots:
 
 signals:
     void startSimulate(double k, double n);
+    void sendData(double k, double n, double t, double dt, double n_y_max, QVector<double>* n_y);
 
 };
 

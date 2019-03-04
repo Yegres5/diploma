@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -34,7 +34,7 @@ FORMS += \
     mainwindow/modelingframeparameters.ui \
     mainwindow/rocketinitialframe.ui \
     AcceptableKDialog/resultframe.ui \
-    AcceptableKDialog/tableviewelement.ui
+    AcceptableKDialog/headeritem.ui
 
 HEADERS += \
     AcceptableKDialog/acceptablek.h \
@@ -44,12 +44,14 @@ HEADERS += \
     mainwindow/modelingframeparameters.h \
     mainwindow/rocketinitialframe.h \
     AcceptableKDialog/resultframe.h \
-    AcceptableKDialog/tableviewelement.h \
     ModelClasses/model.h \
     ModelClasses/simulator.h \
     ModelClasses/FlyObjects/la.h \
     ModelClasses/FlyObjects/rocket.h \
-    ModelClasses/FlyObjects/UsefulClassesForLA/angle.h
+    ModelClasses/FlyObjects/UsefulClassesForLA/angle.h \
+    AcceptableKDialog/headeritem.h \
+    AcceptableKDialog/tabledelegate.h \
+    AcceptableKDialog/tabledrawingdata.h
 
 SOURCES += \
     AcceptableKDialog/acceptablek.cpp \
@@ -60,12 +62,14 @@ SOURCES += \
     mainwindow/rocketinitialframe.cpp \
     main.cpp \
     AcceptableKDialog/resultframe.cpp \
-    AcceptableKDialog/tableviewelement.cpp \
     ModelClasses/model.cpp \
     ModelClasses/simulator.cpp \
     ModelClasses/FlyObjects/la.cpp \
     ModelClasses/FlyObjects/rocket.cpp \
-    ModelClasses/FlyObjects/UsefulClassesForLA/angle.cpp
+    ModelClasses/FlyObjects/UsefulClassesForLA/angle.cpp \
+    AcceptableKDialog/headeritem.cpp \
+    AcceptableKDialog/tabledelegate.cpp \
+    AcceptableKDialog/tabledrawingdata.cpp
 
 
 
