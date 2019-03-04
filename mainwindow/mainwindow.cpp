@@ -45,21 +45,21 @@ MainWindow::~MainWindow()
 }
 
 // saving settings: https://evileg.com/ru/post/61/
-#include <QDebug>
+
 void MainWindow::save_settings()
 {
     InitialModelingFrame* frame = dynamic_cast<InitialModelingFrame*>(centralWidget());
     QMap<QString, QVariant> iniParametrs = frame->getInitialParametrs();
-    QSettings settings("config.ini", QSettings::IniFormat);
+    QSettings settings(SETTINGS_FILE_PWD, QSettings::IniFormat);
     settings.beginGroup(SETTINGS_MAINWINDOW);
-    settings.setValue("initial parametrs", iniParametrs);
+    settings.setValue(SETTINGS_INITIAL_SECTION, iniParametrs);
     settings.endGroup();
 }
 
 void MainWindow::load_settings()
 {
-    QSettings settings("config.ini", QSettings::IniFormat);
-    QMap<QString, QVariant> iniMap = settings.value(SETTINGS_MAINWINDOW"/initial parametrs").toMap();
+    QSettings settings(SETTINGS_FILE_PWD, QSettings::IniFormat);
+    QMap<QString, QVariant> iniMap = settings.value(SETTINGS_MAINWINDOW "/" SETTINGS_INITIAL_SECTION).toMap();
     InitialModelingFrame* frame = dynamic_cast<InitialModelingFrame*>(centralWidget());
     frame->setInitialParametrs(iniMap);
 }

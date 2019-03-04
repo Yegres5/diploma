@@ -10,9 +10,10 @@ double CalcAngle(double dx, double dy);
 Rocket::Rocket(double x, double y, double z, double V, double n_xv,
                double n_yv, double teta, double psi, double gamma, LA *target, double K,
                const char *name)
-      :x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta),psi(psi),gamma(gamma),
+      :x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta/180*M_PI),psi(psi/180*M_PI),gamma(gamma/180*M_PI),
        target(target),
-       K(K)
+       K(K),
+       n_y_max(20)
 {
     setObjectName(name);
 
@@ -109,9 +110,7 @@ void Rocket::update(double dt)
     double d_lambda_XY = (TargetSpeedXY[0]*sin(sigma_T_XY) - SelfSpeedXY[0]*sin(sigma_R_XY))/r_XY;
     //qDebug("---dLambda = %5.f", d_lambda_XY);
     double W_XY = K*V*d_lambda_XY;
-    double n_pitch = W_XY/_g;
-
-
+    n_pitch = W_XY/_g;
 
 // FOR XZ (roll)
     QVector<double> SelfSpeedXZ = {SelfSpeed[0]*cos(SelfSpeed[1]),
@@ -124,14 +123,16 @@ void Rocket::update(double dt)
     r = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[2],2));
     double d_lambda = (TargetSpeedXZ[0]*sin(sigma_T) - SelfSpeedXZ[0]*sin(sigma_R))/r;
     double W = -K*V*d_lambda;
-    double n_roll = W/_g;
+    n_roll = W/_g;
 
 //Summ of gravity, roll and pitch
     n_yv += n_pitch;
 
     gamma += isDoubleEqualToZero(n_roll) ? 0 : atan(n_roll/n_yv);
+
+    //qDebug() << Q_FUNC_INFO <<  "n_roll  = " << n_roll << "n_pitch = " << n_yv << "n_y = " << sqrt(pow(n_yv,2) + pow(n_roll,2))*(n_yv > 0 ? 1 : -1);
     n_yv = sqrt(pow(n_yv,2) + pow(n_roll,2))*(n_yv > 0 ? 1 : -1);
-    n_roll = 0;
+
 
     if (n_yv > n_y_max){
         n_y_max = n_yv;
@@ -175,9 +176,14 @@ QVector<double> Rocket::toSpeedCoordinateSystem(QVector<double> vec)
     double psi   = -this->psi.getValue();
     double gamma = -this->gamma.getValue();
 
-    QVector<double> a{qCos(teta)*qCos(psi),                                    qSin(teta),              -qCos(teta)*qSin(psi)};
-    QVector<double> b{-qCos(gamma)*qSin(teta)*qCos(psi)+qSin(gamma)*qSin(psi), qCos(gamma)*qCos(teta),  qCos(gamma)*qSin(teta)*qSin(psi)+qSin(gamma)*qCos(psi)};
-    QVector<double> c{qSin(gamma)*qSin(teta)*qCos(psi)+qCos(gamma)*qSin(psi),  -qSin(gamma)*qCos(teta), -qSin(psi)*qSin(teta)*qSin(gamma)+qCos(psi)*qCos(gamma)};
+//    double* temp = new double;
+//    *temp = cos(teta)*cos(psi);
+//    QVector<double*> tempVec;// = new QVector<double*>();
+//    tempVec.push_back(temp);
+
+    QVector<double> a{cos(teta)*cos(psi),                                    sin(teta),              -cos(teta)*sin(psi)};
+    QVector<double> b{-cos(gamma)*sin(teta)*cos(psi)+sin(gamma)*sin(psi), cos(gamma)*cos(teta),  cos(gamma)*sin(teta)*sin(psi)+sin(gamma)*cos(psi)};
+    QVector<double> c{sin(gamma)*sin(teta)*cos(psi)+cos(gamma)*sin(psi),  -sin(gamma)*cos(teta), -sin(psi)*sin(teta)*sin(gamma)+cos(psi)*cos(gamma)};
 
     QVector<QVector<double>> arr{a,b,c};
 
@@ -198,9 +204,9 @@ QVector<double> Rocket::toTrajectoryCoordinateSystem(QVector<double> vec)
     double gamma = -this->gamma.getValue();
 
     QVector<QVector<double>> arr{
-                        {qCos(teta)*qCos(psi),                                    qSin(teta),              -qCos(teta)*qSin(psi)},
-                        {-qCos(gamma)*qSin(teta)*qCos(psi)+qSin(gamma)*qSin(psi), qCos(gamma)*qCos(teta),  qCos(gamma)*qSin(teta)*qSin(psi)+qSin(gamma)*qCos(psi)},
-                        {qSin(gamma)*qSin(teta)*qCos(psi)+qCos(gamma)*qSin(psi),  -qSin(gamma)*qCos(teta), -qSin(psi)*qSin(teta)*qSin(gamma)+qCos(psi)*qCos(gamma)}};
+                        {cos(teta)*cos(psi),                                    sin(teta),              -cos(teta)*sin(psi)},
+                        {-cos(gamma)*sin(teta)*cos(psi)+sin(gamma)*sin(psi), cos(gamma)*cos(teta),  cos(gamma)*sin(teta)*sin(psi)+sin(gamma)*cos(psi)},
+                        {sin(gamma)*sin(teta)*cos(psi)+cos(gamma)*sin(psi),  -sin(gamma)*cos(teta), -sin(psi)*sin(teta)*sin(gamma)+cos(psi)*cos(gamma)}};
 
     QVector<double> Result(3);
 

@@ -16,7 +16,10 @@ public:
     QVector<double> TargetCoordinatesInSpeed;
     double n_y_max;
     double getNy();
+    double getDistanceToTarget() {return distance_to_target;}
 
+    double n_pitch;
+    double n_roll;
 private:
     double x,y,z;
     double V;

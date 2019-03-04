@@ -10,7 +10,14 @@
 #define ORGANIZATION_DOMAIN "localhost"
 #define APPLICATION_NAME "FindOptimalK program"
 
+
+#define SETTINGS_FILE_PWD "config.ini" //Full path to the ini file
+
+//Settings group names
 #define SETTINGS_MAINWINDOW "Mainwindow parametrs"
+
+//Settings section names
+#define SETTINGS_INITIAL_SECTION "Initial parametrs"
 
 namespace Ui {
 class MainWindow;

@@ -65,9 +65,7 @@ void ResultFrame::pasteData(double k, double n, double t, double dt, double n_y_
 
     for(int i = 0; i < ui->table_results->model()->rowCount(); i++)
     {
-        qDebug() << ui->table_results->model()->headerData(i, Qt::Vertical, Qt::UserRole).toDouble();
         if (abs(n - ui->table_results->model()->headerData(i, Qt::Vertical, Qt::UserRole).toDouble()) < 1e-4){
-
             rowNum = i;
             break;
         }
@@ -92,7 +90,12 @@ void ResultFrame::pasteData(double k, double n, double t, double dt, double n_y_
     dataMap.insert("n", n);
     dataMap.insert("n_y_max", n_y_max);
     item->setData(Role_Map, QVariant::fromValue(dataMap));
+
+    //QList<double> n_y = qvariant_cast<QList<double>>(item->data(Role_Ny));
+//    QList<QList<double>> N_yList;
+//    N_yList.push_back(n_y);
     item->setData(Role_Ny, QVariant::fromValue(n_y->toList()));
+
     ui->table_results->setItem(rowNum, headerNum, item);
 
     ui->table_results->verticalHeader()->setMinimumSectionSize(50);
@@ -104,18 +107,35 @@ void ResultFrame::drawNy()
 {
     QList<QTableWidgetItem*> items = ui->table_results->selectedItems();
 
-    qDebug()<<Q_FUNC_INFO<<"Items Count"<<items.count();
-
     if (!items.count())
     {
         qDebug() << "Return";
         return;
     }
 
-    QLineSeries *series = new QLineSeries();
+
+    QChart *chart= new QChart();
+    chart->setTitle("График зависимости перегрузки ЛА от времени");
+    QLineSeries* series = nullptr;
+
+    QValueAxis *axisX = new QValueAxis;
+    axisX->setTitleText(tr("Time"));
+    chart->addAxis(axisX, Qt::AlignBottom);
+
+
+    QValueAxis *axisY = new QValueAxis;
+    axisY->setTitleText(tr("Overload"));
+    chart->addAxis(axisY, Qt::AlignLeft);
+
+
+    {
+    int r(255),g(0),b(0);
     for (QList<QTableWidgetItem*>::iterator it(items.begin()); it != items.end(); it++){
         QTableWidgetItem* item = *it;
+        series = new QLineSeries(chart);
 
+        QBrush brush(QColor::fromRgb(r,g,b));
+        series->setPen(QPen(brush, 4));
         QList<double> n_y = qvariant_cast<QList<double>>(item->data(Role_Ny));
         double dt = qvariant_cast<QMap<QString,double>>(item->data(Role_Map)).find("dt").value();
         double t(0);
@@ -124,24 +144,44 @@ void ResultFrame::drawNy()
             series->append(t, *ListIter);
             t += dt;
         }
-        QChart *chart= new QChart();
+
         chart->addSeries(series);
-        chart->setTitle("График зависимости перегрузки ЛА от времени");
-
-        QValueAxis *axisX = new QValueAxis;
-        axisX->setTickCount(10);
-        axisX->setTitleText("dZ");
-        chart->addAxis(axisX, Qt::AlignBottom);
         series->attachAxis(axisX);
+        series->attachAxis(axisY);
 
-        QChartView* v = new QChartView;
-        v->setChart(chart);
-        QDialog* dia = new QDialog();
-        QVBoxLayout* layout = new QVBoxLayout(dia);
-        dia->setLayout(layout);
-        layout->addWidget(v);
+        if (axisX->max() < t){
+            axisX->setMax(t);
+        }
 
-        dia->exec();
+        if (axisY->max() < qvariant_cast<QMap<QString,double>>(item->data(Role_Map)).find("n_y_max").value()){
+            axisY->setMax(qvariant_cast<QMap<QString,double>>(item->data(Role_Map)).find("n_y_max").value());
+        }
 
+        double minimum_ny = *std::min_element(n_y.begin(), n_y.end());
+
+        if (axisY->min() < minimum_ny + 0.5){
+            axisY->setMin(minimum_ny - 0.5);
+        }
+
+
+        if (g+50 < 255){
+            g += 70;
+        }else{
+            g = 70;
+            b += 80;
+        }
     }
+    }
+    //axisX->setTickInterval(2);
+    axisX->setTickCount(15);
+    axisX->setMin(0);
+
+    QChartView* v = new QChartView;
+    v->setChart(chart);
+    QDialog* dia = new QDialog();
+    QVBoxLayout* layout = new QVBoxLayout(dia);
+    dia->setLayout(layout);
+    layout->addWidget(v);
+
+    dia->exec();
 }

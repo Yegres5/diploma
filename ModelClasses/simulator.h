@@ -19,6 +19,7 @@ public:
     simulator(QMap<QString, QVariant>* iniParam);
     double current_t,n_y_max,dt;
     QVector<double>* n_y;
+    bool loopOn;
 
 public slots:
     void startSimulate(double k, double n);
@@ -28,7 +29,6 @@ public slots:
 
 signals:
     void simulationEnded();
-    void loop();
 };
 
 #endif // SIMULATOR_H

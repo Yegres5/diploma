@@ -2,6 +2,7 @@
 #include <QtMath>
 #include <QFile>
 #include <QTextStream>
+#include <QVector>
 
 #define isDoubleEqualToZero(x) ( fabs(x) < 0.1e-5)
 
@@ -19,29 +20,21 @@ void LA::update(double dt)
 {
     //qDebug("%.3f,%.3f,%.3f",x,y,z);
 
-    QString filename = "/Users/evgeny/PycharmProjects/draw3dTrajectory/target.csv";
-    QFile file(filename);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
-        QTextStream stream(&file);
-        stream << x << "," << y << "," << z << endl;
-    }
-    file.close();
-
-    std::vector<double> grav = {0,1,0};
+    QVector<double> grav = {0,1,0};
     {
     double psi = 0;
     double teta  = -this->teta.getValue();
     double gamma = -this->gamma.getValue();
 
-    std::vector<std::vector<double>> arr{
-                        {qCos(teta)*qCos(psi),                                    qSin(teta),              -qCos(teta)*qSin(psi)},
-                        {-qCos(gamma)*qSin(teta)*qCos(psi)+qSin(gamma)*qSin(psi), qCos(gamma)*qCos(teta),  qCos(gamma)*qSin(teta)*qSin(psi)+qSin(gamma)*qCos(psi)},
-                        {qSin(gamma)*qSin(teta)*qCos(psi)+qCos(gamma)*qSin(psi),  -qSin(gamma)*qCos(teta), -qSin(psi)*qSin(teta)*qSin(gamma)+qCos(psi)*qCos(gamma)}};
+    QVector<QVector<double>> arr{
+                        {cos(teta)*cos(psi),                                    sin(teta),              -cos(teta)*sin(psi)},
+                        {-cos(gamma)*sin(teta)*cos(psi)+sin(gamma)*sin(psi), cos(gamma)*cos(teta),  cos(gamma)*sin(teta)*sin(psi)+sin(gamma)*cos(psi)},
+                        {sin(gamma)*sin(teta)*cos(psi)+cos(gamma)*sin(psi),  -sin(gamma)*cos(teta), -sin(psi)*sin(teta)*sin(gamma)+cos(psi)*cos(gamma)}};
 
-    std::vector<double> temp(3);
+    QVector<double> temp(3);
 
-    for(size_t i = 0; i < arr.at(0).size(); i++){
-        for(size_t j = 0; j < grav.size(); j++){
+    for(int i = 0; i < arr.at(0).size(); i++){
+        for(int j = 0; j < grav.size(); j++){
             temp[i] += grav.at(j)*arr.at(j).at(i);
         }
     }
@@ -72,10 +65,11 @@ void LA::update(double dt)
     n_yv += 0;
     double n_roll = 0;
     t += dt;
+
     if (t > n_t0){
         n_roll = n_manouver;
     }
-    if (t > n_t0+n_dt){
+    if (t > n_t0 + 2*M_PI*V/(_g*abs(n_manouver))/2){
         n_roll = 0;
     }
 
