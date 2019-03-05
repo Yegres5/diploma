@@ -12,7 +12,6 @@ public:
     Rocket(double x, double y, double z, double V, double n_xv,
            double n_yv, double teta, double psi, double gamma, LA* target, double K,
            const char* name = "Rocket");
-    QVector<double> TargetCoordinatesInSpeed;
 
     double getNy() { return n_yv; }
     double getN_pitch() { return n_pitch; }
@@ -33,6 +32,18 @@ private:
     double r_XY;                    //Distance to target XY.
     double n_pitch;                 //Normal overload.
     double n_roll;                  //Lateral overload.
+
+    QVector<double> TargetSpeed;
+
+    void GravityCompensation();         //Adding overload to n_y, n_x, and changing gamma.
+    void CalculateTargetPosition();     //Calculating target position in SpeedCoordinateSystem.
+    void CalculateTargetSpeed();        //Calculating target speed vector.
+    void CalculateNyPN();
+    void CalculateNzPN();
+    void SummarizeAllOverload();
+    void CheckMaxNy();
+    void EquationsOfMotion(double dt);
+    void CheckTargetGetReached();
 
     QVector<double> toSpeedCoordinateSystem(QVector<double> vec);
     QVector<double> toTrajectoryCoordinateSystem(QVector<double> vec);

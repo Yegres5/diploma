@@ -24,12 +24,8 @@ Rocket::Rocket(double x, double y, double z, double V, double n_xv,
     distance_to_target = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[1],2) + pow(TargetCoor[2],2));
 }
 
-void Rocket::update(double dt)
+void Rocket::GravityCompensation()
 {
-    TargetCoordinatesInSpeed = toSpeedCoordinateSystem(QVector<double> ({{target->getX()-x,
-                                                           target->getY()-y,
-                                                           target->getZ()-z}}));
-//Gravity compensation
     QVector<double> grav = {0,1,0};
     grav = toTrajectoryCoordinateSystem(grav);
 
@@ -40,14 +36,18 @@ void Rocket::update(double dt)
     grav = toTrajectoryCoordinateSystem(grav);
     n_xv = grav[0];
     n_yv = grav[1];
+}
 
-//Calculation target position, QVector of target speed, QVector of self speed
-    TargetCoor = toSpeedCoordinateSystem(QVector<double> ({{target->getX()-x,
+void Rocket::CalculateTargetPosition()
+{
+    TargetCoor = toSpeedCoordinateSystem(QVector<double> ({target->getX()-x,
                                                            target->getY()-y,
-                                                           target->getZ()-z}}));
+                                                           target->getZ()-z}));
+}
 
-
-    QVector<double> TargetSpeed = {target->GetV()*qCos(target->getTeta().getValue())*qCos(target->getPsi().getValue()),
+void Rocket::CalculateTargetSpeed()
+{
+    TargetSpeed = {target->GetV()*qCos(target->getTeta().getValue())*qCos(target->getPsi().getValue()),
                                   target->GetV()*qSin(target->getTeta().getValue()),
                                   -target->GetV()*qCos(target->getTeta().getValue())*qSin(target->getPsi().getValue())};
 
@@ -64,80 +64,86 @@ void Rocket::update(double dt)
                                                      atan2(-TargetSpeed[2],TargetSpeed[0])};
     std::copy(toSpherical->begin(),toSpherical->end(),TargetSpeed.begin());
     delete toSpherical;
+}
 
-    QVector<double> SelfSpeed = {V*qCos(teta.getValue())*qCos(psi.getValue()),
-                                V*qSin(teta.getValue()),
-                                -V*qCos(teta.getValue())*qSin(psi.getValue())};
-    SelfSpeed = toSpeedCoordinateSystem(SelfSpeed);
-
-    toSpherical = new QVector<double>{sqrt(pow(SelfSpeed[0],2)+
-                                          pow(SelfSpeed[1],2)+
-                                          pow(SelfSpeed[2],2)),
-                                     qAcos(sqrt(pow(SelfSpeed[0],2)+
-                                                pow(SelfSpeed[2],2))/
-                                           sqrt(pow(SelfSpeed[0],2)+
-                                           pow(SelfSpeed[1],2)+
-                                           pow(SelfSpeed[2],2))),
-                                     atan2(-SelfSpeed[2], SelfSpeed[0])};
-
-    std::copy(toSpherical->begin(),toSpherical->end(),SelfSpeed.begin());
-    delete toSpherical;
-
-//FOR XY (pitch)
-    QVector<double> SelfSpeedXY = {SelfSpeed[0], 0};
-
+void Rocket::CalculateNyPN()
+{
     QVector<double> TargetSpeedXY = {TargetSpeed[0]*cos(TargetSpeed[1])*cos(TargetSpeed[2]),
                                     TargetSpeed[0]*sin(TargetSpeed[1])};
 
     TargetSpeedXY = {sqrt(pow(TargetSpeedXY[0],2) + pow(TargetSpeedXY[1],2)),
                      atan2(TargetSpeedXY[1],TargetSpeedXY[0])};
 
-    double sigma_R_XY = SelfSpeedXY[1] - atan2(TargetCoor[1],TargetCoor[0]);
+    double sigma_R_XY = -atan2(TargetCoor[1],TargetCoor[0]);
     double sigma_T_XY = TargetSpeedXY[1] - atan2(TargetCoor[1],TargetCoor[0]);
 
     r_XY = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[1],2));
 
-    double d_lambda_XY = (TargetSpeedXY[0]*sin(sigma_T_XY) - SelfSpeedXY[0]*sin(sigma_R_XY))/r_XY;
+    double d_lambda_XY = (TargetSpeedXY[0]*sin(sigma_T_XY) - V*sin(sigma_R_XY))/r_XY;
     double W_XY = K*V*d_lambda_XY;
     n_pitch = W_XY/_g;
+}
 
-// FOR XZ (roll)
-    QVector<double> SelfSpeedXZ = {SelfSpeed[0]*cos(SelfSpeed[1]),
-                                  SelfSpeed[2]};
+void Rocket::CalculateNzPN()
+{
     QVector<double> TargetSpeedXZ = {TargetSpeed[0]*cos(TargetSpeed[1]),
                                     TargetSpeed[2]};
 
-    double sigma_R = SelfSpeedXZ[1] - atan2(-TargetCoor[2],TargetCoor[0]);
+    double sigma_R = -atan2(-TargetCoor[2],TargetCoor[0]);
     double sigma_T = TargetSpeedXZ[1] - atan2(-TargetCoor[2],TargetCoor[0]);
     r = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[2],2));
-    double d_lambda = (TargetSpeedXZ[0]*sin(sigma_T) - SelfSpeedXZ[0]*sin(sigma_R))/r;
+    double d_lambda = (TargetSpeedXZ[0]*sin(sigma_T) - V*sin(sigma_R))/r;
     double W = -K*V*d_lambda;
     n_roll = W/_g;
+}
 
-//Summ of gravity, roll and pitch
+void Rocket::SummarizeAllOverload()
+{
     n_yv += n_pitch;
     gamma += isDoubleEqualToZero(n_roll) ? 0 : atan(n_roll/n_yv);
     n_yv = sqrt(pow(n_yv,2) + pow(n_roll,2))*(n_yv > 0 ? 1 : -1);
+}
 
-//Check for max ny
-    if (n_yv > n_y_max){
-        n_y_max = n_yv;
-    }
+void Rocket::CheckMaxNy()
+{
+    n_y_max = n_yv > n_y_max ? n_yv : n_y_max;
+}
 
-//Equations of motion
+void Rocket::EquationsOfMotion(double dt)
+{
     V += (n_xv - sin(teta.getValue()))*_g*dt;
     teta += (n_yv*cos(gamma.getValue())-cos(teta.getValue()))*_g/V*dt;
     psi += -n_yv*sin(gamma.getValue())*_g/(V*cos(teta.getValue()))*dt;
     x += V*cos(teta.getValue())*cos(psi.getValue())*dt;
     y += V*sin(teta.getValue())*dt;
     z += -V*cos(teta.getValue())*sin(psi.getValue())*dt;
+}
 
-// Target get reached by rocket
+void Rocket::CheckTargetGetReached()
+{
     if (distance_to_target > 100){
         distance_to_target = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[1],2) + pow(TargetCoor[2],2));
     }else{
         emit targetGetReached();
     }
+}
+
+void Rocket::update(double dt)
+{
+    GravityCompensation();
+
+    CalculateTargetPosition();
+    CalculateTargetSpeed();
+
+    CalculateNyPN();
+    CalculateNzPN();
+
+    SummarizeAllOverload();
+    CheckMaxNy();
+
+    EquationsOfMotion(dt);
+
+    CheckTargetGetReached();
 }
 
 QVector<double> Rocket::toSpeedCoordinateSystem(QVector<double> vec)
