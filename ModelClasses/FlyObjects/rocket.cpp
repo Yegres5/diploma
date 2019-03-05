@@ -5,8 +5,6 @@
 
 #define isDoubleEqualToZero(x) ( fabs(x) < 0.1e-5)
 
-double CalcAngle(double dx, double dy);
-
 Rocket::Rocket(double x, double y, double z, double V, double n_xv,
                double n_yv, double teta, double psi, double gamma, LA *target, double K,
                const char *name)
@@ -17,9 +15,8 @@ Rocket::Rocket(double x, double y, double z, double V, double n_xv,
 {
     setObjectName(name);
 
-    this->teta.check = false;//CHANGE
-    this->gamma.check = false;//CHANGE
-    r_explode = 11; //CHANGE
+    this->teta.check = false;
+    this->gamma.check = false;
 
     TargetCoor = toSpeedCoordinateSystem(QVector<double> ({{target->getX(),target->getY(),target->getZ()}}));
     r = sqrt(pow(TargetCoor[0],2)+pow(TargetCoor[2],2));
@@ -43,8 +40,6 @@ void Rocket::update(double dt)
 
     gamma += isDoubleEqualToZero(grav[2]) ? 0 : atan(grav[2]/
                                             sqrt(pow(grav[0],2)+pow(grav[1],2)));
-
-
 
     grav = {0,1,0};
     grav = toTrajectoryCoordinateSystem(grav);
@@ -71,7 +66,7 @@ void Rocket::update(double dt)
                                                            sqrt(pow(TargetSpeed[0],2)+
                                                                 pow(TargetSpeed[1],2)+
                                                                 pow(TargetSpeed[2],2)))*(TargetSpeed[1] < 0 ? -1 : 1),
-                                                     CalcAngle(TargetSpeed[0],-TargetSpeed[2])};
+                                                     atan2(-TargetSpeed[2],TargetSpeed[0])};
     std::copy(toSpherical->begin(),toSpherical->end(),TargetSpeed.begin());
     delete toSpherical;
 
@@ -88,7 +83,7 @@ void Rocket::update(double dt)
                                            sqrt(pow(SelfSpeed[0],2)+
                                            pow(SelfSpeed[1],2)+
                                            pow(SelfSpeed[2],2))),
-                                     CalcAngle(SelfSpeed[0],-SelfSpeed[2])};
+                                     atan2(-SelfSpeed[2], SelfSpeed[0])};
 
     std::copy(toSpherical->begin(),toSpherical->end(),SelfSpeed.begin());
     delete toSpherical;
@@ -100,10 +95,10 @@ void Rocket::update(double dt)
                                     TargetSpeed[0]*sin(TargetSpeed[1])};
 
     TargetSpeedXY = {sqrt(pow(TargetSpeedXY[0],2) + pow(TargetSpeedXY[1],2)),
-                     CalcAngle(TargetSpeedXY[0],TargetSpeedXY[1])};
+                     atan2(TargetSpeedXY[1],TargetSpeedXY[0])};
 
-    double sigma_R_XY = SelfSpeedXY[1] - CalcLambdaYX();
-    double sigma_T_XY = TargetSpeedXY[1] - CalcLambdaYX();
+    double sigma_R_XY = SelfSpeedXY[1] - atan2(TargetCoor[1],TargetCoor[0]);
+    double sigma_T_XY = TargetSpeedXY[1] - atan2(TargetCoor[1],TargetCoor[0]);
 
     r_XY = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[1],2));
 
@@ -118,8 +113,8 @@ void Rocket::update(double dt)
     QVector<double> TargetSpeedXZ = {TargetSpeed[0]*cos(TargetSpeed[1]),
                                     TargetSpeed[2]};
 
-    double sigma_R = SelfSpeedXZ[1] - CalcLambdaXZ();
-    double sigma_T = TargetSpeedXZ[1] - CalcLambdaXZ();
+    double sigma_R = SelfSpeedXZ[1] - atan2(-TargetCoor[2],TargetCoor[0]);
+    double sigma_T = TargetSpeedXZ[1] - atan2(-TargetCoor[2],TargetCoor[0]);
     r = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[2],2));
     double d_lambda = (TargetSpeedXZ[0]*sin(sigma_T) - SelfSpeedXZ[0]*sin(sigma_R))/r;
     double W = -K*V*d_lambda;
@@ -127,13 +122,10 @@ void Rocket::update(double dt)
 
 //Summ of gravity, roll and pitch
     n_yv += n_pitch;
-
     gamma += isDoubleEqualToZero(n_roll) ? 0 : atan(n_roll/n_yv);
-
-    //qDebug() << Q_FUNC_INFO <<  "n_roll  = " << n_roll << "n_pitch = " << n_yv << "n_y = " << sqrt(pow(n_yv,2) + pow(n_roll,2))*(n_yv > 0 ? 1 : -1);
     n_yv = sqrt(pow(n_yv,2) + pow(n_roll,2))*(n_yv > 0 ? 1 : -1);
 
-
+//Check for max ny
     if (n_yv > n_y_max){
         n_y_max = n_yv;
     }
@@ -154,32 +146,11 @@ void Rocket::update(double dt)
     }
 }
 
-double Rocket::CalcLambdaXZ()
-{
-    double dx = TargetCoor[0];  //X
-    double dy = -TargetCoor[2];  //Z
-
-    return CalcAngle(dx,dy);
-}
-
-double Rocket::CalcLambdaYX()
-{
-    double dx = TargetCoor[0];  //X
-    double dy = TargetCoor[1];  //Z
-
-    return CalcAngle(dx,dy);
-}
-
 QVector<double> Rocket::toSpeedCoordinateSystem(QVector<double> vec)
 {
     double teta  = -this->teta.getValue();
     double psi   = -this->psi.getValue();
     double gamma = -this->gamma.getValue();
-
-//    double* temp = new double;
-//    *temp = cos(teta)*cos(psi);
-//    QVector<double*> tempVec;// = new QVector<double*>();
-//    tempVec.push_back(temp);
 
     QVector<double> a{cos(teta)*cos(psi),                                    sin(teta),              -cos(teta)*sin(psi)};
     QVector<double> b{-cos(gamma)*sin(teta)*cos(psi)+sin(gamma)*sin(psi), cos(gamma)*cos(teta),  cos(gamma)*sin(teta)*sin(psi)+sin(gamma)*cos(psi)};
@@ -200,7 +171,7 @@ QVector<double> Rocket::toSpeedCoordinateSystem(QVector<double> vec)
 QVector<double> Rocket::toTrajectoryCoordinateSystem(QVector<double> vec)
 {
     double teta  = -this->teta.getValue();
-    double psi   = 0;//-this->psi.getValue();
+    double psi   = 0;
     double gamma = -this->gamma.getValue();
 
     QVector<QVector<double>> arr{
@@ -216,36 +187,4 @@ QVector<double> Rocket::toTrajectoryCoordinateSystem(QVector<double> vec)
         }
     }
     return Result;
-}
-
-double CalcAngle(double dx, double dy){
-    if (isDoubleEqualToZero(dx)){
-        if (dy>0){
-            return M_PI_2;
-        }else{
-            return M_PI+M_PI_2;
-        }
-    }
-
-    if (isDoubleEqualToZero(dy)){
-        if (dx>0){
-            return 0;
-        }else{
-            return M_PI;
-        }
-    }
-
-    if (dx < 0){
-        if(dy < 0){
-            return atan(dy/dx)+M_PI;
-        }else{
-            return atan(dy/dx)+M_PI;
-        }
-    }else{
-        if (dy < 0){
-            return 2*M_PI+atan(dy/dx);
-        }else{
-            return atan(dy/dx);
-        }
-    }
 }
