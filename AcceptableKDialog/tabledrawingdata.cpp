@@ -9,7 +9,7 @@ tabledrawingdata::tabledrawingdata(double time, double n_y_max):
 void tabledrawingdata::paint(QPainter *painter, const QRect &rect, const QPalette &palette) const
 {
     painter->save();
-    painter->setPen(Qt::red);
+    painter->setPen(Qt::black);
     QString text;
     text = timeText + "\n" + n_y_maxText;
     painter->drawText(rect, Qt::AlignCenter ,text);

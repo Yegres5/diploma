@@ -14,9 +14,10 @@ private:
     QMap<QString, QVariant>* params;
     LA* target;
     Rocket* missile;
-public:
 
+public:
     simulator(QMap<QString, QVariant>* iniParam);
+
     double current_t,n_y_max,dt;
     QVector<double>* n_y;
     bool loopOn;

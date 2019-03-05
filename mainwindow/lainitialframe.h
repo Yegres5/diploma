@@ -13,6 +13,7 @@ class laInitialFrame: public QFrame
     Q_OBJECT
 private:
     Ui::laInitialFrame* ui;
+
 public:
     laInitialFrame(QWidget* parent = nullptr);
     ~laInitialFrame();

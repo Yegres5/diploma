@@ -11,6 +11,7 @@ public:
     void paint(QPainter *painter, const QRect &rect,
                const QPalette &palette) const;
     QSize sizeHint() const;
+
 private:
     QString timeText;
     QString n_y_maxText;

@@ -21,16 +21,19 @@ private:
     rocketInitialFrame* m_rocketFrame;
     modelingFrameParameters* m_modelFrame;
     QPushButton* m_StartModelingButton;
+
 public:
     explicit InitialModelingFrame(QWidget* parent = nullptr);
     virtual ~InitialModelingFrame() {}
-
     QMap<QString, QVariant> getInitialParametrs();
     void setInitialParametrs(QMap<QString, QVariant> parametrs);
+
 public slots:
     void StartModeling();
+
 signals:
     void startModelingPressed(QMap<QString, QVariant>* paramentr);
+
 };
 
 #endif // INITIALMODELINGFRAME_H

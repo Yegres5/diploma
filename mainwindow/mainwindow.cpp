@@ -45,7 +45,6 @@ MainWindow::~MainWindow()
 }
 
 // saving settings: https://evileg.com/ru/post/61/
-
 void MainWindow::save_settings()
 {
     InitialModelingFrame* frame = dynamic_cast<InitialModelingFrame*>(centralWidget());

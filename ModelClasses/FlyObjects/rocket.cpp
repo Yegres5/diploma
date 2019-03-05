@@ -24,11 +24,6 @@ Rocket::Rocket(double x, double y, double z, double V, double n_xv,
     distance_to_target = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[1],2) + pow(TargetCoor[2],2));
 }
 
-double Rocket::getNy()
-{
-    return n_yv;
-}
-
 void Rocket::update(double dt)
 {
     TargetCoordinatesInSpeed = toSpeedCoordinateSystem(QVector<double> ({{target->getX()-x,
@@ -103,7 +98,6 @@ void Rocket::update(double dt)
     r_XY = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[1],2));
 
     double d_lambda_XY = (TargetSpeedXY[0]*sin(sigma_T_XY) - SelfSpeedXY[0]*sin(sigma_R_XY))/r_XY;
-    //qDebug("---dLambda = %5.f", d_lambda_XY);
     double W_XY = K*V*d_lambda_XY;
     n_pitch = W_XY/_g;
 

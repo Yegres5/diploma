@@ -63,7 +63,7 @@ void simulator::targetReached()
 
 void simulator::swap()
 {
-    loopOn = false;
+    loopOn = !loopOn;
 }
 
 #include <QDebug>
@@ -72,7 +72,6 @@ void simulator::update()
     if (missile->getDistanceToTarget() < 50){
         dt = 0.0001;
     }
-    qDebug() << "distance = " << missile->getDistanceToTarget();
     target->update(dt);
     missile->update(dt);
     n_y->push_back(abs(missile->getNy()));

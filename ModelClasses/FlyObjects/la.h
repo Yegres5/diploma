@@ -15,8 +15,8 @@ protected:
     double V;
     double n_xv,n_yv;
     Angle teta,psi,gamma;
-    double n_manouver,n_t0,n_dt;
-    double t;
+    double n_manouver,n_t0,n_dt;    //Manouver overload, manouver initial time, manouver duration.
+    double t;                       //Current time(for manouver).
 
 public:
     LA(double x,double y,double z,double V,double n_xv,
@@ -27,15 +27,15 @@ public:
     explicit LA(QObject *parent = nullptr);
     LA();
 
-    double getX();
-    double getY();
-    double getZ();
-    double GetV();
-    double GetNy();
-    double GetNx();
-    Angle getTeta();
-    Angle getPsi();
-    Angle getGamma();
+    double getX()       { return x; }
+    double getY()       { return y; }
+    double getZ()       { return z; }
+    double GetV()       { return V; }
+    double GetNy()      { return n_yv; }
+    double GetNx()      { return n_xv; }
+    Angle getTeta()     { return teta; }
+    Angle getPsi()      { return psi; }
+    Angle getGamma()    { return gamma; }
 
 public slots:
    virtual void update(double dt);

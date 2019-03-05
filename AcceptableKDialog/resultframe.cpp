@@ -113,7 +113,6 @@ void ResultFrame::drawNy()
         return;
     }
 
-
     QChart *chart= new QChart();
     chart->setTitle("График зависимости перегрузки ЛА от времени");
     QLineSeries* series = nullptr;
@@ -122,11 +121,9 @@ void ResultFrame::drawNy()
     axisX->setTitleText(tr("Time"));
     chart->addAxis(axisX, Qt::AlignBottom);
 
-
     QValueAxis *axisY = new QValueAxis;
     axisY->setTitleText(tr("Overload"));
     chart->addAxis(axisY, Qt::AlignLeft);
-
 
     {
     int r(255),g(0),b(0);
@@ -163,7 +160,6 @@ void ResultFrame::drawNy()
             axisY->setMin(minimum_ny - 0.5);
         }
 
-
         if (g+50 < 255){
             g += 70;
         }else{
@@ -172,7 +168,6 @@ void ResultFrame::drawNy()
         }
     }
     }
-    //axisX->setTickInterval(2);
     axisX->setTickCount(15);
     axisX->setMin(0);
 

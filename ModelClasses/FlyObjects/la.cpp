@@ -18,8 +18,6 @@ LA::LA(double x, double y, double z, double V, double n_xv,
 
 void LA::update(double dt)
 {
-    //qDebug("%.3f,%.3f,%.3f",x,y,z);
-
     QVector<double> grav = {0,1,0};
     {
     double psi = 0;
@@ -82,49 +80,4 @@ void LA::update(double dt)
     x += V*cos(teta.getValue())*cos(psi.getValue())*dt;
     y += V*sin(teta.getValue())*dt;
     z += -V*cos(teta.getValue())*sin(psi.getValue())*dt;
-}
-
-double LA::getX()
-{
-    return x;
-}
-
-double LA::getY()
-{
-    return y;
-}
-
-double LA::getZ()
-{
-    return z;
-}
-
-double LA::GetV()
-{
-    return V;
-}
-
-double LA::GetNy()
-{
-    return n_yv;
-}
-
-double LA::GetNx()
-{
-    return n_xv;
-}
-
-Angle LA::getTeta()
-{
-    return teta;
-}
-
-Angle LA::getPsi()
-{
-    return psi;
-}
-
-Angle LA::getGamma()
-{
-    return gamma;
 }

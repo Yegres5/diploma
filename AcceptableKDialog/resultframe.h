@@ -15,14 +15,17 @@ class ResultFrame : public QFrame
 public:
     explicit ResultFrame(QWidget *parent = nullptr);
     ~ResultFrame();
+
+    Ui::ResultFrame *ui;
+
 signals:
     void startSimulation();
+
 public slots:
     void pasteData(double k, double n, double t, double dt, double n_y_max, QVector<double> *n_y);
+
 private slots:
     void drawNy();
-private:
-    Ui::ResultFrame *ui;
 };
 
 #endif // RESULTFRAME_H
