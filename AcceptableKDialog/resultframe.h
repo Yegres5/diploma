@@ -18,14 +18,20 @@ public:
 
     Ui::ResultFrame *ui;
 
+private:
+    void safeHideDia();
+
 signals:
     void startSimulation();
+    void hideDialog();
+    void showDialog();
 
 public slots:
     void pasteData(double k, double n, double t, double dt, double n_y_max, QVector<double> *n_y);
 
 private slots:
     void drawNy();
+    void draw3Dtrajectory();
 };
 
 #endif // RESULTFRAME_H

@@ -71,6 +71,9 @@ SOURCES += \
     AcceptableKDialog/tabledelegate.cpp \
     AcceptableKDialog/tabledrawingdata.cpp
 
+RESOURCES += \
+    pythonpathfile.qrc
+
 
 
 

@@ -1,7 +1,5 @@
 #include "rocket.h"
-#include <QDebug>
 #include <QtMath>
-#include <QFile>
 
 #define isDoubleEqualToZero(x) ( fabs(x) < 0.1e-5)
 

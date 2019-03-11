@@ -28,6 +28,10 @@ ResultFrame::ResultFrame(QWidget *parent) :
             this, SIGNAL(startSimulation()));
     connect(ui->button_draw_ny,SIGNAL(clicked()),
             this, SLOT(drawNy()));
+    connect(ui->button_start3dModeling,SIGNAL(clicked()),
+            this, SLOT(draw3Dtrajectory()));
+    connect(ui->button_start3dModeling,SIGNAL(clicked()),
+            this, SIGNAL(hideDialog()));
 
     tableDelegate* delegate = new tableDelegate(ui->table_results);
     ui->table_results->setItemDelegate(delegate);
@@ -40,6 +44,18 @@ ResultFrame::ResultFrame(QWidget *parent) :
 ResultFrame::~ResultFrame()
 {
     delete ui;
+}
+
+void ResultFrame::safeHideDia()
+{
+//    hideDialog();
+//    QTimer timer;
+//    timer.setSingleShot(true);
+//    QEventLoop loop;
+//    connect(sslSocket,  SIGNAL(encrypted()), &loop, SLOT(quit()) );
+//    connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
+//    timer.start(msTimeout);
+//    loop.exec();
 }
 
 void ResultFrame::pasteData(double k, double n, double t, double dt, double n_y_max, QVector<double>* n_y)
@@ -114,7 +130,7 @@ void ResultFrame::drawNy()
     }
 
     QChart *chart= new QChart();
-    chart->setTitle("График зависимости перегрузки ЛА от времени");
+    chart->setTitle(tr("График зависимости перегрузки ЛА от времени"));
     QLineSeries* series = nullptr;
 
     QValueAxis *axisX = new QValueAxis;
@@ -179,4 +195,22 @@ void ResultFrame::drawNy()
     layout->addWidget(v);
 
     dia->exec();
+}
+
+void ResultFrame::draw3Dtrajectory()
+{
+
+    while(this->isHidden()){}
+    QFile jsonFile(":/JSON/paths.json");
+    jsonFile.open(QFile::ReadOnly);
+    //QJsonDocument().fromJson(jsonFile.readAll());
+
+    QJsonDocument doc (QJsonDocument().fromJson(jsonFile.readAll()));
+    QJsonObject obj (doc.object());
+    QStringList arguments { obj.value("pythonScriptPath").toString() };
+
+    QProcess p;
+    p.start(obj.value("pythonInterpriterPath").toString(), arguments);
+    p.waitForFinished();
+    //showDialog();
 }

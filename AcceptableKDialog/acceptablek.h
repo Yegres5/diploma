@@ -10,6 +10,10 @@ class AcceptableK:public QDialog
 public:
     AcceptableK(QMap<QString, QVariant>* iniParam, QWidget* parent = nullptr);
     ~AcceptableK();
+
+public slots:
+    void hideDia();
+    void showDia();
 };
 
 #endif // ACCEPTABLEK_H
