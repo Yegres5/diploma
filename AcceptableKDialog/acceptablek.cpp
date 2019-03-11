@@ -11,8 +11,8 @@
 #include "resultframe.h"
 #include "ModelClasses/model.h"
 
-AcceptableK::AcceptableK(QMap<QString, QVariant>* iniParam, QWidget* parent):
-    QDialog (parent)
+AcceptableK::AcceptableK(QMap<QString, QVariant>* iniParam, QWidget* parent, Qt::WindowFlags f):
+    QWidget (parent, f)
 {
     QGridLayout* mainLayout = new QGridLayout(this);
     QLabel* label = new QLabel("Title");

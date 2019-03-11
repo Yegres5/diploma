@@ -65,6 +65,7 @@ void MainWindow::load_settings()
 
 void MainWindow::start_modeling(QMap<QString, QVariant>* parametrs)
 {
-    AcceptableK* dialog = new AcceptableK(parametrs, this);
-    dialog->exec();
+    AcceptableK* window = new AcceptableK(parametrs, this, Qt::Window);
+    window->show();
+
 }
