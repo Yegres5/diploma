@@ -40,10 +40,13 @@ void Model::StartModeling()
     delete sim;
 }
 
-void Model::StartModelingFor(double K, double N)
+void Model::StartModelingFor(double K, double N, double dt)
 {
+    qDebug() << Q_FUNC_INFO;
     clearCSVFiles();
-    simulator* sim = new simulator(params);
+    QMap<QString,QVariant> tempMap(*params);
+    tempMap["Modeling dt"] = dt;
+    simulator* sim = new simulator(&tempMap);
     connect(this, SIGNAL(startSimulate(double, double)),
             sim, SLOT(startSimulate(double, double)), Qt::DirectConnection);
 

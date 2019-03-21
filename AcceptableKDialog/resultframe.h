@@ -20,7 +20,7 @@ public:
 
 signals:
     void startSimulation();
-    void startSimulationFor(double K, double N);
+    void startSimulationFor(double K, double N, double dt);
     void hideDialog();
     void showDialog();
 

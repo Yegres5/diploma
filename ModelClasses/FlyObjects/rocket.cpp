@@ -158,10 +158,10 @@ void Rocket::update(double dt)
     //n_xv -= drag_acceleration/_g;
 
     t+=dt;
-    qDebug() << Q_FUNC_INFO << "V = " << V
-             << " n_yv = " << n_yv
-             << " n_xv = " << n_xv
-             << " t = " << t;
+//    qDebug() << Q_FUNC_INFO << "V = " << V
+//             << " n_yv = " << n_yv
+//             << " n_xv = " << n_xv
+//             << " t = " << t;
 
 
     CalculateTargetPosition();

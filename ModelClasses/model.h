@@ -18,7 +18,7 @@ public:
 
 public slots:
     void StartModeling();
-    void StartModelingFor(double K, double N);
+    void StartModelingFor(double K, double N, double dt);
     void writeCoordToCSV(QMap<QString,  QVariant>* coord);
     void clearCSVFiles();
 

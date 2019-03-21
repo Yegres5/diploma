@@ -30,8 +30,8 @@ AcceptableK::AcceptableK(QMap<QString, QVariant>* iniParam, QWidget* parent, Qt:
     connect(frame, SIGNAL(startSimulation()),
             simulationModel, SLOT(StartModeling()));
 
-    connect(frame, SIGNAL(startSimulationFor(double, double)),
-            simulationModel, SLOT(StartModelingFor(double, double)));
+    connect(frame, SIGNAL(startSimulationFor(double, double, double)),
+            simulationModel, SLOT(StartModelingFor(double, double, double)));
 
     connect(frame, SIGNAL(hideDialog()),
             this,  SLOT(hideDia()));
