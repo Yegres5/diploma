@@ -74,6 +74,12 @@ void simulator::update()
 //    }
     target->update(dt);
     missile->update(dt);
+    QList<double> targetCoor    {target->getX(),    target->getY(),     target->getZ()};
+    QList<double> LACoor        {missile->getX(),   missile->getY(),    missile->getZ()};
+    QMap<QString, QVariant>* csvData = new QMap<QString,QVariant>;
+    csvData->insert("Target", QVariant::fromValue(targetCoor));
+    csvData->insert("LA", QVariant::fromValue(LACoor));
+    emit sendCoordinates(csvData);
     n_y->push_back(abs(missile->getNy()));
     current_t+=dt;
 }

@@ -17,6 +17,9 @@ public:
     double getN_pitch() { return n_pitch; }
     double getN_roll() { return n_roll; }
     double getDistanceToTarget() { return distance_to_target; }
+    double getX()       { return x; }
+    double getY()       { return y; }
+    double getZ()       { return z; }
 
 private:
     double x,y,z;                   //Self coordinates.

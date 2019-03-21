@@ -2,7 +2,8 @@
 #define MODEL_H
 
 #include <QObject>
-
+#include <QMap>
+#include <QVariant>
 class Model : public QObject
 {
     Q_OBJECT
@@ -17,6 +18,9 @@ public:
 
 public slots:
     void StartModeling();
+    void StartModelingFor(double K, double N);
+    void writeCoordToCSV(QMap<QString,  QVariant>* coord);
+    void clearCSVFiles();
 
 signals:
     void startSimulate(double k, double n);

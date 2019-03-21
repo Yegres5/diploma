@@ -1,6 +1,11 @@
 #include "mainwindow/mainwindow.h"
 #include <QApplication>
 
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QDataStream>
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setOrganizationName(ORGANIZATION_NAME);

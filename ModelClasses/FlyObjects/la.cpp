@@ -18,6 +18,14 @@ LA::LA(double x, double y, double z, double V, double n_xv,
 
 void LA::update(double dt)
 {
+//    QString filename = "/Users/evgeny/Documents/QtProjects/build-findOptimalK/pythonScript/target.csv";
+//    QFile file(filename);
+//    if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
+//        QTextStream stream(&file);
+//        stream << x << "," << y << "," << z << endl;
+//    }
+//    file.close();
+
     QVector<double> grav = {0,1,0};
     {
     double psi = 0;

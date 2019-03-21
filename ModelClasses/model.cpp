@@ -4,6 +4,10 @@
 #include <QVariant>
 #include <math.h>
 #include <QEventLoop>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QVariant>
 
 #include "simulator.h"
 
@@ -34,4 +38,75 @@ void Model::StartModeling()
         }
     }
     delete sim;
+}
+
+void Model::StartModelingFor(double K, double N)
+{
+    clearCSVFiles();
+    simulator* sim = new simulator(params);
+    connect(this, SIGNAL(startSimulate(double, double)),
+            sim, SLOT(startSimulate(double, double)), Qt::DirectConnection);
+
+    connect(sim, SIGNAL(sendCoordinates(QMap<QString,  QVariant>*)),
+            this, SLOT(writeCoordToCSV(QMap<QString, QVariant>*)));
+
+    qDebug() << Q_FUNC_INFO <<  "K = " << K << "N_y = " << N;
+    emit startSimulate(K,N);
+
+    delete sim;
+}
+
+void Model::writeCoordToCSV(QMap<QString, QVariant>* coord)
+{
+    if(coord->contains("LA")){
+        QList<double> coord_vec = qvariant_cast<QList<double>>(*coord->find("LA"));
+
+        QFile jsonFile(":/JSON/paths.json");
+        jsonFile.open(QFile::ReadOnly);
+
+        QJsonDocument doc (QJsonDocument().fromJson(jsonFile.readAll()));
+        QJsonObject obj (doc.object());
+
+        QString filename = obj.value("rocketPath").toString();
+        QFile file(filename);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
+            QTextStream stream(&file);
+            stream << coord_vec.at(0) << "," << coord_vec.at(1) << "," << coord_vec.at(2) << endl;
+        }
+        file.close();
+    }
+
+    if(coord->contains("Target")){
+        QList<double> coord_vec = qvariant_cast<QList<double>>(*coord->find("Target"));
+
+        QFile jsonFile(":/JSON/paths.json");
+        jsonFile.open(QFile::ReadOnly);
+
+        QJsonDocument doc (QJsonDocument().fromJson(jsonFile.readAll()));
+        QJsonObject obj (doc.object());
+
+        QString filename = obj.value("targetPath").toString();
+        QFile file(filename);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
+            QTextStream stream(&file);
+            stream << coord_vec.at(0) << "," << coord_vec.at(1) << "," << coord_vec.at(2) << endl;
+        }
+        file.close();
+    }
+    delete coord;
+}
+
+void Model::clearCSVFiles()
+{
+    QFile jsonFile(":/JSON/paths.json");
+    jsonFile.open(QFile::ReadOnly);
+
+    QJsonDocument doc (QJsonDocument().fromJson(jsonFile.readAll()));
+    QJsonObject obj (doc.object());
+    QStringList arguments { obj.value("pythonScriptPath").toString() };
+
+    QFile file(obj.value("rocketPath").toString());
+    file.resize(0);
+    file.setFileName(obj.value("targetPath").toString());
+    file.resize(0);
 }

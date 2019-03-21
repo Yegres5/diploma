@@ -24,16 +24,17 @@ Rocket::Rocket(double x, double y, double z, double V, double n_xv,
 
 void Rocket::GravityCompensation()
 {
-    QVector<double> grav = {0,1,0};
-    grav = toTrajectoryCoordinateSystem(grav);
+    //QVector<double> grav = {0,-1,0};
+    QVector<double> compens = {0,1,0};
+    compens = toTrajectoryCoordinateSystem(compens);
 
-    gamma += isDoubleEqualToZero(grav[2]) ? 0 : atan(grav[2]/
-                                            sqrt(pow(grav[0],2)+pow(grav[1],2)));
+    gamma += isDoubleEqualToZero(compens[2]) ? 0 : atan(compens[2]/
+                                            sqrt(pow(compens[0],2)+pow(compens[1],2)));
 
-    grav = {0,1,0};
-    grav = toTrajectoryCoordinateSystem(grav);
-    n_xv = grav[0];
-    n_yv = grav[1];
+    compens = {0,1,0};
+    compens = toTrajectoryCoordinateSystem(compens);
+    n_xv = compens[0];
+    n_yv = compens[1];
 }
 
 void Rocket::CalculateTargetPosition()
@@ -116,26 +117,58 @@ void Rocket::EquationsOfMotion(double dt)
     y += V*sin(teta.getValue())*dt;
     z += -V*cos(teta.getValue())*sin(psi.getValue())*dt;
 }
-
+static double t = 0;
 void Rocket::CheckTargetGetReached()
 {
     if (distance_to_target > 100){
         distance_to_target = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[1],2) + pow(TargetCoor[2],2));
     }else{
+        t = 0;
         emit targetGetReached();
     }
 }
-
+#include <QDebug>
+#include <QFile>
 void Rocket::update(double dt)
 {
     GravityCompensation();
+
+    //qDebug() << V;
+    double l = 3.6;
+    double d = 0.2;
+    double p = 0.2279;
+    double q = 0.5*p*pow(V,2);
+    double M = V/320;
+    double Ae = 0.0314;
+    double Sm = 0.0314;
+    double Ln = 0.476;
+
+    double Cd_body = 0.054*(l/d)*pow( M/(q*l), 0.2);
+
+    double Cd_base = 0.25/M;
+
+    double Cd_base_powered = (1-Ae/Sm)*(0.25/M);
+
+    double Cd_body_wave = (1.59+1.83/pow(M,2))*pow( (tan(0.5*Ln/d)),-1.89);
+
+    double Cd = Cd_body + Cd_base + Cd_base_powered + Cd_body_wave;
+
+    double drag_force = 0.5*Cd*p*0.026*V*V;
+    double drag_acceleration = drag_force/175;
+    //n_xv -= drag_acceleration/_g;
+
+    t+=dt;
+    qDebug() << Q_FUNC_INFO << "V = " << V
+             << " n_yv = " << n_yv
+             << " n_xv = " << n_xv
+             << " t = " << t;
+
 
     CalculateTargetPosition();
     CalculateTargetSpeed();
 
     CalculateNyPN();
     CalculateNzPN();
-
     SummarizeAllOverload();
     CheckMaxNy();
 

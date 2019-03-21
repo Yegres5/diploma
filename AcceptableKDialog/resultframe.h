@@ -18,11 +18,9 @@ public:
 
     Ui::ResultFrame *ui;
 
-private:
-    void safeHideDia();
-
 signals:
     void startSimulation();
+    void startSimulationFor(double K, double N);
     void hideDialog();
     void showDialog();
 

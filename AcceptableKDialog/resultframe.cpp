@@ -30,8 +30,6 @@ ResultFrame::ResultFrame(QWidget *parent) :
             this, SLOT(drawNy()));
     connect(ui->button_start3dModeling,SIGNAL(clicked()),
             this, SLOT(draw3Dtrajectory()));
-    connect(ui->button_start3dModeling,SIGNAL(clicked()),
-            this, SIGNAL(hideDialog()));
 
     tableDelegate* delegate = new tableDelegate(ui->table_results);
     ui->table_results->setItemDelegate(delegate);
@@ -44,18 +42,6 @@ ResultFrame::ResultFrame(QWidget *parent) :
 ResultFrame::~ResultFrame()
 {
     delete ui;
-}
-
-void ResultFrame::safeHideDia()
-{
-//    hideDialog();
-//    QTimer timer;
-//    timer.setSingleShot(true);
-//    QEventLoop loop;
-//    connect(sslSocket,  SIGNAL(encrypted()), &loop, SLOT(quit()) );
-//    connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
-//    timer.start(msTimeout);
-//    loop.exec();
 }
 
 void ResultFrame::pasteData(double k, double n, double t, double dt, double n_y_max, QVector<double>* n_y)
@@ -200,10 +186,42 @@ void ResultFrame::drawNy()
 void ResultFrame::draw3Dtrajectory()
 {
 
-    while(this->isHidden()){}
+    QList<QTableWidgetItem*> items = ui->table_results->selectedItems();
+
+    if (!items.count())
+    {
+        qDebug() << "Return";
+        QMessageBox msgBox;
+        msgBox.setText(tr("Choose element."));
+        msgBox.exec();
+        return;
+    }
+
+    switch (items.count()){
+
+    case 0:{
+        QMessageBox msgBox;
+        msgBox.setText(tr("Choose element."));
+        msgBox.exec();
+        break;
+        }
+    case 1: {
+        QTableWidgetItem* item = items.takeFirst();
+        const double k = ui->table_results->horizontalHeaderItem(item->column())->data(Qt::UserRole).toDouble();
+        const double n_y = ui->table_results->verticalHeaderItem(item->row())->data(Qt::UserRole).toDouble();
+        emit startSimulationFor(k,n_y);
+        break;
+        }
+    default:{
+        QMessageBox msgBox;
+        msgBox.setText(tr("Choose only one element."));
+        msgBox.exec();
+        return;
+    }
+    }
+
     QFile jsonFile(":/JSON/paths.json");
     jsonFile.open(QFile::ReadOnly);
-    //QJsonDocument().fromJson(jsonFile.readAll());
 
     QJsonDocument doc (QJsonDocument().fromJson(jsonFile.readAll()));
     QJsonObject obj (doc.object());
@@ -212,5 +230,4 @@ void ResultFrame::draw3Dtrajectory()
     QProcess p;
     p.start(obj.value("pythonInterpriterPath").toString(), arguments);
     p.waitForFinished();
-    //showDialog();
 }

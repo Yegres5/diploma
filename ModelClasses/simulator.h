@@ -22,6 +22,7 @@ public:
     QVector<double>* n_y;
     bool loopOn;
 
+
 public slots:
     void startSimulate(double k, double n);
     void targetReached();
@@ -29,6 +30,7 @@ public slots:
     void swap();
 
 signals:
+    void sendCoordinates(QMap<QString, QVariant>* coord);
     void simulationEnded();
 };
 
