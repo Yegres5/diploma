@@ -74,7 +74,7 @@ void simulator::update()
 //    }
     target->update(dt);
     missile->update(dt);
-    n_y->push_back(abs(missile->getNy()));
+    n_y->push_back(std::abs(missile->getNy()));
     current_t+=dt;
 
     QList<double> targetCoor    {target->getX(),    target->getY(),     target->getZ()};
