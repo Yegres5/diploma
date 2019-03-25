@@ -93,16 +93,12 @@ void ResultFrame::pasteData(double k, double n, double t, double dt, double n_y_
     dataMap.insert("n_y_max", n_y_max);
     item->setData(Role_Map, QVariant::fromValue(dataMap));
 
-    //QList<double> n_y = qvariant_cast<QList<double>>(item->data(Role_Ny));
-//    QList<QList<double>> N_yList;
-//    N_yList.push_back(n_y);
     item->setData(Role_Ny, QVariant::fromValue(n_y->toList()));
 
     ui->table_results->setItem(rowNum, headerNum, item);
 
     ui->table_results->verticalHeader()->setMinimumSectionSize(50);
     ui->table_results->horizontalHeader()->setMinimumSectionSize(175);
-
 }
 
 void ResultFrame::drawNy()
@@ -116,7 +112,7 @@ void ResultFrame::drawNy()
     }
 
     QChart *chart= new QChart();
-    chart->setTitle(tr("График зависимости перегрузки ЛА от времени"));
+    chart->setTitle(tr("Graph of LA overload versus time"));
     QLineSeries* series = nullptr;
 
     QValueAxis *axisX = new QValueAxis;
@@ -229,5 +225,5 @@ void ResultFrame::draw3Dtrajectory()
 
     QProcess p;
     p.start(obj.value("pythonInterpriterPath").toString(), arguments);
-    p.waitForFinished(INT_MAX);
+    p.waitForFinished(-1);
 }

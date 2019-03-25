@@ -15,11 +15,8 @@ AcceptableK::AcceptableK(QMap<QString, QVariant>* iniParam, QWidget* parent, Qt:
     QWidget (parent, f)
 {
     QGridLayout* mainLayout = new QGridLayout(this);
-    QLabel* label = new QLabel("Title");
-    label->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    mainLayout->addWidget(label,0,0);
     ResultFrame* frame = new ResultFrame();
-    mainLayout->addWidget(frame,1,0);
+    mainLayout->addWidget(frame,0,0);
 
     Model* simulationModel = new Model(iniParam);
 
