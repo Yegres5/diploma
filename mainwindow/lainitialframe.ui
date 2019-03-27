@@ -381,6 +381,8 @@
   <tabstop>LineEdit_teta</tabstop>
   <tabstop>LineEdit_psi</tabstop>
   <tabstop>LineEdit_n_pitch_min</tabstop>
+  <tabstop>LineEdit_n_pitch_max</tabstop>
+  <tabstop>LineEdit_n_pitch_delta</tabstop>
   <tabstop>LineEdit_t_manouver</tabstop>
   <tabstop>LineEdit_t_manouver_delay</tabstop>
  </tabstops>
