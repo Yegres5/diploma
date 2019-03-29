@@ -205,7 +205,10 @@ void ResultFrame::draw3Dtrajectory()
         QTableWidgetItem* item = items.takeFirst();
         const double k = ui->table_results->horizontalHeaderItem(item->column())->data(Qt::UserRole).toDouble();
         const double n_y = ui->table_results->verticalHeaderItem(item->row())->data(Qt::UserRole).toDouble();
+
         emit startSimulationFor(k,n_y,ui->Edit_modelingTime->text().toDouble());
+
+
         break;
         }
     default:{
@@ -221,7 +224,7 @@ void ResultFrame::draw3Dtrajectory()
 
     QJsonDocument doc (QJsonDocument().fromJson(jsonFile.readAll()));
     QJsonObject obj (doc.object());
-    QStringList arguments { obj.value("pythonScriptPath").toString() };
+    QStringList arguments { obj.value("pythonScriptPath").toString() + "3Ddraw.py" };
 
     QProcess p;
     p.start(obj.value("pythonInterpriterPath").toString(), arguments);

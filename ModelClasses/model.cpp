@@ -45,7 +45,9 @@ void Model::StartModelingFor(double K, double N, double dt)
     qDebug() << Q_FUNC_INFO;
     clearCSVFiles();
     QMap<QString,QVariant> tempMap(*params);
-    tempMap["Modeling dt"] = dt;
+    if (dt > 1e-7){
+        tempMap["Modeling dt"] = dt;
+    }
     simulator* sim = new simulator(&tempMap);
     connect(this, SIGNAL(startSimulate(double, double)),
             sim, SLOT(startSimulate(double, double)), Qt::DirectConnection);
@@ -70,7 +72,7 @@ void Model::writeCoordToCSV(QMap<QString, QVariant>* coord)
         QJsonDocument doc (QJsonDocument().fromJson(jsonFile.readAll()));
         QJsonObject obj (doc.object());
 
-        QString filename = obj.value("rocketPath").toString();
+        QString filename = obj.value("pythonScriptPath").toString() + "rocket.csv";
         QFile file(filename);
         if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
             QTextStream stream(&file);
@@ -88,7 +90,7 @@ void Model::writeCoordToCSV(QMap<QString, QVariant>* coord)
         QJsonDocument doc (QJsonDocument().fromJson(jsonFile.readAll()));
         QJsonObject obj (doc.object());
 
-        QString filename = obj.value("targetPath").toString();
+        QString filename = obj.value("pythonScriptPath").toString() + "target.csv";
         QFile file(filename);
         if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
             QTextStream stream(&file);
@@ -106,10 +108,9 @@ void Model::clearCSVFiles()
 
     QJsonDocument doc (QJsonDocument().fromJson(jsonFile.readAll()));
     QJsonObject obj (doc.object());
-    QStringList arguments { obj.value("pythonScriptPath").toString() };
 
-    QFile file(obj.value("rocketPath").toString());
+    QFile file(obj.value("pythonScriptPath").toString() + "rocket.csv");
     file.resize(0);
-    file.setFileName(obj.value("targetPath").toString());
+    file.setFileName(obj.value("pythonScriptPath").toString() + "target.csv");
     file.resize(0);
 }

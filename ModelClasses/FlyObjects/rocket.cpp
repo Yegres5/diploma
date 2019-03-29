@@ -24,7 +24,6 @@ Rocket::Rocket(double x, double y, double z, double V, double n_xv,
 
 void Rocket::GravityCompensation()
 {
-    //QVector<double> grav = {0,-1,0};
     QVector<double> compens = {0,1,0};
     compens = toTrajectoryCoordinateSystem(compens);
 
@@ -95,9 +94,12 @@ void Rocket::CalculateNzPN()
     double W = -K*V*d_lambda;
     n_roll = W/_g;
 }
-
+#include <QDebug>
 void Rocket::SummarizeAllOverload()
 {
+
+    qDebug() << Q_FUNC_INFO << " pitch = " << n_pitch << " roll = " << n_roll;
+
     n_yv += n_pitch;
     gamma += isDoubleEqualToZero(n_roll) ? 0 : atan(n_roll/n_yv);
     n_yv = sqrt(pow(n_yv,2) + pow(n_roll,2))*(n_yv > 0 ? 1 : -1);

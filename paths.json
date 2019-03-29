@@ -1,6 +1,4 @@
 {
-    "pythonScriptPath": "/Users/evgeny/Documents/QtProjects/build-findOptimalK/pythonScript/3Ddraw.py",
-    "rocketPath" : "/Users/evgeny/Documents/QtProjects/build-findOptimalK/pythonScript/rocket.csv",
-    "targetPath" : "/Users/evgeny/Documents/QtProjects/build-findOptimalK/pythonScript/target.csv",
+    "pythonScriptPath": "/Users/evgeny/Documents/QtProjects/pythonScript/",
     "pythonInterpriterPath" : "/usr/local/opt/python/bin/python3.7"
 }
