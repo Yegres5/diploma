@@ -20,9 +20,9 @@ AcceptableK::AcceptableK(QMap<QString, QVariant>* iniParam, QWidget* parent, Qt:
 
     Model* simulationModel = new Model(iniParam);
 
-//    QThread *thread= new QThread();
-//    simulationModel->moveToThread(thread);
-//    thread->start();
+    QThread *thread= new QThread();
+    simulationModel->moveToThread(thread);
+    thread->start();
 
     connect(frame, SIGNAL(startSimulation()),
             simulationModel, SLOT(StartModeling()));

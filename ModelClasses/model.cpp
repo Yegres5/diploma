@@ -8,6 +8,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QVariant>
+#include <QDebug>
 
 #include "simulator.h"
 
@@ -20,34 +21,36 @@ Model::Model(QMap<QString, QVariant> *iniParam):
     dk(iniParam->find ("Rock dK").value().toDouble()),
     params(iniParam)
 {
-
 }
-#include <QDebug>
+
 
 void Model::StartModeling()
 {
-    simulator* sim = new simulator(params);
-    connect(this, SIGNAL(startSimulate(double, double)),
-            sim, SLOT(startSimulate(double, double)), Qt::DirectConnection);
-
     for (double k(k0); k1-k+dk>1e-4; k+=dk) {
         for (double n(n0); n1-n+dn>1e-4; n+=dn) {
             qDebug() << Q_FUNC_INFO <<  "K = " << k << "N_y = " << n;
+
+            simulator* sim = new simulator(params);
+            connect(this, SIGNAL(startSimulate(double, double)),
+                    sim, SLOT(startSimulate(double, double)));
             emit startSimulate(k,n);
             emit sendData(k, n, sim->current_t, sim->dt, sim->n_y_max, sim->n_y);
+            delete sim;
         }
     }
-    delete sim;
 }
 
 void Model::StartModelingFor(double K, double N, double dt)
 {
     qDebug() << Q_FUNC_INFO;
     clearCSVFiles();
+
     QMap<QString,QVariant> tempMap(*params);
+
     if (dt > 1e-7){
         tempMap["Modeling dt"] = dt;
     }
+
     simulator* sim = new simulator(&tempMap);
     connect(this, SIGNAL(startSimulate(double, double)),
             sim, SLOT(startSimulate(double, double)), Qt::DirectConnection);

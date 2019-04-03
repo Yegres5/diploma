@@ -94,12 +94,9 @@ void Rocket::CalculateNzPN()
     double W = -K*V*d_lambda;
     n_roll = W/_g;
 }
-#include <QDebug>
+
 void Rocket::SummarizeAllOverload()
 {
-
-    qDebug() << Q_FUNC_INFO << " pitch = " << n_pitch << " roll = " << n_roll;
-
     n_yv += n_pitch;
     gamma += isDoubleEqualToZero(n_roll) ? 0 : atan(n_roll/n_yv);
     n_yv = sqrt(pow(n_yv,2) + pow(n_roll,2))*(n_yv > 0 ? 1 : -1);
@@ -157,14 +154,9 @@ void Rocket::update(double dt)
 
     double drag_force = 0.5*Cd*p*0.026*V*V;
     double drag_acceleration = drag_force/175;
-    //n_xv -= drag_acceleration/_g;
+    n_xv -= drag_acceleration/_g;
 
     t+=dt;
-//    qDebug() << Q_FUNC_INFO << "V = " << V
-//             << " n_yv = " << n_yv
-//             << " n_xv = " << n_xv
-//             << " t = " << t;
-
 
     CalculateTargetPosition();
     CalculateTargetSpeed();

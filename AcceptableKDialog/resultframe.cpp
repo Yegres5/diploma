@@ -96,7 +96,6 @@ void ResultFrame::pasteData(double k, double n, double t, double dt, double n_y_
     item->setData(Role_Ny, QVariant::fromValue(n_y->toList()));
 
     ui->table_results->setItem(rowNum, headerNum, item);
-
     ui->table_results->verticalHeader()->setMinimumSectionSize(50);
     ui->table_results->horizontalHeader()->setMinimumSectionSize(175);
 }
@@ -194,7 +193,6 @@ void ResultFrame::draw3Dtrajectory()
     }
 
     switch (items.count()){
-
     case 0:{
         QMessageBox msgBox;
         msgBox.setText(tr("Choose element."));
@@ -205,10 +203,7 @@ void ResultFrame::draw3Dtrajectory()
         QTableWidgetItem* item = items.takeFirst();
         const double k = ui->table_results->horizontalHeaderItem(item->column())->data(Qt::UserRole).toDouble();
         const double n_y = ui->table_results->verticalHeaderItem(item->row())->data(Qt::UserRole).toDouble();
-
         emit startSimulationFor(k,n_y,ui->Edit_modelingTime->text().toDouble());
-
-
         break;
         }
     default:{
