@@ -20,6 +20,7 @@ public:
     double getX()       { return x; }
     double getY()       { return y; }
     double getZ()       { return z; }
+    double getV()       { return V; }
 
 private:
     double x,y,z;                   //Self coordinates.
@@ -47,6 +48,7 @@ private:
     void CheckMaxNy();
     void EquationsOfMotion(double dt);
     void CheckTargetGetReached();
+    void CalculatingDragForce();
 
     QVector<double> toSpeedCoordinateSystem(QVector<double> vec);
     QVector<double> toTrajectoryCoordinateSystem(QVector<double> vec);

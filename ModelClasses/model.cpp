@@ -23,7 +23,6 @@ Model::Model(QMap<QString, QVariant> *iniParam):
 {
 }
 
-
 void Model::StartModeling()
 {
     for (double k(k0); k1-k+dk>1e-4; k+=dk) {
@@ -58,7 +57,7 @@ void Model::StartModelingFor(double K, double N, double dt)
     connect(sim, SIGNAL(sendCoordinates(QMap<QString,  QVariant>*)),
             this, SLOT(writeCoordToCSV(QMap<QString, QVariant>*)));
 
-    qDebug() << Q_FUNC_INFO <<  "K = " << K << "N_y = " << N;
+    qDebug() <<Q_FUNC_INFO <<  "K = " << K << "N_y = " << N;
     emit startSimulate(K,N);
 
     delete sim;

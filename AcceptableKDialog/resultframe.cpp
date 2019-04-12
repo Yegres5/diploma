@@ -83,6 +83,8 @@ void ResultFrame::pasteData(double k, double n, double t, double dt, double n_y_
         item->setData(Qt::UserRole, data);
         ui->table_results->setVerticalHeaderItem(rowNum, item);
     }
+
+
     QTableWidgetItem* item = new QTableWidgetItem;
     item->setData(Qt::DisplayRole, QVariant::fromValue(tabledrawingdata(t,n_y_max)));
     QMap<QString, double> dataMap;

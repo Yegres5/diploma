@@ -52,10 +52,11 @@ void simulator::startSimulate(double k, double n)
     }
     targetReached();
 }
-
+#include <QDebug>
 void simulator::targetReached()
 {
     n_y_max = *std::max_element(n_y->begin(), n_y->end());
+    qDebug() << Q_FUNC_INFO << " V_end = " << missile->getV();
     delete missile;
     delete target;
     emit simulationEnded();
@@ -81,7 +82,7 @@ void simulator::update()
     csvData->insert("LA", QVariant::fromValue(LACoor));
     emit sendCoordinates(csvData);
 
-    if (current_t > 200){
+    if (current_t > 100){
         swap();
     }
 }

@@ -1,5 +1,6 @@
 #include "rocket.h"
 #include <QtMath>
+#include <QDebug>
 
 #define isDoubleEqualToZero(x) ( fabs(x) < 0.1e-5)
 
@@ -104,7 +105,7 @@ void Rocket::SummarizeAllOverload()
 
 void Rocket::CheckMaxNy()
 {
-    n_y_max = n_yv > n_y_max ? n_yv : n_y_max;
+    n_yv = (abs(n_yv) > n_y_max) ? n_y_max*(n_yv > 0 ? 1 : -1) : n_yv;
 }
 
 void Rocket::EquationsOfMotion(double dt)
@@ -116,23 +117,19 @@ void Rocket::EquationsOfMotion(double dt)
     y += V*sin(teta.getValue())*dt;
     z += -V*cos(teta.getValue())*sin(psi.getValue())*dt;
 }
-static double t = 0;
+
 void Rocket::CheckTargetGetReached()
 {
-    if (distance_to_target > 100){
+    if (distance_to_target > 11){
         distance_to_target = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[1],2) + pow(TargetCoor[2],2));
     }else{
-        t = 0;
+        qDebug() << Q_FUNC_INFO << "distance to target = " << distance_to_target;
         emit targetGetReached();
     }
 }
-#include <QDebug>
-#include <QFile>
-void Rocket::update(double dt)
-{
-    GravityCompensation();
 
-    //qDebug() << V;
+void Rocket::CalculatingDragForce()
+{
     double l = 3.6;
     double d = 0.2;
     double p = 0.2279;
@@ -155,8 +152,13 @@ void Rocket::update(double dt)
     double drag_force = 0.5*Cd*p*0.026*V*V;
     double drag_acceleration = drag_force/175;
     n_xv -= drag_acceleration/_g;
+}
 
-    t+=dt;
+void Rocket::update(double dt)
+{
+    GravityCompensation();
+
+    CalculatingDragForce();
 
     CalculateTargetPosition();
     CalculateTargetSpeed();
