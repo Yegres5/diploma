@@ -13,29 +13,88 @@
 #include "simulator.h"
 
 Model::Model(QMap<QString, QVariant> *iniParam):
-    n0(iniParam->find ("LA pitch min").value().toDouble()),
-    n1(iniParam->find ("LA pitch max").value().toDouble()),
-    dn(iniParam->find ("LA pitch delta").value().toDouble()),
-    k0(iniParam->find ("Rock K0").value().toDouble()),
-    k1(iniParam->find ("Rock K1").value().toDouble()),
-    dk(iniParam->find ("Rock dK").value().toDouble()),
     params(iniParam)
 {
+    const QStringList str({
+                      "LA v",
+                      "LA pitch max",
+                      "LA t delay",
+                      "Rock x",
+                      "Rock y",
+                      "Rock z",
+                      "Rock v",
+                      "Rock teta",
+                      "Modeling dt"});
+
+    for (auto& it : str){
+        if(params->contains(it)){
+            staticParams.insert(it,*params->find(it));
+        }
+    }
+    staticParams.insert("LA teta", 0);
+    staticParams.insert("Rock psi",0);
 }
+
+struct pairOfAngles{
+    double delta;
+    double lambda;
+    pairOfAngles(double delta, double lambda):delta(delta/180*M_PI),lambda(lambda/180*M_PI){}
+};
 
 void Model::StartModeling()
 {
-    for (double k(k0); k1-k+dk>1e-4; k+=dk) {
-        for (double n(n0); n1-n+dn>1e-4; n+=dn) {
-            qDebug() << Q_FUNC_INFO <<  "K = " << k << "N_y = " << n;
+    //QMap<double, QList<double>> possibleLambda;    // delta, QList<double> lambda
+    QList<pairOfAngles> possibleAngleValues;
 
-            simulator* sim = new simulator(params);
-            connect(this, SIGNAL(startSimulate(double, double)),
-                    sim, SLOT(startSimulate(double, double)));
-            emit startSimulate(k,n);
-            emit sendData(k, n, sim->current_t, sim->dt, sim->n_y_max, sim->n_y);
+    for (double delta(0);
+         delta <= ((*params->find("Modeling sightMaxValue")).toDouble());
+         delta += ((*params->find("Modeling sightMaxValue")).toDouble())/
+         ((*params->find("Modeling countSightAngles")).toDouble() - 1))
+    {
+        QList<double> lambdas;
+        for (double lambda(0);
+             lambda <= (180 - delta);
+             lambda += (180 - delta)/((*params->find("Modeling countSpeedAngles")).toDouble() - 1))
+        {
+            pairOfAngles pair(delta,lambda);
+            possibleAngleValues.push_back(pair);
+        }
+    }
+
+    for (double k((*params->find("Modeling K0")).toDouble());
+                    (*params->find("Modeling K1")).toDouble() >= k ;
+                    k+=(*params->find("Modeling dK")).toDouble()) {
+        for (auto& angles : possibleAngleValues) {
+            QMap<QString, QVariant> dynamicData;
+
+            double a = sqrt(pow((*params->find("Rock MeshD")).toDouble(), 2) - pow((*params->find("LA dH")).toDouble(), 2));
+            dynamicData.insert("LA x", a*cos(angles.delta));
+            dynamicData.insert("LA y", (*params->find("LA dH")).toDouble());
+            dynamicData.insert("LA z", a*sin(angles.delta));
+            dynamicData.insert("LA psi", angles.lambda);
+            dynamicData.insert("Rocket k", k);
+            qDebug() << Q_FUNC_INFO << "LOOP " << k;
+
+            QMap<QString, QVariant> data(staticParams);
+
+            for(auto& it : dynamicData.keys()){
+                data.insert(it,(*dynamicData.find(it)));
+            }
+
+
+            simulator* sim = new simulator(&data);
+            connect(this, SIGNAL(startSimulate(double)),
+                    sim, SLOT(startSimulate(double)));
+
+            clearCSVFiles();
+            connect(sim, SIGNAL(sendCoordinates(QMap<QString,  QVariant>*)),
+                    this, SLOT(writeCoordToCSV(QMap<QString, QVariant>*)));
+
+            emit startSimulate(k);
+            emit sendData(k, 0, sim->current_t, sim->dt, sim->n_y_max, sim->n_y);
             delete sim;
         }
+
     }
 }
 
@@ -58,7 +117,7 @@ void Model::StartModelingFor(double K, double N, double dt)
             this, SLOT(writeCoordToCSV(QMap<QString, QVariant>*)));
 
     qDebug() <<Q_FUNC_INFO <<  "K = " << K << "N_y = " << N;
-    emit startSimulate(K,N);
+    emit startSimulate(K);
 
     delete sim;
 }

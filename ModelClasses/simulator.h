@@ -24,7 +24,7 @@ public:
 
 
 public slots:
-    void startSimulate(double k, double n);
+    void startSimulate(double k);
     void targetReached();
     void update();
     void swap();

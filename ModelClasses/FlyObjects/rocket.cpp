@@ -132,7 +132,7 @@ void Rocket::CalculatingDragForce()
 {
     double l = 3.6;
     double d = 0.2;
-    double p = 0.2279;
+    double p = 0.4135;
     double q = 0.5*p*pow(V,2);
     double M = V/320;
     double Ae = 0.0314;

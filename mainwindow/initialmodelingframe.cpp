@@ -36,7 +36,7 @@ InitialModelingFrame::InitialModelingFrame(QWidget *parent):
             this, SLOT(StartModeling()));
 }
 
-QMap<QString, QVariant> InitialModelingFrame::getInitialParametrs()
+QMap<QString, QVariant> InitialModelingFrame::getInitialParametrs() // all parametrs from frame
 {
     QMap<QString, QVariant> iniMap;
     QVector<QMap<QString, double>> mapVector;

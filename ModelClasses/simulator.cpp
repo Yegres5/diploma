@@ -14,7 +14,7 @@ simulator::simulator(QMap<QString, QVariant> *iniParam):
 {
 }
 
-void simulator::startSimulate(double k, double n)
+void simulator::startSimulate(double k)
 {
     current_t = 0;
     n_y->clear();
@@ -27,7 +27,7 @@ void simulator::startSimulate(double k, double n)
                     params->find("LA teta").value().toDouble(),
                     params->find("LA psi").value().toDouble(),
                     0,
-                    n,
+                    params->find("LA pitch max").value().toDouble(),
                     params->find("LA t manouver").value().toDouble(),
                     params->find("LA t delay").value().toDouble());
 
@@ -67,13 +67,14 @@ void simulator::swap()
     loopOn = !loopOn;
 }
 
-#include <QDebug>
 void simulator::update()
 {
     target->update(dt);
     missile->update(dt);
     n_y->push_back(std::abs(missile->getNy()));
     current_t+=dt;
+
+    //qDebug() << Q_FUNC_INFO << " current time = " << current_t;
 
     QList<double> targetCoor    {target->getX(),    target->getY(),     target->getZ()};
     QList<double> LACoor        {missile->getX(),   missile->getY(),    missile->getZ()};

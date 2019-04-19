@@ -23,20 +23,17 @@ void LA::update(double dt)
     double psi = 0;
     double teta  = -this->teta.getValue();
     double gamma = -this->gamma.getValue();
-
     QVector<QVector<double>> arr{
                         {cos(teta)*cos(psi),                                    sin(teta),              -cos(teta)*sin(psi)},
                         {-cos(gamma)*sin(teta)*cos(psi)+sin(gamma)*sin(psi), cos(gamma)*cos(teta),  cos(gamma)*sin(teta)*sin(psi)+sin(gamma)*cos(psi)},
                         {sin(gamma)*sin(teta)*cos(psi)+cos(gamma)*sin(psi),  -sin(gamma)*cos(teta), -sin(psi)*sin(teta)*sin(gamma)+cos(psi)*cos(gamma)}};
 
     QVector<double> temp(3);
-
     for(int i = 0; i < arr.at(0).size(); i++){
         for(int j = 0; j < grav.size(); j++){
             temp[i] += grav.at(j)*arr.at(j).at(i);
         }
     }
-
     grav = temp;
     }
 
@@ -60,6 +57,7 @@ void LA::update(double dt)
             }
         }
     }
+
     n_yv += 0;
     double n_roll = 0;
     t += dt;
