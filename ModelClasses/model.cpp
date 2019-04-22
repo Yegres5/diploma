@@ -81,42 +81,62 @@ void Model::StartModeling()
                 data.insert(it,(*dynamicData.find(it)));
             }
 
-
-            simulator* sim = new simulator(&data);
+            simulator* sim = new simulator(new QMap<QString,QVariant>(data));
             connect(this, SIGNAL(startSimulate(double)),
                     sim, SLOT(startSimulate(double)));
 
-            clearCSVFiles();
-            connect(sim, SIGNAL(sendCoordinates(QMap<QString,  QVariant>*)),
-                    this, SLOT(writeCoordToCSV(QMap<QString, QVariant>*)));
-
             emit startSimulate(k);
-            emit sendData(k, 0, sim->current_t, sim->dt, sim->n_y_max, sim->n_y);
+
+            QMap<QString, double> tempMap;
+            for (auto& it : data.keys()){
+                tempMap.insert(it, (*data.find(it)).toDouble());
+            }
+            tempMap.insert("Rock K",k);
+            tempMap.insert("LA delta",angles.delta);
+            tempMap.insert("LA lambda", angles.lambda);
+            tempMap.insert("Simulator t",sim->current_t);
+            tempMap.insert("Simulator dt",sim->dt);
+            tempMap.insert("Simulator n_y_max",sim->n_y_max);
+
+            emit sendData(new QMap<QString,double>(tempMap), sim->n_y);
             delete sim;
         }
-
     }
 }
 
-void Model::StartModelingFor(double K, double N, double dt)
+void Model::StartModelingFor(double K, QList<double> angles, double dt)
 {
     qDebug() << Q_FUNC_INFO;
     clearCSVFiles();
 
-    QMap<QString,QVariant> tempMap(*params);
+    QMap<QString,QVariant> tempMap(staticParams);
 
     if (dt > 1e-7){
         tempMap["Modeling dt"] = dt;
     }
 
-    simulator* sim = new simulator(&tempMap);
-    connect(this, SIGNAL(startSimulate(double, double)),
-            sim, SLOT(startSimulate(double, double)), Qt::DirectConnection);
+    QMap<QString,double> dynamicData;
+    double a = sqrt(pow((*params->find("Rock MeshD")).toDouble(), 2) - pow((*params->find("LA dH")).toDouble(), 2));
+    dynamicData.insert("LA x", a*cos(angles.first()));
+    dynamicData.insert("LA y", (*params->find("LA dH")).toDouble());
+    dynamicData.insert("LA z", a*sin(angles.first()));
+    dynamicData.insert("LA psi", angles.last());
+    dynamicData.insert("Rocket k", K);
+
+    QMap<QString, QVariant> data(staticParams);
+
+    for(auto& it : dynamicData.keys()){
+        data.insert(it,(*dynamicData.find(it)));
+    }
+
+    simulator* sim = new simulator(new QMap<QString, QVariant>(data));
+    connect(this, SIGNAL(startSimulate(double)),
+            sim, SLOT(startSimulate(double)), Qt::DirectConnection);
 
     connect(sim, SIGNAL(sendCoordinates(QMap<QString,  QVariant>*)),
             this, SLOT(writeCoordToCSV(QMap<QString, QVariant>*)));
 
-    qDebug() <<Q_FUNC_INFO <<  "K = " << K << "N_y = " << N;
+    qDebug() <<Q_FUNC_INFO <<  "K = " << K << "N_y = " << angles;
     emit startSimulate(K);
 
     delete sim;

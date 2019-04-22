@@ -122,10 +122,12 @@ void Rocket::CheckTargetGetReached()
 {
     if (distance_to_target > 11){
         distance_to_target = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[1],2) + pow(TargetCoor[2],2));
+
     }else{
         qDebug() << Q_FUNC_INFO << "distance to target = " << distance_to_target;
         emit targetGetReached();
     }
+    qDebug() << Q_FUNC_INFO << "distance to target = " << distance_to_target;
 }
 
 void Rocket::CalculatingDragForce()
@@ -166,7 +168,7 @@ void Rocket::update(double dt)
     CalculateNyPN();
     CalculateNzPN();
     SummarizeAllOverload();
-    CheckMaxNy();
+    //CheckMaxNy();
 
     EquationsOfMotion(dt);
 

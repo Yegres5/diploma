@@ -6,18 +6,24 @@
 #include <QtMath>
 
 simulator::simulator(QMap<QString, QVariant> *iniParam):
-    params(iniParam),
+    params(new QMap<QString, QVariant>(*iniParam)),
     current_t(0),
     dt(iniParam->find("Modeling dt")->toDouble()),
     n_y(new QVector<double>),
     loopOn(true)
 {
+    delete iniParam;
 }
-
+#include <QDebug>
 void simulator::startSimulate(double k)
 {
     current_t = 0;
     n_y->clear();
+    qDebug() << Q_FUNC_INFO << params;
+    for (auto& it:params->keys()) {
+        qDebug() << it << "__" << params->find(it)->toDouble();
+    }
+
     target = new LA(params->find("LA x").value().toDouble(),
                     params->find("LA y").value().toDouble(),
                     params->find("LA z").value().toDouble(),
@@ -28,7 +34,7 @@ void simulator::startSimulate(double k)
                     params->find("LA psi").value().toDouble(),
                     0,
                     params->find("LA pitch max").value().toDouble(),
-                    params->find("LA t manouver").value().toDouble(),
+                    params->find("LA t delay").value().toDouble(),
                     params->find("LA t delay").value().toDouble());
 
     missile = new Rocket(params->find ("Rock x").value().toDouble(),
@@ -42,15 +48,18 @@ void simulator::startSimulate(double k)
                          0,
                          target,
                          k);
+    qDebug() << Q_FUNC_INFO << "end";
 
     connect(missile,SIGNAL(targetGetReached()),
             this, SLOT(swap()));
 
     loopOn = true;
+
     while (loopOn){
         update();
     }
     targetReached();
+
 }
 #include <QDebug>
 void simulator::targetReached()
@@ -83,7 +92,7 @@ void simulator::update()
     csvData->insert("LA", QVariant::fromValue(LACoor));
     emit sendCoordinates(csvData);
 
-    if (current_t > 100){
+    if (current_t > 200){
         swap();
     }
 }

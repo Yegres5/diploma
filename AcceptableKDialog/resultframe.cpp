@@ -44,9 +44,12 @@ ResultFrame::~ResultFrame()
     delete ui;
 }
 
-void ResultFrame::pasteData(double k, double n, double t, double dt, double n_y_max, QVector<double>* n_y)
+void ResultFrame::pasteData(QMap<QString, double>* modelingParametrs, QVector<double> *n_y)
 {
+    double k = *modelingParametrs->find("Rock K");
     int headerNum(-1),rowNum(-1);
+
+    //finding K
     for(int i = 0; i < ui->table_results->model()->columnCount(); i++)
     {
         if (abs(ui->table_results->model()->headerData(i, Qt::Horizontal,Qt::UserRole).toDouble() - k) < 1e-4){
@@ -54,6 +57,8 @@ void ResultFrame::pasteData(double k, double n, double t, double dt, double n_y_
             break;
         }
     }
+
+    //if K not found
     if (headerNum == -1){
         ui->table_results->setColumnCount(ui->table_results->model()->columnCount()+1);
         headerNum = ui->table_results->model()->columnCount()-1;
@@ -65,33 +70,48 @@ void ResultFrame::pasteData(double k, double n, double t, double dt, double n_y_
         ui->table_results->setHorizontalHeaderItem(headerNum, item);
     }
 
+    //finding (delta lambda)
     for(int i = 0; i < ui->table_results->model()->rowCount(); i++)
     {
-        if (abs(n - ui->table_results->model()->headerData(i, Qt::Vertical, Qt::UserRole).toDouble()) < 1e-4){
+        QList<double> angleList(ui->table_results->model()->headerData(i, Qt::Vertical, Qt::UserRole).value<QList<double>>());
+        angleList[0] = angleList[0]/180*M_PI;
+        angleList[1] = angleList[1]/180*M_PI;
+        if ((abs(*modelingParametrs->find("LA delta") - angleList.first()) < 1e-4)
+                && (abs(*modelingParametrs->find("LA lambda") - angleList.last()) < 1e-4)){
             rowNum = i;
             break;
         }
     }
 
+    //if (delta lambda) not found
     if (rowNum == -1){
         ui->table_results->setRowCount(ui->table_results->model()->rowCount()+1);
         rowNum = ui->table_results->model()->rowCount()-1;
 
-        QString name("N = " + QString::number(n));
+        QList<double> angles;
+        angles.push_back(*modelingParametrs->find("LA delta")/M_PI*180);
+        angles.push_back(*modelingParametrs->find("LA lambda")/M_PI*180);
+
+        QString name(tr("Delta = ") + QString::number(angles.first()) + "\n"
+                     + tr("Lambda = ") + QString::number(angles.last()));
+
         QTableWidgetItem* item = new QTableWidgetItem(name);
-        QVariant data = n;
+
+        QVariant data;
+        data.setValue<QList<double>>(angles);
         item->setData(Qt::UserRole, data);
         ui->table_results->setVerticalHeaderItem(rowNum, item);
     }
 
+    //paste element in cell
     QTableWidgetItem* item = new QTableWidgetItem;
-    item->setData(Qt::DisplayRole, QVariant::fromValue(tabledrawingdata(t,n_y_max)));
+    item->setData(Qt::DisplayRole, QVariant::fromValue(tabledrawingdata(*modelingParametrs->find("Simulator t"),
+                                                                        *modelingParametrs->find("Simulator n_y_max"))));
     QMap<QString, double> dataMap;
     dataMap.insert("k", k);
-    dataMap.insert("t", t);
-    dataMap.insert("dt" ,dt);
-    dataMap.insert("n", n);
-    dataMap.insert("n_y_max", n_y_max);
+    dataMap.insert("t", *modelingParametrs->find("Simulator t"));
+    dataMap.insert("dt", *modelingParametrs->find("Simulator dt"));
+    dataMap.insert("n_y_max", *modelingParametrs->find("Simulator n_y_max"));
     item->setData(Role_Map, QVariant::fromValue(dataMap));
 
     item->setData(Role_Ny, QVariant::fromValue(n_y->toList()));
@@ -181,7 +201,6 @@ void ResultFrame::drawNy()
 
 void ResultFrame::draw3Dtrajectory()
 {
-
     QList<QTableWidgetItem*> items = ui->table_results->selectedItems();
 
     if (!items.count())
@@ -203,8 +222,8 @@ void ResultFrame::draw3Dtrajectory()
     case 1: {
         QTableWidgetItem* item = items.takeFirst();
         const double k = ui->table_results->horizontalHeaderItem(item->column())->data(Qt::UserRole).toDouble();
-        const double n_y = ui->table_results->verticalHeaderItem(item->row())->data(Qt::UserRole).toDouble();
-        emit startSimulationFor(k,n_y,ui->Edit_modelingTime->text().toDouble());
+        const QList<double> angles(ui->table_results->verticalHeaderItem(item->row())->data(Qt::UserRole).value<QList<double>>());
+        emit startSimulationFor(k,angles,ui->Edit_modelingTime->text().toDouble());
         break;
         }
     default:{
@@ -220,7 +239,7 @@ void ResultFrame::draw3Dtrajectory()
 
     QJsonDocument doc (QJsonDocument().fromJson(jsonFile.readAll()));
     QJsonObject obj (doc.object());
-    QStringList arguments { obj.value("pythonScriptPath").toString() + "3Ddraw.py" };
+    QStringList arguments { obj.value("pythonScriptPath").toString() + "3Ddraw_animate.py" };
 
     QProcess p;
     p.start(obj.value("pythonInterpriterPath").toString(), arguments);

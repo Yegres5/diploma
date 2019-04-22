@@ -3,6 +3,8 @@
 
 #include <QFrame>
 #include <QVector>
+#include <QMap>
+#include <QMetaType>
 
 namespace Ui {
 class ResultFrame;
@@ -20,16 +22,18 @@ public:
 
 signals:
     void startSimulation();
-    void startSimulationFor(double K, double N, double dt);
+    void startSimulationFor(double K, QList<double> angles, double dt);
     void hideDialog();
     void showDialog();
 
 public slots:
-    void pasteData(double k, double n, double t, double dt, double n_y_max, QVector<double> *n_y);
+    void pasteData(QMap<QString, double>* modelingParametrs, QVector<double> *n_y);
 
 private slots:
     void drawNy();
     void draw3Dtrajectory();
 };
+
+
 
 #endif // RESULTFRAME_H
