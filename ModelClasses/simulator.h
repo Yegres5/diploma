@@ -6,6 +6,7 @@
 
 #include "FlyObjects/la.h"
 #include "FlyObjects/rocket.h"
+#include <QMap>
 
 class simulator:public QObject
 {
@@ -14,17 +15,20 @@ private:
     QMap<QString, QVariant>* params;
     LA* target;
     Rocket* missile;
+    double tCSV;
 
 public:
     simulator(QMap<QString, QVariant>* iniParam);
 
     double current_t,n_y_max,dt;
-    QVector<double>* n_y;
+    QList<double> n_y_sum, n_y, n_z;
+    QMap<QString, QList<double>> graphs;
     bool loopOn;
 
 
+
 public slots:
-    void startSimulate(double k);
+    void startSimulate(double Ky, double Kz);
     void targetReached();
     void update();
     void swap();

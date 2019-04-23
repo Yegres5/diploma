@@ -22,16 +22,20 @@ public:
 
 signals:
     void startSimulation();
-    void startSimulationFor(double K, QList<double> angles, double dt);
+    void startSimulationFor(QList<double> K, QList<double> angles, double dt);
     void hideDialog();
     void showDialog();
 
 public slots:
-    void pasteData(QMap<QString, double>* modelingParametrs, QVector<double> *n_y);
+    void pasteData(QMap<QString, double>* modelingParametrs, QMap<QString,QList<double>>* graphs);
 
 private slots:
     void drawNy();
+    void drawNz();
+    void drawNy_sum();
     void draw3Dtrajectory();
+private:
+    void drawGraphForKey(QString key);
 };
 
 

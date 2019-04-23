@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QVector>
+#include <QDebug>
 
 #define isDoubleEqualToZero(x) ( fabs(x) < 0.1e-5)
 
@@ -10,8 +11,8 @@ LA::LA()
 {}
 
 LA::LA(double x, double y, double z, double V, double n_xv,
-       double n_yv, double teta, double psi, double gamma, double n_manouver, double n_t0, double n_dt, const char *name):
-        x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta/180*M_PI),psi(psi/180*M_PI),gamma(gamma/180*M_PI),n_manouver(n_manouver),n_t0(n_t0),n_dt(n_dt),t(0)
+       double n_yv, double teta, double psi, double gamma, double n_manouver, double n_t0, double n_dt, double deltaAngle, const char *name):
+        x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta),psi(psi),gamma(gamma/180*M_PI),n_manouver(n_manouver),n_t0(n_t0),n_dt(n_dt),t(0),deltaAngle(deltaAngle)
 {
     setObjectName(name);
 }
@@ -61,11 +62,9 @@ void LA::update(double dt)
     n_yv += 0;
     double n_roll = 0;
     t += dt;
-
-    if (t > n_t0){
+    if (abs(psi.getValue() - deltaAngle) > 10./180.*M_PI){
         n_roll = n_manouver;
-    }
-    if (t > n_t0 + 2*M_PI*V/(_g*abs(n_manouver))/2){
+    }else{
         n_roll = 0;
     }
 

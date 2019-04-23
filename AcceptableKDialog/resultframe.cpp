@@ -17,7 +17,7 @@
 #include "tabledelegate.h"
 
 #define Role_Map Qt::UserRole
-#define Role_Ny Qt::UserRole+1
+#define Role_graph Qt::UserRole+1
 
 ResultFrame::ResultFrame(QWidget *parent) :
     QFrame(parent),
@@ -28,6 +28,11 @@ ResultFrame::ResultFrame(QWidget *parent) :
             this, SIGNAL(startSimulation()));
     connect(ui->button_draw_ny,SIGNAL(clicked()),
             this, SLOT(drawNy()));
+    connect(ui->button_draw_ny_sum,SIGNAL(clicked()),
+            this, SLOT(drawNy_sum()));
+    connect(ui->button_draw_nz,SIGNAL(clicked()),
+            this, SLOT(drawNz()));
+
     connect(ui->button_start3dModeling,SIGNAL(clicked()),
             this, SLOT(draw3Dtrajectory()));
 
@@ -44,15 +49,18 @@ ResultFrame::~ResultFrame()
     delete ui;
 }
 
-void ResultFrame::pasteData(QMap<QString, double>* modelingParametrs, QVector<double> *n_y)
+void ResultFrame::pasteData(QMap<QString, double>* modelingParametrs, QMap<QString,QList<double>>* graphs)
 {
-    double k = *modelingParametrs->find("Rock K");
     int headerNum(-1),rowNum(-1);
 
     //finding K
     for(int i = 0; i < ui->table_results->model()->columnCount(); i++)
     {
-        if (abs(ui->table_results->model()->headerData(i, Qt::Horizontal,Qt::UserRole).toDouble() - k) < 1e-4){
+
+        QList<double> kList(ui->table_results->model()->headerData(i, Qt::Horizontal,Qt::UserRole).value<QList<double>>());
+
+        if ((abs(kList.first() - *modelingParametrs->find("Rock Ky")) < 1e-4) &&
+                (abs(kList.last() - *modelingParametrs->find("Rock Kz")) < 1e-4)) {
             headerNum = i;
             break;
         }
@@ -63,9 +71,18 @@ void ResultFrame::pasteData(QMap<QString, double>* modelingParametrs, QVector<do
         ui->table_results->setColumnCount(ui->table_results->model()->columnCount()+1);
         headerNum = ui->table_results->model()->columnCount()-1;
 
-        QString name("K = " + QString::number(k));
+
+        QList<double> kList;
+        kList.push_back(*modelingParametrs->find("Rock Ky"));
+        kList.push_back(*modelingParametrs->find("Rock Kz"));
+
+        QVariant data;
+        data.setValue<QList<double>>(kList);
+
+        QString name(tr("Ky = ") + QString::number(kList.first()) + "\n" +
+                     tr("Kz = ") + QString::number(kList.last()));
         QTableWidgetItem* item = new QTableWidgetItem(name);
-        QVariant data = k;
+
         item->setData(Qt::UserRole,data);
         ui->table_results->setHorizontalHeaderItem(headerNum, item);
     }
@@ -108,13 +125,14 @@ void ResultFrame::pasteData(QMap<QString, double>* modelingParametrs, QVector<do
     item->setData(Qt::DisplayRole, QVariant::fromValue(tabledrawingdata(*modelingParametrs->find("Simulator t"),
                                                                         *modelingParametrs->find("Simulator n_y_max"))));
     QMap<QString, double> dataMap;
-    dataMap.insert("k", k);
+    dataMap.insert("ky", *modelingParametrs->find("Rock Ky"));
+    dataMap.insert("kz", *modelingParametrs->find("Rock Kz"));
     dataMap.insert("t", *modelingParametrs->find("Simulator t"));
     dataMap.insert("dt", *modelingParametrs->find("Simulator dt"));
     dataMap.insert("n_y_max", *modelingParametrs->find("Simulator n_y_max"));
     item->setData(Role_Map, QVariant::fromValue(dataMap));
 
-    item->setData(Role_Ny, QVariant::fromValue(n_y->toList()));
+    item->setData(Role_graph, QVariant::fromValue(*graphs));
 
     ui->table_results->setItem(rowNum, headerNum, item);
     ui->table_results->verticalHeader()->setMinimumSectionSize(50);
@@ -122,6 +140,67 @@ void ResultFrame::pasteData(QMap<QString, double>* modelingParametrs, QVector<do
 }
 
 void ResultFrame::drawNy()
+{
+    drawGraphForKey("N_y");
+}
+
+void ResultFrame::drawNz()
+{
+    drawGraphForKey("N_z");
+}
+
+void ResultFrame::drawNy_sum()
+{
+    drawGraphForKey("Ny_sum");
+}
+
+void ResultFrame::draw3Dtrajectory()
+{
+    QList<QTableWidgetItem*> items = ui->table_results->selectedItems();
+
+    if (!items.count())
+    {
+        qDebug() << "Return";
+        QMessageBox msgBox;
+        msgBox.setText(tr("Choose element."));
+        msgBox.exec();
+        return;
+    }
+    switch (items.count()){
+    case 0:{
+        QMessageBox msgBox;
+        msgBox.setText(tr("Choose element."));
+        msgBox.exec();
+        break;
+        }
+    case 1: {
+        QTableWidgetItem* item = items.takeFirst();
+        const QList<double> k = ui->table_results->horizontalHeaderItem(item->column())->data(Qt::UserRole).value<QList<double>>();
+        const QList<double> angles(ui->table_results->verticalHeaderItem(item->row())->data(Qt::UserRole).value<QList<double>>());
+        emit startSimulationFor(k,angles,ui->Edit_modelingTime->text().toDouble());
+        break;
+        }
+    default:{
+        QMessageBox msgBox;
+        msgBox.setText(tr("Choose only one element."));
+        msgBox.exec();
+        return;
+        }
+    }
+
+    QFile jsonFile(":/JSON/paths.json");
+    jsonFile.open(QFile::ReadOnly);
+
+    QJsonDocument doc (QJsonDocument().fromJson(jsonFile.readAll()));
+    QJsonObject obj (doc.object());
+    QStringList arguments { obj.value("pythonScriptPath").toString() + "3Ddraw_animate.py" };
+
+    QProcess p;
+    p.start(obj.value("pythonInterpriterPath").toString(), arguments);
+    p.waitForFinished(-1);
+}
+
+void ResultFrame::drawGraphForKey(QString key)
 {
     QList<QTableWidgetItem*> items = ui->table_results->selectedItems();
 
@@ -151,7 +230,8 @@ void ResultFrame::drawNy()
 
         QBrush brush(QColor::fromRgb(r,g,b));
         series->setPen(QPen(brush, 4));
-        QList<double> n_y = qvariant_cast<QList<double>>(item->data(Role_Ny));
+        QMap<QString,QList<double>> graphs = qvariant_cast<QMap<QString,QList<double>>>(item->data(Role_graph));
+        QList<double> n_y = *graphs.find(key);
         double dt = qvariant_cast<QMap<QString,double>>(item->data(Role_Map)).find("dt").value();
         double t(0);
 
@@ -199,49 +279,4 @@ void ResultFrame::drawNy()
     dia->exec();
 }
 
-void ResultFrame::draw3Dtrajectory()
-{
-    QList<QTableWidgetItem*> items = ui->table_results->selectedItems();
 
-    if (!items.count())
-    {
-        qDebug() << "Return";
-        QMessageBox msgBox;
-        msgBox.setText(tr("Choose element."));
-        msgBox.exec();
-        return;
-    }
-
-    switch (items.count()){
-    case 0:{
-        QMessageBox msgBox;
-        msgBox.setText(tr("Choose element."));
-        msgBox.exec();
-        break;
-        }
-    case 1: {
-        QTableWidgetItem* item = items.takeFirst();
-        const double k = ui->table_results->horizontalHeaderItem(item->column())->data(Qt::UserRole).toDouble();
-        const QList<double> angles(ui->table_results->verticalHeaderItem(item->row())->data(Qt::UserRole).value<QList<double>>());
-        emit startSimulationFor(k,angles,ui->Edit_modelingTime->text().toDouble());
-        break;
-        }
-    default:{
-        QMessageBox msgBox;
-        msgBox.setText(tr("Choose only one element."));
-        msgBox.exec();
-        return;
-        }
-    }
-
-    QFile jsonFile(":/JSON/paths.json");
-    jsonFile.open(QFile::ReadOnly);
-
-    QJsonDocument doc (QJsonDocument().fromJson(jsonFile.readAll()));
-    QJsonObject obj (doc.object());
-    QStringList arguments { obj.value("pythonScriptPath").toString() + "3Ddraw_animate.py" };
-
-    QProcess p;
-    p.start(obj.value("pythonInterpriterPath").toString(), arguments);
-    p.waitForFinished(-1);
-}

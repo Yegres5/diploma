@@ -61,50 +61,63 @@ void Model::StartModeling()
         }
     }
 
-    for (double k((*params->find("Modeling K0")).toDouble());
-                    (*params->find("Modeling K1")).toDouble() >= k ;
-                    k+=(*params->find("Modeling dK")).toDouble()) {
-        for (auto& angles : possibleAngleValues) {
-            QMap<QString, QVariant> dynamicData;
+    for (double Ky((*params->find("Modeling Ky_0")).toDouble());
+                    (*params->find("Modeling Ky_1")).toDouble() >= Ky ;
+                    Ky+=(*params->find("Modeling dKy")).toDouble()) {
 
-            double a = sqrt(pow((*params->find("Rock MeshD")).toDouble(), 2) - pow((*params->find("LA dH")).toDouble(), 2));
-            dynamicData.insert("LA x", a*cos(angles.delta));
-            dynamicData.insert("LA y", (*params->find("LA dH")).toDouble());
-            dynamicData.insert("LA z", a*sin(angles.delta));
-            dynamicData.insert("LA psi", angles.lambda);
-            dynamicData.insert("Rocket k", k);
-            qDebug() << Q_FUNC_INFO << "LOOP " << k;
+        for (double Kz((*params->find("Modeling Kz_0")).toDouble());
+                        (*params->find("Modeling Kz_1")).toDouble() >= Kz ;
+                        Kz+=(*params->find("Modeling dKz")).toDouble()) {
 
-            QMap<QString, QVariant> data(staticParams);
+            for (auto& angles : possibleAngleValues) {
+                QMap<QString, QVariant> dynamicData;
 
-            for(auto& it : dynamicData.keys()){
-                data.insert(it,(*dynamicData.find(it)));
+                double a = sqrt(pow((*params->find("Rock MeshD")).toDouble(), 2) - pow((*params->find("LA dH")).toDouble(), 2));
+                dynamicData.insert("LA x", a*cos(angles.delta));
+                dynamicData.insert("LA y", (*params->find("LA dH")).toDouble());
+                dynamicData.insert("LA z", a*sin(angles.delta));
+                dynamicData.insert("LA psi", angles.lambda);
+                dynamicData.insert("Rocket ky", Ky);
+                dynamicData.insert("Rocket kz", Kz);
+                dynamicData.insert("LA needed angle", 2*M_PI-angles.delta);
+                qDebug() << Q_FUNC_INFO << "LOOP " << Ky << "___" << Kz;
+
+                QMap<QString, QVariant> data(staticParams);
+
+                for(auto& it : dynamicData.keys()){
+                    data.insert(it,(*dynamicData.find(it)));
+                }
+
+                simulator* sim = new simulator(new QMap<QString,QVariant>(data));
+                connect(this, SIGNAL(startSimulate(double, double)),
+                        sim, SLOT(startSimulate(double, double)));
+
+                emit startSimulate(Ky,Kz);
+
+                QMap<QString, double> tempMap;
+                for (auto& it : data.keys()){
+                    tempMap.insert(it, (*data.find(it)).toDouble());
+                }
+                tempMap.insert("Rock Ky",Ky);
+                tempMap.insert("Rock Kz",Kz);
+                tempMap.insert("LA delta",angles.delta);
+                tempMap.insert("LA lambda", angles.lambda);
+                tempMap.insert("Simulator t",sim->current_t);
+                tempMap.insert("Simulator dt",sim->dt);
+                tempMap.insert("Simulator n_y_max",sim->n_y_max);
+
+                QMap<QString, QList<double>>* graphMap(new QMap<QString, QList<double>>(sim->graphs));
+
+
+                emit sendData(new QMap<QString,double>(tempMap), graphMap);
+                delete sim;
             }
-
-            simulator* sim = new simulator(new QMap<QString,QVariant>(data));
-            connect(this, SIGNAL(startSimulate(double)),
-                    sim, SLOT(startSimulate(double)));
-
-            emit startSimulate(k);
-
-            QMap<QString, double> tempMap;
-            for (auto& it : data.keys()){
-                tempMap.insert(it, (*data.find(it)).toDouble());
-            }
-            tempMap.insert("Rock K",k);
-            tempMap.insert("LA delta",angles.delta);
-            tempMap.insert("LA lambda", angles.lambda);
-            tempMap.insert("Simulator t",sim->current_t);
-            tempMap.insert("Simulator dt",sim->dt);
-            tempMap.insert("Simulator n_y_max",sim->n_y_max);
-
-            emit sendData(new QMap<QString,double>(tempMap), sim->n_y);
-            delete sim;
         }
     }
 }
 
-void Model::StartModelingFor(double K, QList<double> angles, double dt)
+
+void Model::StartModelingFor(QList<double> K, QList<double> angles, double dt)
 {
     qDebug() << Q_FUNC_INFO;
     clearCSVFiles();
@@ -117,11 +130,13 @@ void Model::StartModelingFor(double K, QList<double> angles, double dt)
 
     QMap<QString,double> dynamicData;
     double a = sqrt(pow((*params->find("Rock MeshD")).toDouble(), 2) - pow((*params->find("LA dH")).toDouble(), 2));
-    dynamicData.insert("LA x", a*cos(angles.first()));
+    dynamicData.insert("LA x", a*cos(angles.first()*M_PI/180));
     dynamicData.insert("LA y", (*params->find("LA dH")).toDouble());
-    dynamicData.insert("LA z", a*sin(angles.first()));
-    dynamicData.insert("LA psi", angles.last());
-    dynamicData.insert("Rocket k", K);
+    dynamicData.insert("LA z", a*sin(angles.first()*M_PI/180));
+    dynamicData.insert("LA psi", angles.last()/180*M_PI);
+    dynamicData.insert("Rocket Ky", K.first());
+    dynamicData.insert("Rocket Kz", K.last());
+    dynamicData.insert("LA needed angle", 2*M_PI-angles.first()*M_PI/180);
 
     QMap<QString, QVariant> data(staticParams);
 
@@ -130,14 +145,14 @@ void Model::StartModelingFor(double K, QList<double> angles, double dt)
     }
 
     simulator* sim = new simulator(new QMap<QString, QVariant>(data));
-    connect(this, SIGNAL(startSimulate(double)),
-            sim, SLOT(startSimulate(double)), Qt::DirectConnection);
+    connect(this, SIGNAL(startSimulate(double, double)),
+            sim, SLOT(startSimulate(double, double)), Qt::DirectConnection);
 
     connect(sim, SIGNAL(sendCoordinates(QMap<QString,  QVariant>*)),
             this, SLOT(writeCoordToCSV(QMap<QString, QVariant>*)));
 
     qDebug() <<Q_FUNC_INFO <<  "K = " << K << "N_y = " << angles;
-    emit startSimulate(K);
+    emit startSimulate(K.first(),K.last());
 
     delete sim;
 }
