@@ -34,6 +34,8 @@ private slots:
     void drawNz();
     void drawNy_sum();
     void draw3Dtrajectory();
+    void findOptimalPlan();
+
 private:
     void drawGraphForKey(QString key);
 };

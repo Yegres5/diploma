@@ -10,7 +10,7 @@ class Rocket: public QObject
   Q_OBJECT
 public:
     Rocket(double x, double y, double z, double V, double n_xv,
-           double n_yv, double teta, double psi, double gamma, LA* target, double Ky, double Kz,
+           double n_yv, double teta, double psi, double gamma, LA* target, double Ky, double Kz, double max_distance_to_target,
            const char* name = "Rocket");
 
     double getNy() { return n_yv; }
@@ -37,7 +37,7 @@ private:
     double r_XY;                    //Distance to target XY.
     double n_pitch;                 //Normal overload.
     double n_roll;                  //Lateral overload.
-    double max_angle;
+
 
     QVector<double> TargetSpeed;
 

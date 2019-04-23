@@ -43,7 +43,8 @@ void simulator::startSimulate(double Ky, double Kz)
                          params->find ("Rock psi").value().toDouble(),
                          0,
                          target,
-                         Ky,Kz);
+                         Ky,Kz,
+                         params->find("Rock explode_dist").value().toDouble());
 
     connect(missile,SIGNAL(targetGetReached()),
             this, SLOT(swap()));
@@ -89,7 +90,7 @@ void simulator::update()
 
 
     tCSV += dt;
-
+    qDebug() << current_t;
     if (fmod(tCSV, 0.1) < 1e-7){
         QList<double> targetCoor    {target->getX(),    target->getY(),     target->getZ()};
         QList<double> LACoor        {missile->getX(),   missile->getY(),    missile->getZ()};

@@ -14,7 +14,7 @@ private:
     QMap<QString, QVariant>* params;
     QMap<QString, QVariant> staticParams;
 public:
-    Model(QMap<QString, QVariant>* iniParam);
+    Model(QMap<QString, QVariant>* iniParam, QObject *parent = nullptr);
 public slots:
     void StartModeling();
     void StartModelingFor(QList<double> K, QList<double> angles, double dt);

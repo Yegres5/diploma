@@ -12,7 +12,8 @@
 
 #include "simulator.h"
 
-Model::Model(QMap<QString, QVariant> *iniParam):
+Model::Model(QMap<QString, QVariant> *iniParam, QObject *parent):
+    QObject(parent),
     params(iniParam)
 {
     const QStringList str({
@@ -24,6 +25,7 @@ Model::Model(QMap<QString, QVariant> *iniParam):
                       "Rock z",
                       "Rock v",
                       "Rock teta",
+                      "Rock explode_dist",
                       "Modeling dt"});
 
     for (auto& it : str){

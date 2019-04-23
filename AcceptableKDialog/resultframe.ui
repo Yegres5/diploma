@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>612</width>
-    <height>367</height>
+    <width>766</width>
+    <height>363</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -133,6 +133,13 @@
      </property>
      <property name="text">
       <string>n_y_sum(t) graph</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QPushButton" name="button_optimal_plan">
+     <property name="text">
+      <string>Find optimal plan</string>
      </property>
     </widget>
    </item>

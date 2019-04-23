@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QtCharts>
 #include <QList>
+#include <algorithm>
 
 #include "tabledrawingdata.h"
 #include "headeritem.h"
@@ -32,6 +33,8 @@ ResultFrame::ResultFrame(QWidget *parent) :
             this, SLOT(drawNy_sum()));
     connect(ui->button_draw_nz,SIGNAL(clicked()),
             this, SLOT(drawNz()));
+    connect(ui->button_optimal_plan, SIGNAL(clicked()),
+            this, SLOT(findOptimalPlan()));
 
     connect(ui->button_start3dModeling,SIGNAL(clicked()),
             this, SLOT(draw3Dtrajectory()));
@@ -88,6 +91,7 @@ void ResultFrame::pasteData(QMap<QString, double>* modelingParametrs, QMap<QStri
     }
 
     //finding (delta lambda)
+
     for(int i = 0; i < ui->table_results->model()->rowCount(); i++)
     {
         QList<double> angleList(ui->table_results->model()->headerData(i, Qt::Vertical, Qt::UserRole).value<QList<double>>());
@@ -198,6 +202,40 @@ void ResultFrame::draw3Dtrajectory()
     QProcess p;
     p.start(obj.value("pythonInterpriterPath").toString(), arguments);
     p.waitForFinished(-1);
+}
+
+void ResultFrame::findOptimalPlan()
+{
+    QVector<QVector<double>> timeVec;
+    for(int i = 0; i < ui->table_results->model()->rowCount(); i++){
+        QVector<double> timeLine;
+        for(int j = 0; j < ui->table_results->model()->columnCount(); j++){
+            QMap<QString,double> data = qvariant_cast<QMap<QString,double>>(ui->table_results->item(i,j)->data(Role_Map));
+            timeLine.push_back(*data.find("t"));
+            qDebug();
+        }
+        timeVec.push_back(timeLine);
+    }
+
+    QVector<double> MaxVec(timeVec.first().size());
+    for (auto& i : timeVec) {
+        for (int j(0); j < i.size(); j++) {
+            if  (MaxVec[j] < i[j]){
+                MaxVec[j] = i[j];
+            }
+        }
+    }
+
+    int numberK(0);
+    double MinValue = MAXFLOAT;
+    for (int i(0); i < MaxVec.size(); i++) {
+        if (MaxVec[i] < MinValue){
+            numberK = i;
+            MinValue = MaxVec[i];
+        }
+    }
+    QList<double> kList(ui->table_results->model()->headerData(numberK, Qt::Horizontal,Qt::UserRole).value<QList<double>>());
+    qDebug() << "Ky = " << kList.first() << " Kz = " << kList.last() << " time = " << MinValue;
 }
 
 void ResultFrame::drawGraphForKey(QString key)
