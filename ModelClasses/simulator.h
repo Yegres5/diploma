@@ -15,6 +15,7 @@ private:
     QMap<QString, QVariant>* params;
     LA* target;
     Rocket* missile;
+    double tCSV;
 
 public:
     simulator(QMap<QString, QVariant>* iniParam);
@@ -23,6 +24,7 @@ public:
     QList<double> n_y_sum, n_y, n_z;
     QMap<QString, QList<double>> graphs;
     bool loopOn;
+
 
 
 public slots:

@@ -17,11 +17,12 @@ protected:
     Angle teta,psi,gamma;
     double n_manouver,n_t0,n_dt;    //Manouver overload, manouver initial time, manouver duration.
     double t;                       //Current time(for manouver).
+    double deltaAngle;
 
 public:
     LA(double x,double y,double z,double V,double n_xv,
        double n_yv,double teta,double psi,double gamma,
-       double n_manouver, double n_t0, double n_dt,
+       double n_manouver, double n_t0, double n_dt, double deltaAngle,
        const char* name = "LA");
 
     explicit LA(QObject *parent = nullptr);

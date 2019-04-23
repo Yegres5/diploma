@@ -164,7 +164,7 @@ void Rocket::CheckMaxAngle()
     double angle = qAcos( (Vvec[0]*TargetCoor[0]+Vvec[1]*TargetCoor[1]+Vvec[2]*TargetCoor[2])/
             (sqrt(pow(Vvec[0],2)+pow(Vvec[1],2)+pow(Vvec[2],2))*sqrt(pow(TargetCoor[0],2)+pow(TargetCoor[1],2)+pow(TargetCoor[2],2))));
 
-    qDebug() << Q_FUNC_INFO << angle/M_PI*180;
+//    qDebug() << Q_FUNC_INFO << angle/M_PI*180;
 }
 
 void Rocket::update(double dt)

@@ -4,10 +4,11 @@
 #include <QVariant>
 #include <QVector>
 #include <QtMath>
+#include "math.h"
 
 simulator::simulator(QMap<QString, QVariant> *iniParam):
     params(new QMap<QString, QVariant>(*iniParam)),
-    current_t(0),
+    current_t(0),tCSV(0),
     dt(iniParam->find("Modeling dt")->toDouble()),
     n_y_sum(), n_y(), n_z(),
     loopOn(true)
@@ -29,7 +30,8 @@ void simulator::startSimulate(double Ky, double Kz)
                     0,
                     params->find("LA pitch max").value().toDouble(),
                     params->find("LA t delay").value().toDouble(),
-                    params->find("LA t delay").value().toDouble());
+                    params->find("LA t delay").value().toDouble(),
+                    params->find("LA needed angle").value().toDouble());//deltaAngle LA needed angle
 
     missile = new Rocket(params->find ("Rock x").value().toDouble(),
                          params->find ("Rock y").value().toDouble(),
@@ -85,13 +87,18 @@ void simulator::update()
 
     //qDebug() << Q_FUNC_INFO << " current time = " << current_t;
 
-    QList<double> targetCoor    {target->getX(),    target->getY(),     target->getZ()};
-    QList<double> LACoor        {missile->getX(),   missile->getY(),    missile->getZ()};
-    QMap<QString, QVariant>* csvData = new QMap<QString,QVariant>;
-    csvData->insert("Target", QVariant::fromValue(targetCoor));
-    csvData->insert("LA", QVariant::fromValue(LACoor));
-    emit sendCoordinates(csvData);
 
+    tCSV += dt;
+
+    if (fmod(tCSV, 0.1) < 1e-7){
+        QList<double> targetCoor    {target->getX(),    target->getY(),     target->getZ()};
+        QList<double> LACoor        {missile->getX(),   missile->getY(),    missile->getZ()};
+        QMap<QString, QVariant>* csvData = new QMap<QString,QVariant>;
+        csvData->insert("Target", QVariant::fromValue(targetCoor));
+        csvData->insert("LA", QVariant::fromValue(LACoor));
+        emit sendCoordinates(csvData);
+        tCSV = 0;
+    }
     if (current_t > 200){
         swap();
     }

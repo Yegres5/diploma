@@ -79,6 +79,7 @@ void Model::StartModeling()
                 dynamicData.insert("LA psi", angles.lambda);
                 dynamicData.insert("Rocket ky", Ky);
                 dynamicData.insert("Rocket kz", Kz);
+                dynamicData.insert("LA needed angle", 2*M_PI-angles.delta);
                 qDebug() << Q_FUNC_INFO << "LOOP " << Ky << "___" << Kz;
 
                 QMap<QString, QVariant> data(staticParams);
@@ -135,6 +136,7 @@ void Model::StartModelingFor(QList<double> K, QList<double> angles, double dt)
     dynamicData.insert("LA psi", angles.last()/180*M_PI);
     dynamicData.insert("Rocket Ky", K.first());
     dynamicData.insert("Rocket Kz", K.last());
+    dynamicData.insert("LA needed angle", 2*M_PI-angles.first()*M_PI/180);
 
     QMap<QString, QVariant> data(staticParams);
 
