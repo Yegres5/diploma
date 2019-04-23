@@ -27,16 +27,16 @@ AcceptableK::AcceptableK(QMap<QString, QVariant>* iniParam, QWidget* parent, Qt:
     connect(frame, SIGNAL(startSimulation()),
             simulationModel, SLOT(StartModeling()));
 
-    connect(frame, SIGNAL(startSimulationFor(double, QList<double>, double)),
-            simulationModel, SLOT(StartModelingFor(double, QList<double>, double)));
+    connect(frame, SIGNAL(startSimulationFor(QList<double>, QList<double>, double)),
+            simulationModel, SLOT(StartModelingFor(QList<double>, QList<double>, double)), Qt::DirectConnection);
 
     connect(frame, SIGNAL(hideDialog()),
             this,  SLOT(hideDia()));
     connect(frame, SIGNAL(showDialog()),
             this,  SLOT(showDia()));
 
-    connect(simulationModel, SIGNAL(sendData(QMap<QString,double>*, QVector<double>*)),
-            frame, SLOT(pasteData(QMap<QString,double>*, QVector<double>*)));
+    connect(simulationModel, SIGNAL(sendData(QMap<QString,double>*, QMap<QString,QList<double>>*)),
+            frame, SLOT(pasteData(QMap<QString,double>*, QMap<QString,QList<double>>*)));
 }
 
 AcceptableK::~AcceptableK()

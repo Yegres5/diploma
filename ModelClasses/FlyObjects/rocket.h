@@ -10,7 +10,7 @@ class Rocket: public QObject
   Q_OBJECT
 public:
     Rocket(double x, double y, double z, double V, double n_xv,
-           double n_yv, double teta, double psi, double gamma, LA* target, double K,
+           double n_yv, double teta, double psi, double gamma, LA* target, double Ky, double Kz,
            const char* name = "Rocket");
 
     double getNy() { return n_yv; }
@@ -28,14 +28,16 @@ private:
     double n_xv,n_yv;               //X Y overload.
     Angle teta,psi,gamma;           //Euler angles.
     LA* target;                     //Target.
-    double K;                       //Coefficient of proportional navigation.
+    double Ky,Kz;                       //Coefficient of proportional navigation.
     double n_y_max;                 //Maximum Ny overload.
     QVector<double> TargetCoor;     //Coordinates of target in Speed System.
     double distance_to_target;      //Current distance to target.
+    double max_distance_to_target;
     double r;                       //Distance to target XZ.
     double r_XY;                    //Distance to target XY.
     double n_pitch;                 //Normal overload.
     double n_roll;                  //Lateral overload.
+    double max_angle;
 
     QVector<double> TargetSpeed;
 
@@ -49,6 +51,7 @@ private:
     void EquationsOfMotion(double dt);
     void CheckTargetGetReached();
     void CalculatingDragForce();
+    void CheckMaxAngle();
 
     QVector<double> toSpeedCoordinateSystem(QVector<double> vec);
     QVector<double> toTrajectoryCoordinateSystem(QVector<double> vec);

@@ -9,21 +9,15 @@ simulator::simulator(QMap<QString, QVariant> *iniParam):
     params(new QMap<QString, QVariant>(*iniParam)),
     current_t(0),
     dt(iniParam->find("Modeling dt")->toDouble()),
-    n_y(new QVector<double>),
+    n_y_sum(), n_y(), n_z(),
     loopOn(true)
 {
     delete iniParam;
 }
 #include <QDebug>
-void simulator::startSimulate(double k)
+void simulator::startSimulate(double Ky, double Kz)
 {
     current_t = 0;
-    n_y->clear();
-    qDebug() << Q_FUNC_INFO << params;
-    for (auto& it:params->keys()) {
-        qDebug() << it << "__" << params->find(it)->toDouble();
-    }
-
     target = new LA(params->find("LA x").value().toDouble(),
                     params->find("LA y").value().toDouble(),
                     params->find("LA z").value().toDouble(),
@@ -47,8 +41,7 @@ void simulator::startSimulate(double k)
                          params->find ("Rock psi").value().toDouble(),
                          0,
                          target,
-                         k);
-    qDebug() << Q_FUNC_INFO << "end";
+                         Ky,Kz);
 
     connect(missile,SIGNAL(targetGetReached()),
             this, SLOT(swap()));
@@ -64,8 +57,13 @@ void simulator::startSimulate(double k)
 #include <QDebug>
 void simulator::targetReached()
 {
-    n_y_max = *std::max_element(n_y->begin(), n_y->end());
+    n_y_max = *std::max_element(n_y_sum.begin(), n_y_sum.end());
     qDebug() << Q_FUNC_INFO << " V_end = " << missile->getV();
+
+    graphs.insert("Ny_sum", n_y_sum);
+    graphs.insert("N_y", n_y);
+    graphs.insert("N_z", n_z);
+
     delete missile;
     delete target;
     emit simulationEnded();
@@ -80,7 +78,9 @@ void simulator::update()
 {
     target->update(dt);
     missile->update(dt);
-    n_y->push_back(std::abs(missile->getNy()));
+    n_y_sum.push_back(std::abs(missile->getNy()));
+    n_y.push_back(missile->getN_pitch());
+    n_z.push_back(missile->getN_roll());
     current_t+=dt;
 
     //qDebug() << Q_FUNC_INFO << " current time = " << current_t;

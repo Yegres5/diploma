@@ -11,7 +11,7 @@ LA::LA()
 
 LA::LA(double x, double y, double z, double V, double n_xv,
        double n_yv, double teta, double psi, double gamma, double n_manouver, double n_t0, double n_dt, const char *name):
-        x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta/180*M_PI),psi(psi/180*M_PI),gamma(gamma/180*M_PI),n_manouver(n_manouver),n_t0(n_t0),n_dt(n_dt),t(0)
+        x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta),psi(psi),gamma(gamma/180*M_PI),n_manouver(n_manouver),n_t0(n_t0),n_dt(n_dt),t(0)
 {
     setObjectName(name);
 }

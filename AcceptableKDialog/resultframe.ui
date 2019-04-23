@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>610</width>
+    <width>612</width>
     <height>367</height>
    </rect>
   </property>
@@ -14,7 +14,17 @@
    <string>Frame</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" rowspan="4">
+   <item row="1" column="1">
+    <widget class="QPushButton" name="button_start2dModeling">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>2D modeling</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" rowspan="7">
     <widget class="QTableWidget" name="table_results">
      <property name="minimumSize">
       <size>
@@ -79,27 +89,17 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="1">
-    <widget class="QPushButton" name="button_start2dModeling">
+   <item row="7" column="1">
+    <widget class="QPushButton" name="button_startSimulate">
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
      </property>
      <property name="text">
-      <string>2D modeling</string>
+      <string>start simulation</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QPushButton" name="button_draw_ny">
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>n_y(t) graph</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
+   <item row="6" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -112,13 +112,27 @@
      </property>
     </spacer>
    </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="button_draw_ny">
+     <property name="text">
+      <string>n_y(t) graph</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QPushButton" name="button_draw_nz">
+     <property name="text">
+      <string>n_z(t) graph</string>
+     </property>
+    </widget>
+   </item>
    <item row="4" column="1">
-    <widget class="QPushButton" name="button_startSimulate">
+    <widget class="QPushButton" name="button_draw_ny_sum">
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
      </property>
      <property name="text">
-      <string>start simulation</string>
+      <string>n_y_sum(t) graph</string>
      </property>
     </widget>
    </item>

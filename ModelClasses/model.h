@@ -17,12 +17,12 @@ public:
     Model(QMap<QString, QVariant>* iniParam);
 public slots:
     void StartModeling();
-    void StartModelingFor(double K, QList<double> angles, double dt);
+    void StartModelingFor(QList<double> K, QList<double> angles, double dt);
     void writeCoordToCSV(QMap<QString,  QVariant>* coord);
     void clearCSVFiles();
 signals:
-    void startSimulate(double k);
-    void sendData(QMap<QString,double>* tempMap, QVector<double>* n_y);
+    void startSimulate(double Ky, double Kz);
+    void sendData(QMap<QString,double>* tempMap, QMap<QString, QList<double>>* n_y);
 };
 
 

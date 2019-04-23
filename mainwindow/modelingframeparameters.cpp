@@ -21,18 +21,24 @@ QMap<QString, double> modelingFrameParameters::getInitialParametrs()
     initialMap.insert("Modeling rocketAltitude",ui->lineEdit_rocketAltitude->text().toDouble());
     initialMap.insert("Modeling countSightAngles",ui->lineEdit_countSightAngles->text().toDouble());
     initialMap.insert("Modeling countSpeedAngles",ui->lineEdit_countSpeedAngles->text().toDouble());
-    initialMap.insert("Modeling K0",ui->lineEdit_K0->text().toDouble());
-    initialMap.insert("Modeling K1",ui->lineEdit_K1->text().toDouble());
-    initialMap.insert("Modeling dK",ui->lineEdit_dK->text().toDouble());
+    initialMap.insert("Modeling Ky_0",ui->lineEdit_Ky_0->text().toDouble());
+    initialMap.insert("Modeling Ky_1",ui->lineEdit_Ky_1->text().toDouble());
+    initialMap.insert("Modeling dKy",ui->lineEdit_dKy->text().toDouble());
+    initialMap.insert("Modeling Kz_0",ui->lineEdit_Kz_0->text().toDouble());
+    initialMap.insert("Modeling Kz_1",ui->lineEdit_Kz_1->text().toDouble());
+    initialMap.insert("Modeling dKz",ui->lineEdit_dKz->text().toDouble());
     return  initialMap;
 }
 
 void modelingFrameParameters::loadInitialParametrs(QMap<QString, double> parametrs)
 {
     ui->lineEdit_dt->setText(QString::number(parametrs.find ("Modeling dt").value()));
-    ui->lineEdit_K0->setText(QString::number(parametrs.find ("Modeling K0").value()));
-    ui->lineEdit_K1->setText(QString::number(parametrs.find ("Modeling K1").value()));
-    ui->lineEdit_dK->setText(QString::number(parametrs.find ("Modeling dK").value()));
+    ui->lineEdit_Ky_0->setText(QString::number(parametrs.find ("Modeling Ky_0").value()));
+    ui->lineEdit_Ky_1->setText(QString::number(parametrs.find ("Modeling Ky_1").value()));
+    ui->lineEdit_dKy->setText(QString::number(parametrs.find ("Modeling dKy").value()));
+    ui->lineEdit_Kz_0->setText(QString::number(parametrs.find ("Modeling Kz_0").value()));
+    ui->lineEdit_Kz_1->setText(QString::number(parametrs.find ("Modeling Kz_1").value()));
+    ui->lineEdit_dKz->setText(QString::number(parametrs.find ("Modeling dKz").value()));
     ui->lineEdit_sightMaxValue->setText(QString::number(parametrs.find ("Modeling sightMaxValue").value()));
     ui->lineEdit_rocketAltitude->setText(QString::number(parametrs.find ("Modeling rocketAltitude").value()));
     ui->lineEdit_countSightAngles->setText(QString::number(parametrs.find ("Modeling countSightAngles").value()));
