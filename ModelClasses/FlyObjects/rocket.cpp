@@ -5,13 +5,14 @@
 #define isDoubleEqualToZero(x) ( fabs(x) < 0.1e-5)
 
 Rocket::Rocket(double x, double y, double z, double V, double n_xv,
-               double n_yv, double teta, double psi, double gamma, LA *target, double Ky, double Kz, double max_distance_to_target,
+               double n_yv, double teta, double psi, double gamma, LA *target, double Ky, double Kz, double max_distance_to_target, double maxAngle,
                const char *name)
       :x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta/180*M_PI),psi(psi/180*M_PI),gamma(gamma/180*M_PI),
        target(target),
        Ky(Ky),Kz(Kz),
        n_y_max(20),
-       max_distance_to_target(max_distance_to_target)
+       max_distance_to_target(max_distance_to_target),
+       max_angleLineOfSight(maxAngle)
 {
     setObjectName(name);
 
@@ -125,9 +126,8 @@ void Rocket::CheckTargetGetReached()
         distance_to_target = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[1],2) + pow(TargetCoor[2],2));
     }else{
         qDebug() << Q_FUNC_INFO << "distance to target = " << distance_to_target;
-        emit targetGetReached();
+        emit targetGetReached(0);
     }
-
 }
 
 void Rocket::CalculatingDragForce()
@@ -149,9 +149,9 @@ void Rocket::CalculatingDragForce()
 
     double Cd_body_wave = (1.59+1.83/pow(M,2))*pow( (tan(0.5*Ln/d)),-1.89);
 
-    double Cd = Cd_body + Cd_base + Cd_base_powered + Cd_body_wave;
+    double Cx0 = Cd_body + Cd_base + Cd_base_powered + Cd_body_wave;
 
-    double drag_force = 0.5*Cd*p*0.026*V*V;
+    double drag_force = 0.5*Cx0*p*0.026*V*V;
     double drag_acceleration = drag_force/175;
     n_xv -= drag_acceleration/_g;
 }
@@ -160,14 +160,22 @@ void Rocket::CheckMaxAngle()
 {
     QList<double> Vvec({V*sin(M_PI_2-teta.getValue())*cos(psi.getValue()),
             V*cos(M_PI_2-teta.getValue()),
-            V*sin(M_PI_2-teta.getValue())*sin(psi.getValue())});
-//    double angle = qAcos( (Vvec[0]*TargetCoor[0]+Vvec[1]*TargetCoor[1]+Vvec[2]*TargetCoor[2])/
-//            (sqrt(pow(Vvec[0],2)+pow(Vvec[1],2)+pow(Vvec[2],2))*sqrt(pow(TargetCoor[0],2)+pow(TargetCoor[1],2)+pow(TargetCoor[2],2))));
-//  qDebug() << Q_FUNC_INFO << angle/M_PI*180;
+            -V*sin(M_PI_2-teta.getValue())*sin(psi.getValue())});
+
+    QList<double> TargetCoor =     QList<double> ({ target->getX()-x,
+                                                    target->getY()-y,
+                                                    target->getZ()-z});
+
+    angleOfSight = qAcos( (Vvec[0]*TargetCoor[0]+Vvec[1]*TargetCoor[1]+Vvec[2]*TargetCoor[2])/
+            (sqrt(pow(Vvec[0],2)+pow(Vvec[1],2)+pow(Vvec[2],2))*sqrt(pow(TargetCoor[0],2)+pow(TargetCoor[1],2)+pow(TargetCoor[2],2))));
+
+    if (angleOfSight > (max_angleLineOfSight+5)/180*M_PI){
+        targetGetReached(2);
+    }
 }
 
 void Rocket::update(double dt)
-{      
+{
     GravityCompensation();
 
     CalculatingDragForce();
@@ -183,7 +191,6 @@ void Rocket::update(double dt)
 
     n_pitch = n_yv*cos(gamma.getValue());
     n_roll = -n_yv*sin(gamma.getValue());
-    //qDebug() << Q_FUNC_INFO << "n_yv = " << n_yv << " n_pitch =" << n_pitch << " n_roll = " << n_roll;
 
     EquationsOfMotion(dt);
 

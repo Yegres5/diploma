@@ -16,22 +16,23 @@ private:
     LA* target;
     Rocket* missile;
     double tCSV;
+    int outputCode;
+
 
 public:
     simulator(QMap<QString, QVariant>* iniParam);
 
-    double current_t,n_y_max,dt;
+    double current_t,n_y_max, dt, minDistanceToTarget, Vend, MaxAngleOfSight;
     QList<double> n_y_sum, n_y, n_z;
     QMap<QString, QList<double>> graphs;
     bool loopOn;
-
-
+    int getOutputCode(){ return outputCode; }
 
 public slots:
     void startSimulate(double Ky, double Kz);
     void targetReached();
     void update();
-    void swap();
+    void swap(int code);
 
 signals:
     void sendCoordinates(QMap<QString, QVariant>* coord);

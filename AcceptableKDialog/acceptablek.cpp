@@ -37,6 +37,13 @@ AcceptableK::AcceptableK(QMap<QString, QVariant>* iniParam, QWidget* parent, Qt:
 
     connect(simulationModel, SIGNAL(sendData(QMap<QString,double>*, QMap<QString,QList<double>>*)),
             frame, SLOT(pasteData(QMap<QString,double>*, QMap<QString,QList<double>>*)));
+
+    int numKz(int(((*iniParam->find("Modeling Kz_1")).toDouble()- (*iniParam->find("Modeling Kz_0")).toDouble())/(*iniParam->find("Modeling dKz")).toDouble()) + 1);
+    int numKy(int(((*iniParam->find("Modeling Ky_1")).toDouble()- (*iniParam->find("Modeling Ky_0")).toDouble())/(*iniParam->find("Modeling dKy")).toDouble()) + 1);
+
+    int numberOfStrat((*iniParam->find("Modeling countSightAngles")).toInt() * (*iniParam->find("Modeling countSpeedAngles")).toInt());
+
+    frame->setMaxPercent(numKy*numKz*numberOfStrat);
 }
 
 AcceptableK::~AcceptableK()

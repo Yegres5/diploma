@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>488</width>
-    <height>215</height>
+    <width>631</width>
+    <height>231</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <italic>false</italic>
+    <underline>false</underline>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Frame</string>
@@ -21,6 +27,14 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>13</pointsize>
+       <italic>false</italic>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
      </property>
      <property name="title">
       <string>Rocket</string>
@@ -42,6 +56,11 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
           <property name="text">
            <string>X</string>
           </property>
@@ -58,6 +77,11 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
          </widget>
         </item>
        </layout>
@@ -71,6 +95,11 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
           </property>
           <property name="text">
            <string>Mesurement distance</string>
@@ -88,6 +117,11 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
          </widget>
         </item>
        </layout>
@@ -101,6 +135,11 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
           </property>
           <property name="text">
            <string>teta</string>
@@ -118,6 +157,11 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
          </widget>
         </item>
        </layout>
@@ -131,6 +175,11 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
           </property>
           <property name="text">
            <string>V</string>
@@ -148,6 +197,11 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
          </widget>
         </item>
        </layout>
@@ -161,6 +215,11 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
           </property>
           <property name="text">
            <string>Z</string>
@@ -178,6 +237,11 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
          </widget>
         </item>
        </layout>
@@ -191,6 +255,11 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
           </property>
           <property name="text">
            <string>Y</string>
@@ -208,6 +277,11 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
          </widget>
         </item>
        </layout>
@@ -221,6 +295,11 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
           </property>
           <property name="text">
            <string>Distance to explode</string>
@@ -237,6 +316,11 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
           </property>
          </widget>
         </item>

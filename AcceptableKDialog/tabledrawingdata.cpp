@@ -1,8 +1,9 @@
 #include "tabledrawingdata.h"
 
-tabledrawingdata::tabledrawingdata(double time, double n_y_max):
+tabledrawingdata::tabledrawingdata(double time, double n_y_max, QString errorMessage):
     timeText("T = " + QString::number(time)),
-    n_y_maxText("n_y_max = " + QString::number(n_y_max))
+    n_y_maxText("n_y_max = " + QString::number(n_y_max)),
+    errorMessage(errorMessage)
 {
 }
 
@@ -11,7 +12,11 @@ void tabledrawingdata::paint(QPainter *painter, const QRect &rect, const QPalett
     painter->save();
     painter->setPen(Qt::black);
     QString text;
-    text = timeText + "\n" + n_y_maxText;
+    if (errorMessage == ""){
+        text = timeText + "\n" + n_y_maxText;
+    }else{
+        text = errorMessage;
+    }
     painter->drawText(rect, Qt::AlignCenter ,text);
     painter->restore();
 }

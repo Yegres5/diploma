@@ -6,44 +6,35 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>766</width>
-    <height>363</height>
+    <width>838</width>
+    <height>433</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Frame</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="1">
-    <widget class="QPushButton" name="button_start2dModeling">
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="button_draw_ny">
+     <property name="font">
+      <font>
+       <pointsize>18</pointsize>
+      </font>
      </property>
      <property name="text">
-      <string>2D modeling</string>
+      <string>n_y(t) graph</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="0" rowspan="7">
-    <widget class="QTableWidget" name="table_results">
-     <property name="minimumSize">
-      <size>
-       <width>200</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="selectionMode">
-      <enum>QAbstractItemView::ExtendedSelection</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
+   <item row="0" column="2">
     <layout class="QHBoxLayout" name="modeling3dLayout">
      <item>
       <widget class="QPushButton" name="button_start3dModeling">
+       <property name="font">
+        <font>
+         <pointsize>18</pointsize>
+        </font>
+       </property>
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
        </property>
@@ -69,6 +60,11 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
           <property name="text">
            <string>Modeling Time</string>
           </property>
@@ -89,8 +85,31 @@
      </item>
     </layout>
    </item>
-   <item row="7" column="1">
+   <item row="7" column="0">
+    <widget class="QPushButton" name="button_optimal_plan">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>18</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Find optimal plan</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2">
     <widget class="QPushButton" name="button_startSimulate">
+     <property name="font">
+      <font>
+       <pointsize>18</pointsize>
+      </font>
+     </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
      </property>
@@ -99,35 +118,41 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
-    <spacer name="verticalSpacer">
+   <item row="7" column="1">
+    <spacer name="horizontalSpacer">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>40</height>
+       <width>40</width>
+       <height>20</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="2" column="1">
-    <widget class="QPushButton" name="button_draw_ny">
-     <property name="text">
-      <string>n_y(t) graph</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
+   <item row="2" column="2">
     <widget class="QPushButton" name="button_draw_nz">
+     <property name="font">
+      <font>
+       <pointsize>18</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>n_z(t) graph</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="3" column="2">
     <widget class="QPushButton" name="button_draw_ny_sum">
+     <property name="font">
+      <font>
+       <pointsize>18</pointsize>
+      </font>
+     </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
      </property>
@@ -136,10 +161,54 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
-    <widget class="QPushButton" name="button_optimal_plan">
-     <property name="text">
-      <string>Find optimal plan</string>
+   <item row="0" column="0" rowspan="6" colspan="2">
+    <widget class="QTableWidget" name="table_results">
+     <property name="minimumSize">
+      <size>
+       <width>200</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::ExtendedSelection</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QTableWidget" name="table_modeling_results">
+     <property name="font">
+      <font>
+       <family>.SF NS Text</family>
+       <pointsize>18</pointsize>
+      </font>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="showGrid">
+      <bool>true</bool>
+     </property>
+     <property name="cornerButtonEnabled">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QProgressBar" name="progressBar">
+     <property name="maximum">
+      <number>1000</number>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="invertedAppearance">
+      <bool>false</bool>
+     </property>
+     <property name="format">
+      <string>%p%</string>
      </property>
     </widget>
    </item>

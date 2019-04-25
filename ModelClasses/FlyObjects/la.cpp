@@ -11,8 +11,9 @@ LA::LA()
 {}
 
 LA::LA(double x, double y, double z, double V, double n_xv,
-       double n_yv, double teta, double psi, double gamma, double n_manouver, double n_t0, double n_dt, double deltaAngle, const char *name):
-        x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta),psi(psi),gamma(gamma/180*M_PI),n_manouver(n_manouver),n_t0(n_t0),n_dt(n_dt),t(0),deltaAngle(deltaAngle)
+       double n_yv, double teta, double psi, double gamma, double n_manouver, double tManouver, double deltaAngle, const char *name):
+        x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta),psi(psi),gamma(gamma/180*M_PI),
+        n_manouver(n_manouver),tManouver(tManouver),t(0),deltaAngle(deltaAngle)
 {
     setObjectName(name);
 }
@@ -62,11 +63,15 @@ void LA::update(double dt)
     n_yv += 0;
     double n_roll = 0;
     t += dt;
-    if (abs(psi.getValue() - deltaAngle) > 10./180.*M_PI){
-        n_roll = n_manouver;
-    }else{
-        n_roll = 0;
+
+    if (t > tManouver){
+        if ((abs(psi.getValue() - deltaAngle) > 10./180.*M_PI)){
+            n_roll = n_manouver;
+        }else{
+            n_roll = 0;
+        }
     }
+
 
     gamma += isDoubleEqualToZero(n_roll) ? 0 : atan(n_roll/n_yv);
     n_yv = sqrt(pow(n_yv,2)+pow(n_roll,2));

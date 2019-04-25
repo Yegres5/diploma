@@ -26,7 +26,8 @@ Model::Model(QMap<QString, QVariant> *iniParam, QObject *parent):
                       "Rock v",
                       "Rock teta",
                       "Rock explode_dist",
-                      "Modeling dt"});
+                      "Modeling dt",
+                      "Modeling sightMaxValue"});
 
     for (auto& it : str){
         if(params->contains(it)){
@@ -107,9 +108,13 @@ void Model::StartModeling()
                 tempMap.insert("Simulator t",sim->current_t);
                 tempMap.insert("Simulator dt",sim->dt);
                 tempMap.insert("Simulator n_y_max",sim->n_y_max);
+                tempMap.insert("Error message", sim->getOutputCode());
+                tempMap.insert("V_end", sim->Vend);
+                tempMap.insert("Min distance to target", sim->minDistanceToTarget);
+                tempMap.insert("Max overload", sim->n_y_max);
+                tempMap.insert("Max angle of sight", sim->MaxAngleOfSight);
 
                 QMap<QString, QList<double>>* graphMap(new QMap<QString, QList<double>>(sim->graphs));
-
 
                 emit sendData(new QMap<QString,double>(tempMap), graphMap);
                 delete sim;

@@ -19,6 +19,7 @@ public:
     ~ResultFrame();
 
     Ui::ResultFrame *ui;
+    void setMaxPercent(int percent);
 
 signals:
     void startSimulation();
@@ -35,6 +36,8 @@ private slots:
     void drawNy_sum();
     void draw3Dtrajectory();
     void findOptimalPlan();
+
+    void on_table_results_cellClicked(int row, int column);
 
 private:
     void drawGraphForKey(QString key);

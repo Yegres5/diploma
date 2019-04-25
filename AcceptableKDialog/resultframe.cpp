@@ -12,6 +12,7 @@
 #include <QtCharts>
 #include <QList>
 #include <algorithm>
+#include <limits>
 
 #include "tabledrawingdata.h"
 #include "headeritem.h"
@@ -19,6 +20,7 @@
 
 #define Role_Map Qt::UserRole
 #define Role_graph Qt::UserRole+1
+#define Role_error Qt::UserRole+2
 
 ResultFrame::ResultFrame(QWidget *parent) :
     QFrame(parent),
@@ -39,6 +41,21 @@ ResultFrame::ResultFrame(QWidget *parent) :
     connect(ui->button_start3dModeling,SIGNAL(clicked()),
             this, SLOT(draw3Dtrajectory()));
 
+    ui->table_modeling_results->setColumnCount(1);
+
+    ui->table_modeling_results->setHorizontalHeaderLabels(QStringList({tr("Parameter"), tr("Value")}));
+    ui->table_modeling_results->setRowCount(4);
+    ui->table_modeling_results->setVerticalHeaderLabels(QStringList({tr("V_end"), tr("Min distance to target"), tr("Max overload"), tr("Max angle on sight")}));
+
+    for (int i(0); i < ui->table_modeling_results->rowCount(); i++) {
+        for (int j(0); j < ui->table_modeling_results->columnCount(); j++){
+            ui->table_modeling_results->setItem(i,j,new QTableWidgetItem());
+        }
+    }
+
+    ui->table_modeling_results->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->table_modeling_results->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
     tableDelegate* delegate = new tableDelegate(ui->table_results);
     ui->table_results->setItemDelegate(delegate);
     ui->table_results->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -52,9 +69,15 @@ ResultFrame::~ResultFrame()
     delete ui;
 }
 
+void ResultFrame::setMaxPercent(int percent)
+{
+    ui->progressBar->setMaximum(percent);
+}
+
 void ResultFrame::pasteData(QMap<QString, double>* modelingParametrs, QMap<QString,QList<double>>* graphs)
 {
     int headerNum(-1),rowNum(-1);
+    ui->progressBar->setValue(ui->progressBar->value() + 1);
 
     //finding K
     for(int i = 0; i < ui->table_results->model()->columnCount(); i++)
@@ -71,6 +94,7 @@ void ResultFrame::pasteData(QMap<QString, double>* modelingParametrs, QMap<QStri
 
     //if K not found
     if (headerNum == -1){
+
         ui->table_results->setColumnCount(ui->table_results->model()->columnCount()+1);
         headerNum = ui->table_results->model()->columnCount()-1;
 
@@ -106,6 +130,7 @@ void ResultFrame::pasteData(QMap<QString, double>* modelingParametrs, QMap<QStri
 
     //if (delta lambda) not found
     if (rowNum == -1){
+
         ui->table_results->setRowCount(ui->table_results->model()->rowCount()+1);
         rowNum = ui->table_results->model()->rowCount()-1;
 
@@ -126,17 +151,41 @@ void ResultFrame::pasteData(QMap<QString, double>* modelingParametrs, QMap<QStri
 
     //paste element in cell
     QTableWidgetItem* item = new QTableWidgetItem;
-    item->setData(Qt::DisplayRole, QVariant::fromValue(tabledrawingdata(*modelingParametrs->find("Simulator t"),
-                                                                        *modelingParametrs->find("Simulator n_y_max"))));
+
     QMap<QString, double> dataMap;
     dataMap.insert("ky", *modelingParametrs->find("Rock Ky"));
     dataMap.insert("kz", *modelingParametrs->find("Rock Kz"));
     dataMap.insert("t", *modelingParametrs->find("Simulator t"));
     dataMap.insert("dt", *modelingParametrs->find("Simulator dt"));
     dataMap.insert("n_y_max", *modelingParametrs->find("Simulator n_y_max"));
-    item->setData(Role_Map, QVariant::fromValue(dataMap));
+
+    dataMap.insert("V_end", *modelingParametrs->find("V_end"));
+    dataMap.insert("Min distance to target", *modelingParametrs->find("Min distance to target"));
+    dataMap.insert("Max overload", *modelingParametrs->find("Max overload"));
+    dataMap.insert("Max angle of sight", *modelingParametrs->find("Max angle of sight"));
+
+
 
     item->setData(Role_graph, QVariant::fromValue(*graphs));
+
+
+    QString errorMessage;
+    switch (int(*modelingParametrs->find("Error message"))) {
+        case 0:
+            break;
+        case 1:
+            errorMessage = tr("Out of time");
+        break;
+        case 2:
+            errorMessage = tr("Out of angle");
+        break;
+    }
+    item->setData(Qt::DisplayRole, QVariant::fromValue(tabledrawingdata(*modelingParametrs->find("Simulator t"),
+                                                                        *modelingParametrs->find("Simulator n_y_max"),
+                                                                        errorMessage)));
+    dataMap.insert("Error message", *modelingParametrs->find("Error message"));
+    item->setData(Role_Map, QVariant::fromValue(dataMap));
+
 
     ui->table_results->setItem(rowNum, headerNum, item);
     ui->table_results->verticalHeader()->setMinimumSectionSize(50);
@@ -211,7 +260,11 @@ void ResultFrame::findOptimalPlan()
         QVector<double> timeLine;
         for(int j = 0; j < ui->table_results->model()->columnCount(); j++){
             QMap<QString,double> data = qvariant_cast<QMap<QString,double>>(ui->table_results->item(i,j)->data(Role_Map));
-            timeLine.push_back(*data.find("t"));
+            if ((*data.find("Error message") < 1e-7)){
+                timeLine.push_back(*data.find("t"));
+            }else{
+                timeLine.push_back(std::numeric_limits<double>::max());
+            }
             qDebug();
         }
         timeVec.push_back(timeLine);
@@ -227,15 +280,18 @@ void ResultFrame::findOptimalPlan()
     }
 
     int numberK(0);
-    double MinValue = MAXFLOAT;
+    double MinValue = std::numeric_limits<double>::max();
     for (int i(0); i < MaxVec.size(); i++) {
         if (MaxVec[i] < MinValue){
             numberK = i;
             MinValue = MaxVec[i];
         }
     }
+
     QList<double> kList(ui->table_results->model()->headerData(numberK, Qt::Horizontal,Qt::UserRole).value<QList<double>>());
-    qDebug() << "Ky = " << kList.first() << " Kz = " << kList.last() << " time = " << MinValue;
+    QMessageBox msgBox;
+    msgBox.setText(tr("Ky = ") + QString::number(kList.first()) + tr(" Kz = ") + QString::number(kList.last()) + tr(" Time = ") + QString::number(MinValue));
+    msgBox.exec();
 }
 
 void ResultFrame::drawGraphForKey(QString key)
@@ -313,8 +369,16 @@ void ResultFrame::drawGraphForKey(QString key)
     QVBoxLayout* layout = new QVBoxLayout(dia);
     dia->setLayout(layout);
     layout->addWidget(v);
-
     dia->exec();
 }
 
+void ResultFrame::on_table_results_cellClicked(int row, int column)
+{
+    QTableWidgetItem* item = ui->table_results->item(row,column);
+    QMap<QString,double> map = qvariant_cast<QMap<QString,double>>(item->data(Role_Map));
 
+    ui->table_modeling_results->item(0,0)->setText(QString::number(*map.find("V_end")));
+    ui->table_modeling_results->item(1,0)->setText(QString::number(*map.find("Min distance to target")));
+    ui->table_modeling_results->item(2,0)->setText(QString::number(*map.find("Max overload")));
+    ui->table_modeling_results->item(3,0)->setText(QString::number(*map.find("Max angle of sight")/M_PI*180));
+}
