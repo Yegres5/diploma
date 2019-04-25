@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1225</width>
-    <height>198</height>
+    <width>1107</width>
+    <height>186</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,7 +44,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
           <property name="text">
@@ -65,7 +65,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
          </widget>
@@ -84,7 +84,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
           <property name="text">
@@ -105,7 +105,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
          </widget>
@@ -124,7 +124,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
           <property name="text">
@@ -145,7 +145,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
          </widget>
@@ -164,7 +164,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
           <property name="text">
@@ -185,7 +185,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
          </widget>
@@ -204,7 +204,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
           <property name="text">
@@ -225,7 +225,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
          </widget>
@@ -244,7 +244,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
           <property name="text">
@@ -265,7 +265,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
          </widget>
@@ -284,7 +284,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
           <property name="text">
@@ -305,7 +305,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
          </widget>
@@ -324,7 +324,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
           <property name="text">
@@ -345,7 +345,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
          </widget>
@@ -364,7 +364,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
           <property name="text">
@@ -385,7 +385,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
          </widget>
@@ -404,7 +404,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
           <property name="text">
@@ -425,7 +425,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
          </widget>
@@ -444,7 +444,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
           <property name="text">
@@ -465,7 +465,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
          </widget>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>303</width>
-    <height>77</height>
+    <width>391</width>
+    <height>116</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,6 +22,11 @@
      <height>16</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
    <property name="text">
     <string>TextLabel</string>
    </property>
@@ -34,6 +39,11 @@
      <width>59</width>
      <height>16</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>TextLabel</string>
