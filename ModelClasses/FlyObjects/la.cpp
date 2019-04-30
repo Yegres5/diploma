@@ -13,7 +13,7 @@ LA::LA()
 LA::LA(double x, double y, double z, double V, double n_xv,
        double n_yv, double teta, double psi, double gamma, double n_manouver, double tManouver, double deltaAngle, const char *name):
         x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta),psi(psi),gamma(gamma/180*M_PI),
-        n_manouver(n_manouver),tManouver(tManouver),t(0),deltaAngle(deltaAngle)
+        n_manouver(n_manouver),tManouver(tManouver),t(0),deltaAngle(deltaAngle),startSnake(false),manouver_flag(false),angleForSnake(50),n_roll(0),increasedAngleForShake(false)
 {
     setObjectName(name);
 }
@@ -59,19 +59,17 @@ void LA::update(double dt)
             }
         }
     }
-
-    n_yv += 0;
-    double n_roll = 0;
     t += dt;
 
-    if (t > tManouver){
-        if ((abs(psi.getValue() - deltaAngle) > 10./180.*M_PI)){
-            n_roll = n_manouver;
-        }else{
-            n_roll = 0;
+    if ((t > tManouver) && (!startSnake)){
+        startSnake = makeManouverToAngle(deltaAngle);
+    }
+    if (startSnake){
+        manouver_flag = makeManouverToAngle(deltaAngle + angleForSnake/180*M_PI);
+        if (manouver_flag){
+            angleForSnake = -angleForSnake;
         }
     }
-
 
     gamma += isDoubleEqualToZero(n_roll) ? 0 : atan(n_roll/n_yv);
     n_yv = sqrt(pow(n_yv,2)+pow(n_roll,2));
@@ -83,3 +81,30 @@ void LA::update(double dt)
     y += V*sin(teta.getValue())*dt;
     z += -V*cos(teta.getValue())*sin(psi.getValue())*dt;
 }
+
+bool LA::makeManouverToAngle(double angle)
+{
+    double tempAngle = psi.getValue() - angle;
+
+    while (tempAngle > M_PI){
+        tempAngle -= 2*M_PI;
+    }
+
+    while (tempAngle < -M_PI){
+        tempAngle += 2*M_PI;
+    }
+
+    if (abs(tempAngle) > 5./180*M_PI){
+        if (tempAngle > 0){
+            n_roll = n_manouver;
+        }else{
+            n_roll = -n_manouver;  
+        }
+        return false;
+    }else{
+        n_roll = 0;
+        return true;
+    }
+}
+
+

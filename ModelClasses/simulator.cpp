@@ -58,13 +58,13 @@ void simulator::startSimulate(double Ky, double Kz)
     }
     targetReached();
 
+
 }
 #include <QDebug>
 void simulator::targetReached()
 {
     n_y_max = *std::max_element(n_y_sum.begin(), n_y_sum.end());
     Vend = missile->getV();
-    qDebug() << Q_FUNC_INFO << " V_end = " << missile->getV();
 
     graphs.insert("Ny_sum", n_y_sum);
     graphs.insert("N_y", n_y);
@@ -83,8 +83,25 @@ void simulator::swap(int code)
 
 void simulator::update()
 {
+    qDebug() << Q_FUNC_INFO << current_t;
     target->update(dt);
     missile->update(dt);
+
+    tCSV += dt;
+    if (fmod(tCSV, 0.1) < 1e-7){
+        QList<double> targetCoor    {target->getX(),    target->getY(),     target->getZ()};
+        QList<double> LACoor        {missile->getX(),   missile->getY(),    missile->getZ()};
+        QMap<QString, QVariant>* csvData = new QMap<QString,QVariant>;
+        csvData->insert("Target", QVariant::fromValue(targetCoor));
+        csvData->insert("LA", QVariant::fromValue(LACoor));
+        emit sendCoordinates(csvData);
+        tCSV = 0;
+    }
+
+    if (missile->getDistanceToTarget() < 11){
+        swap(0);
+    }
+
     n_y_sum.push_back(std::abs(missile->getNy()));
     n_y.push_back(missile->getN_pitch());
     n_z.push_back(missile->getN_roll());
@@ -99,16 +116,7 @@ void simulator::update()
         MaxAngleOfSight = missile->getAngleOfSight();
     }
 
-    tCSV += dt;
-    if (fmod(tCSV, 0.1) < 1e-7){
-        QList<double> targetCoor    {target->getX(),    target->getY(),     target->getZ()};
-        QList<double> LACoor        {missile->getX(),   missile->getY(),    missile->getZ()};
-        QMap<QString, QVariant>* csvData = new QMap<QString,QVariant>;
-        csvData->insert("Target", QVariant::fromValue(targetCoor));
-        csvData->insert("LA", QVariant::fromValue(LACoor));
-        emit sendCoordinates(csvData);
-        tCSV = 0;
-    }
+
     if (current_t > 200){
         swap(1);
     }

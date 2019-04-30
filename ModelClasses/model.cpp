@@ -27,7 +27,8 @@ Model::Model(QMap<QString, QVariant> *iniParam, QObject *parent):
                       "Rock teta",
                       "Rock explode_dist",
                       "Modeling dt",
-                      "Modeling sightMaxValue"});
+                      "Modeling sightMaxValue",
+                      "Modeling MaxModelingAngle"});
 
     for (auto& it : str){
         if(params->contains(it)){
@@ -50,8 +51,8 @@ void Model::StartModeling()
     QList<pairOfAngles> possibleAngleValues;
 
     for (double delta(0);
-         delta <= ((*params->find("Modeling sightMaxValue")).toDouble());
-         delta += ((*params->find("Modeling sightMaxValue")).toDouble())/
+         delta <= ((*params->find("Modeling MaxModelingAngle")).toDouble());
+         delta += ((*params->find("Modeling MaxModelingAngle")).toDouble())/
          ((*params->find("Modeling countSightAngles")).toDouble() - 1))
     {
         QList<double> lambdas;
@@ -159,9 +160,11 @@ void Model::StartModelingFor(QList<double> K, QList<double> angles, double dt)
             this, SLOT(writeCoordToCSV(QMap<QString, QVariant>*)));
 
     qDebug() <<Q_FUNC_INFO <<  "K = " << K << "N_y = " << angles;
+    qDebug() << Q_FUNC_INFO << "simulate start";
     emit startSimulate(K.first(),K.last());
 
     delete sim;
+    qDebug() << Q_FUNC_INFO << "simulate deleted";
 }
 
 void Model::writeCoordToCSV(QMap<QString, QVariant>* coord)

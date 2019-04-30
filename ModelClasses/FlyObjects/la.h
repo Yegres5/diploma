@@ -14,10 +14,15 @@ protected:
     double x,y,z;
     double V;
     double n_xv,n_yv;
+    double n_roll;
     Angle teta,psi,gamma;
     double n_manouver,tManouver;    //Manouver overload, manouver initial time.
     double t;                       //Current time(for manouver).
     double deltaAngle;
+    bool startSnake;
+    bool manouver_flag;
+    double angleForSnake;
+    bool increasedAngleForShake;
 
 public:
     LA(double x,double y,double z,double V,double n_xv,
@@ -40,6 +45,9 @@ public:
 
 public slots:
    virtual void update(double dt);
+
+private:
+    bool makeManouverToAngle(double angle);
 
 };
 

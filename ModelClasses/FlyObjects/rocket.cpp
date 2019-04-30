@@ -125,7 +125,6 @@ void Rocket::CheckTargetGetReached()
     if (distance_to_target > max_distance_to_target){
         distance_to_target = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[1],2) + pow(TargetCoor[2],2));
     }else{
-        qDebug() << Q_FUNC_INFO << "distance to target = " << distance_to_target;
         emit targetGetReached(0);
     }
 }
@@ -151,6 +150,7 @@ void Rocket::CalculatingDragForce()
 
     double Cx0 = Cd_body + Cd_base + Cd_base_powered + Cd_body_wave;
 
+
     double drag_force = 0.5*Cx0*p*0.026*V*V;
     double drag_acceleration = drag_force/175;
     n_xv -= drag_acceleration/_g;
@@ -169,7 +169,7 @@ void Rocket::CheckMaxAngle()
     angleOfSight = qAcos( (Vvec[0]*TargetCoor[0]+Vvec[1]*TargetCoor[1]+Vvec[2]*TargetCoor[2])/
             (sqrt(pow(Vvec[0],2)+pow(Vvec[1],2)+pow(Vvec[2],2))*sqrt(pow(TargetCoor[0],2)+pow(TargetCoor[1],2)+pow(TargetCoor[2],2))));
 
-    if (angleOfSight > (max_angleLineOfSight+5)/180*M_PI){
+    if (angleOfSight > (max_angleLineOfSight)/180*M_PI){
         targetGetReached(2);
     }
 }
@@ -178,8 +178,6 @@ void Rocket::update(double dt)
 {
     GravityCompensation();
 
-    CalculatingDragForce();
-
     CalculateTargetPosition();
     CalculateTargetSpeed();
 
@@ -187,6 +185,8 @@ void Rocket::update(double dt)
     CalculateNzPN();
     SummarizeAllOverload();
     CheckMaxNy();
+    CalculatingDragForce();
+
     CheckMaxAngle();
 
     n_pitch = n_yv*cos(gamma.getValue());

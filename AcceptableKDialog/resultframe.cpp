@@ -265,7 +265,6 @@ void ResultFrame::findOptimalPlan()
             }else{
                 timeLine.push_back(std::numeric_limits<double>::max());
             }
-            qDebug();
         }
         timeVec.push_back(timeLine);
     }
