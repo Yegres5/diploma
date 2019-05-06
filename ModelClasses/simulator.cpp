@@ -57,9 +57,8 @@ void simulator::startSimulate(double Ky, double Kz)
         update();
     }
     targetReached();
-
-
 }
+
 #include <QDebug>
 void simulator::targetReached()
 {
@@ -83,7 +82,6 @@ void simulator::swap(int code)
 
 void simulator::update()
 {
-    qDebug() << Q_FUNC_INFO << current_t;
     target->update(dt);
     missile->update(dt);
 
@@ -107,7 +105,6 @@ void simulator::update()
     n_z.push_back(missile->getN_roll());
     current_t+=dt;
 
-    //MaxAngleOfSight
     if (missile->getDistanceToTarget() < minDistanceToTarget){
         minDistanceToTarget = missile->getDistanceToTarget();
     }
@@ -115,7 +112,6 @@ void simulator::update()
     if (MaxAngleOfSight < missile->getAngleOfSight()){
         MaxAngleOfSight = missile->getAngleOfSight();
     }
-
 
     if (current_t > 200){
         swap(1);
