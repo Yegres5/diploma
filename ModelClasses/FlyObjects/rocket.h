@@ -3,6 +3,7 @@
 
 #include "la.h"
 #include <QVector>
+#include <QtMath>
 
 class Rocket: public QObject
 {
@@ -10,7 +11,8 @@ class Rocket: public QObject
   Q_OBJECT
 public:
     Rocket(double x, double y, double z, double V, double n_xv,
-           double n_yv, double teta, double psi, double gamma, LA* target, double Ky, double Kz, double max_distance_to_target, double maxAngle,
+           double n_yv, double teta, double psi, double gamma, LA* target, double Ky, double Kz, double max_distance_to_target, double maxAngle, double startHight,
+           double l, double d, double Ae, double Sm, double Ln,
            const char* name = "Rocket");
 
     double getNy()      { return n_yv; }
@@ -40,6 +42,18 @@ private:
     double n_roll;                  //Lateral overload.
     double angleOfSight, max_angleLineOfSight;
 
+    double startHight;
+    double l;
+    double d;
+    double Ae;
+    double Sm;
+    double Ln;
+
+    double p();    //Density on hight
+    double Mc();   //Mach number on hight
+
+    double q(){ return 0.5*p()*pow(V,2); } //Dynamic pressure
+    double M(){ return V/Mc(); }   //Current Mach
 
     QVector<double> TargetSpeed;
 

@@ -4,15 +4,36 @@
 
 #define isDoubleEqualToZero(x) ( fabs(x) < 0.1e-5)
 
+static QVector<QVector<double>> standartAtmosphere = {  {3000,  328.6, 0.9093},
+                                                        {4000,  324.6, 0.8194},
+                                                        {5000,  320.6, 0.7365},
+                                                        {6000,  316.5, 0.6601},
+                                                        {7000,  312.3, 0.59},
+                                                        {8000,  308.1, 0.5258},
+                                                        {9000,  303.9, 0.4671},
+                                                        {10000, 299.6, 0.4135},
+                                                        {11000, 295.2, 0.3648},
+                                                        {12000, 295.1, 0.3119},
+                                                        {14000, 295.1, 0.2279},
+                                                        {16000, 295.1, 0.1665},
+                                                        {18000, 295.1, 0.1216},
+                                                        {20000, 295.1, 0.1216},
+                                                        {24000, 297.7, 0.0889},
+                                                        {28000, 300.4, 0.0469},
+                                                     };
+
 Rocket::Rocket(double x, double y, double z, double V, double n_xv,
-               double n_yv, double teta, double psi, double gamma, LA *target, double Ky, double Kz, double max_distance_to_target, double maxAngle,
+               double n_yv, double teta, double psi, double gamma, LA *target, double Ky, double Kz, double max_distance_to_target, double maxAngle, double startHight,
+               double l, double d, double Ae, double Sm, double Ln,
                const char *name)
       :x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta/180*M_PI),psi(psi/180*M_PI),gamma(gamma/180*M_PI),
        target(target),
        Ky(Ky),Kz(Kz),
        n_y_max(20),
        max_distance_to_target(max_distance_to_target),
-       max_angleLineOfSight(maxAngle)
+       max_angleLineOfSight(maxAngle),
+       startHight(startHight),
+       l(l),d(d),Ae(Ae),Sm(Sm),Ln(Ln)
 {
     setObjectName(name);
 
@@ -23,6 +44,32 @@ Rocket::Rocket(double x, double y, double z, double V, double n_xv,
     r = sqrt(pow(TargetCoor[0],2)+pow(TargetCoor[2],2));
     r_XY = sqrt(pow(TargetCoor[0],2)+pow(TargetCoor[1],2));
     distance_to_target = sqrt(pow(TargetCoor[0],2) + pow(TargetCoor[1],2) + pow(TargetCoor[2],2));
+}
+
+double Rocket::p()
+{
+    double p = 0;
+    for(auto& i : standartAtmosphere){
+        if (i.first() <= y + startHight){
+            p = i.at(2);
+        }else{
+            return p;
+        }
+    }
+    return 0;
+}
+
+double Rocket::Mc()
+{
+    double p = 0;
+    for(auto& i : standartAtmosphere){
+        if (i.first() < y + startHight){
+            p = i.at(1);
+        }else{
+            return p;
+        }
+    }
+    return 0;
 }
 
 void Rocket::GravityCompensation()
@@ -131,27 +178,17 @@ void Rocket::CheckTargetGetReached()
 
 void Rocket::CalculatingDragForce()
 {
-    double l = 3.6;
-    double d = 0.2;
-    double p = 0.4135;
-    double q = 0.5*p*pow(V,2);
-    double M = V/320;
-    double Ae = 0.0314;
-    double Sm = 0.0314;
-    double Ln = 0.476;
+    double Cd_body = 0.054*(l/d)*pow( M()/(q()*l), 0.2);
 
-    double Cd_body = 0.054*(l/d)*pow( M/(q*l), 0.2);
+    double Cd_base = 0.25/M();
 
-    double Cd_base = 0.25/M;
+    double Cd_base_powered = (1-Ae/Sm)*(0.25/M());
 
-    double Cd_base_powered = (1-Ae/Sm)*(0.25/M);
-
-    double Cd_body_wave = (1.59+1.83/pow(M,2))*pow( (tan(0.5*Ln/d)),-1.89);
+    double Cd_body_wave = (1.59+1.83/pow(M(),2))*pow( (tan(0.5*Ln/d)),-1.89);
 
     double Cx0 = Cd_body + Cd_base + Cd_base_powered + Cd_body_wave;
 
-
-    double drag_force = 0.5*Cx0*p*0.026*V*V;
+    double drag_force = Cx0*0.026*q();
     double drag_acceleration = drag_force/175;
     n_xv -= drag_acceleration/_g;
 }

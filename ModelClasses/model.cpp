@@ -28,7 +28,8 @@ Model::Model(QMap<QString, QVariant> *iniParam, QObject *parent):
                       "Rock explode_dist",
                       "Modeling dt",
                       "Modeling sightMaxValue",
-                      "Modeling MaxModelingAngle"});
+                      "Modeling MaxModelingAngle",
+                      "Modeling rocketAltitude"});
 
     for (auto& it : str){
         if(params->contains(it)){

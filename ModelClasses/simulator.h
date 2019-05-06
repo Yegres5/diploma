@@ -18,7 +18,6 @@ private:
     double tCSV;
     int outputCode;
 
-
 public:
     simulator(QMap<QString, QVariant>* iniParam);
 

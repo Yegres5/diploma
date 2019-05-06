@@ -20,6 +20,7 @@ simulator::simulator(QMap<QString, QVariant> *iniParam):
 #include <QDebug>
 void simulator::startSimulate(double Ky, double Kz)
 {
+
     current_t = 0;
     target = new LA(params->find("LA x").value().toDouble(),
                     params->find("LA y").value().toDouble(),
@@ -46,7 +47,13 @@ void simulator::startSimulate(double Ky, double Kz)
                          target,
                          Ky,Kz,
                          params->find("Rock explode_dist").value().toDouble(),
-                         params->find("Modeling sightMaxValue").value().toDouble());
+                         params->find("Modeling sightMaxValue").value().toDouble(),
+                         params->find("Modeling rocketAltitude").value().toDouble(),
+                         3.6,
+                         0.2,
+                         0.0314,
+                         0.0314,
+                         0.476);
 
     connect(missile,SIGNAL(targetGetReached(int)),
             this, SLOT(swap(int)));
