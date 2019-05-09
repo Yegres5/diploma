@@ -31,6 +31,7 @@ private:
 
     QAction* m_saveSettingsAction;
     QAction* m_loadSettingsAction;
+    QMap<QString, QVariant> rocketMapFromDB;
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);

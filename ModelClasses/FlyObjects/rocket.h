@@ -10,8 +10,7 @@ class Rocket: public QObject
 
   Q_OBJECT
 public:
-    Rocket(double x, double y, double z, double V, double n_xv,
-           double n_yv, double teta, double psi, double gamma, LA* target, double Ky, double Kz, double max_distance_to_target, double maxAngle, double startHight,
+    Rocket(double x, double y, double z, double V, double teta, double psi, LA* target, double Ky, double Kz, double max_distance_to_target, double maxAngle, double startHight,
            double l, double d, double Ae, double Sm, double Ln,
            const char* name = "Rocket");
 

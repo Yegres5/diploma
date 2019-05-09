@@ -12,9 +12,9 @@ LA::LA()
 
 LA::LA(double x, double y, double z, double V, double n_xv,
        double n_yv, double teta, double psi, double gamma, double n_manouver, double tManouver, double deltaAngle, const char *name):
-        x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta),psi(psi),gamma(gamma/180*M_PI),
-        n_manouver(n_manouver),tManouver(tManouver),t(0),deltaAngle(deltaAngle),startSnake(false),manouver_flag(false),angleForSnake(50),n_roll(0),increasedAngleForShake(false)
-{
+        x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),n_roll(0),teta(teta),psi(psi),gamma(gamma/180*M_PI),
+        n_manouver(n_manouver),tManouver(tManouver),t(0),deltaAngle(deltaAngle),startSnake(false),manouver_flag(false),angleForSnake(50),increasedAngleForShake(false)
+{    
     setObjectName(name);
 }
 

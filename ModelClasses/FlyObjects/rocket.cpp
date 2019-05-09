@@ -22,11 +22,10 @@ static QVector<QVector<double>> standartAtmosphere = {  {3000,  328.6, 0.9093},
                                                         {28000, 300.4, 0.0469},
                                                      };
 
-Rocket::Rocket(double x, double y, double z, double V, double n_xv,
-               double n_yv, double teta, double psi, double gamma, LA *target, double Ky, double Kz, double max_distance_to_target, double maxAngle, double startHight,
+Rocket::Rocket(double x, double y, double z, double V, double teta, double psi, LA *target, double Ky, double Kz, double max_distance_to_target, double maxAngle, double startHight,
                double l, double d, double Ae, double Sm, double Ln,
                const char *name)
-      :x(x),y(y),z(z),V(V),n_xv(n_xv),n_yv(n_yv),teta(teta/180*M_PI),psi(psi/180*M_PI),gamma(gamma/180*M_PI),
+      :x(x),y(y),z(z),V(V),n_xv(0),n_yv(0),teta(teta/180*M_PI),psi(psi/180*M_PI),gamma(0),
        target(target),
        Ky(Ky),Kz(Kz),
        n_y_max(20),

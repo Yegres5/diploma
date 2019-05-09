@@ -65,6 +65,12 @@ void MainWindow::load_settings()
 
 void MainWindow::start_modeling(QMap<QString, QVariant>* parametrs)
 {
+    //TODO: BD
+    parametrs->insert("Rock x",0);
+    parametrs->insert("Rock y",0);
+    parametrs->insert("Rock z",0);
+
+
     AcceptableK* window = new AcceptableK(parametrs, this, Qt::Window);
     window->show();
 

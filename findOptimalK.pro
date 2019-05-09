@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui charts
+QT       += core gui charts sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -36,7 +36,8 @@ FORMS += \
     mainwindow/modelingframeparameters.ui \
     mainwindow/rocketinitialframe.ui \
     AcceptableKDialog/resultframe.ui \
-    AcceptableKDialog/headeritem.ui
+    AcceptableKDialog/headeritem.ui \
+    DataBase/dbrocketform.ui
 
 HEADERS += \
     AcceptableKDialog/acceptablek.h \
@@ -53,7 +54,10 @@ HEADERS += \
     ModelClasses/FlyObjects/UsefulClassesForLA/angle.h \
     AcceptableKDialog/headeritem.h \
     AcceptableKDialog/tabledelegate.h \
-    AcceptableKDialog/tabledrawingdata.h
+    AcceptableKDialog/tabledrawingdata.h \
+    DataBase/databaseparser.h \
+    DataBase/dbrocketform.h \
+    DataBase/customgraphicsview.h
 
 SOURCES += \
     AcceptableKDialog/acceptablek.cpp \
@@ -71,10 +75,14 @@ SOURCES += \
     ModelClasses/FlyObjects/UsefulClassesForLA/angle.cpp \
     AcceptableKDialog/headeritem.cpp \
     AcceptableKDialog/tabledelegate.cpp \
-    AcceptableKDialog/tabledrawingdata.cpp
+    AcceptableKDialog/tabledrawingdata.cpp \
+    DataBase/databaseparser.cpp \
+    DataBase/dbrocketform.cpp \
+    DataBase/customgraphicsview.cpp
 
 RESOURCES += \
-    pythonpathfile.qrc
+    pythonpathfile.qrc \
+    rocketsres.qrc
 
 
 

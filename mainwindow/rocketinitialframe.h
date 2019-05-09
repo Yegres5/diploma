@@ -19,6 +19,8 @@ public:
 
     QMap<QString, double> getInitialParametrs();
     void loadInitialParametrs(QMap<QString, double> parametrs);
+private slots:
+    void on_pushButton_clicked();
 };
 
 #endif // ROCKETINITIALFRAME_H
