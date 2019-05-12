@@ -31,6 +31,7 @@ private:
 
     QAction* m_saveSettingsAction;
     QAction* m_loadSettingsAction;
+    QAction* m_dbConnectionAction;
     QMap<QString, QVariant> rocketMapFromDB;
 
 public:
@@ -40,7 +41,9 @@ public:
 private slots:
     void save_settings();
     void load_settings();
+    void call_dbConnection();
     void start_modeling(QMap<QString, QVariant>* parametrs);
+
 };
 
 #endif // MAINWINDOW_H

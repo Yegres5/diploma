@@ -230,7 +230,7 @@ void ResultFrame::draw3Dtrajectory()
         QTableWidgetItem* item = items.takeFirst();
         const QList<double> k = ui->table_results->horizontalHeaderItem(item->column())->data(Qt::UserRole).value<QList<double>>();
         const QList<double> angles(ui->table_results->verticalHeaderItem(item->row())->data(Qt::UserRole).value<QList<double>>());
-        emit startSimulationFor(k,angles,ui->Edit_modelingTime->text().toDouble());
+        emit startSimulationFor(k,angles);
         break;
         }
     default:{

@@ -106,7 +106,7 @@
     </spacer>
    </item>
    <item row="0" column="1" rowspan="2">
-    <widget class="QGraphicsView" name="graphicsView_Image">
+    <widget class="customGraphicsView" name="graphicsView_Image">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -123,6 +123,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>customGraphicsView</class>
+   <extends>QGraphicsView</extends>
+   <header>customgraphicsview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

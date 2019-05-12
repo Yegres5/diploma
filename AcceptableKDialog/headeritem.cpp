@@ -6,7 +6,6 @@ headerItem::headerItem(QWidget *parent) :
     ui(new Ui::headerItem)
 {
     ui->setupUi(this);
-
 }
 
 headerItem::~headerItem()

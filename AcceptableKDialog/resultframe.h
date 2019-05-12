@@ -23,7 +23,7 @@ public:
 
 signals:
     void startSimulation();
-    void startSimulationFor(QList<double> K, QList<double> angles, double dt);
+    void startSimulationFor(QList<double> K, QList<double> angles);
     void hideDialog();
     void showDialog();
 

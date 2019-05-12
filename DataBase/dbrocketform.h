@@ -16,7 +16,7 @@ class DBRocketForm : public QFrame
     Q_OBJECT
 
 public:
-    explicit DBRocketForm(QWidget *parent = nullptr);
+    DBRocketForm(QList<QVariant>* dbData = nullptr, QWidget *parent = nullptr);
     ~DBRocketForm() override;
 
 protected:
@@ -25,14 +25,16 @@ protected:
 
 private slots:
     void on_listWidget_Rockets_itemPressed(QListWidgetItem *item);
-
     void on_button_Change_Selected_clicked();
-
-    void on_graphicsView_Image_customContextMenuRequested(const QPoint &pos);
+    void on_button_Delete_Selected_clicked();
+    void on_button_Create_New_clicked();
 
 private:
     Ui::DBRocketForm *ui;
-    dataBaseParser DB_Parser;
+    dataBaseParser* DB_Parser;
+
+signals:
+    void sendRocketData(QMap<QString, double>* data);
 };
 
 #endif // DBROCKETFORM_H

@@ -6,8 +6,18 @@
 
 class customGraphicsView : public QGraphicsView
 {
+    Q_OBJECT
 public:
-    customGraphicsView();
+    customGraphicsView(QWidget* parent = nullptr);
+    QByteArray imageFullSize;
+
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
+
+private slots:
+    void showPathChoose();
+
 };
 
 #endif // CUSTOMGRAPHICSVIEW_H

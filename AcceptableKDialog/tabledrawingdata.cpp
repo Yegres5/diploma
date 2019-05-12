@@ -1,8 +1,10 @@
 #include "tabledrawingdata.h"
 
+#include <QObject>
+
 tabledrawingdata::tabledrawingdata(double time, double n_y_max, QString errorMessage):
-    timeText("T = " + QString::number(time)),
-    n_y_maxText("n_y_max = " + QString::number(n_y_max)),
+    timeText(QObject::tr("T = ") + QString::number(time)),
+    n_y_maxText(QObject::tr("n_y_max = ") + QString::number(n_y_max)),
     errorMessage(errorMessage)
 {
 }

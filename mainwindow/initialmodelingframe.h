@@ -30,9 +30,11 @@ public:
 
 public slots:
     void StartModeling();
+    void turnOnModelingButton();
 
 signals:
     void startModelingPressed(QMap<QString, QVariant>* paramentr);
+    void moveToRocketDBParameters(QList<QVariant>* data);
 
 };
 

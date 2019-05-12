@@ -24,12 +24,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
-TRANSLATIONS = languages
+TRANSLATIONS = ru_RU.ts
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+INCLUDEPATH += DataBase
 
 FORMS += \
     mainwindow/lainitialframe.ui \
@@ -37,7 +39,8 @@ FORMS += \
     mainwindow/rocketinitialframe.ui \
     AcceptableKDialog/resultframe.ui \
     AcceptableKDialog/headeritem.ui \
-    DataBase/dbrocketform.ui
+    DataBase/dbrocketform.ui \
+    DataBase/dbconnector.ui
 
 HEADERS += \
     AcceptableKDialog/acceptablek.h \
@@ -57,7 +60,8 @@ HEADERS += \
     AcceptableKDialog/tabledrawingdata.h \
     DataBase/databaseparser.h \
     DataBase/dbrocketform.h \
-    DataBase/customgraphicsview.h
+    DataBase/customgraphicsview.h \
+    DataBase/dbconnector.h
 
 SOURCES += \
     AcceptableKDialog/acceptablek.cpp \
@@ -78,7 +82,8 @@ SOURCES += \
     AcceptableKDialog/tabledrawingdata.cpp \
     DataBase/databaseparser.cpp \
     DataBase/dbrocketform.cpp \
-    DataBase/customgraphicsview.cpp
+    DataBase/customgraphicsview.cpp \
+    DataBase/dbconnector.cpp
 
 RESOURCES += \
     pythonpathfile.qrc \

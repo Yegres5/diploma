@@ -29,7 +29,13 @@ Model::Model(QMap<QString, QVariant> *iniParam, QObject *parent):
                       "Modeling dt",
                       "Modeling sightMaxValue",
                       "Modeling MaxModelingAngle",
-                      "Modeling rocketAltitude"});
+                      "Modeling rocketAltitude",
+                      "Rock Length",
+                      "Rock Diameter",
+                      "Rock Ae",
+                      "Rock Sm",
+                      "Rock Ln",
+                      "Rock NyMax"});
 
     for (auto& it : str){
         if(params->contains(it)){
@@ -52,8 +58,8 @@ void Model::StartModeling()
     QList<pairOfAngles> possibleAngleValues;
 
     for (double delta(0);
-         delta <= ((*params->find("Modeling MaxModelingAngle")).toDouble());
-         delta += ((*params->find("Modeling MaxModelingAngle")).toDouble())/
+         delta <= ((*params->find("Modeling sightMaxValue")).toDouble());
+         delta += ((*params->find("Modeling sightMaxValue")).toDouble())/
          ((*params->find("Modeling countSightAngles")).toDouble() - 1))
     {
         QList<double> lambdas;
@@ -126,16 +132,12 @@ void Model::StartModeling()
 }
 
 
-void Model::StartModelingFor(QList<double> K, QList<double> angles, double dt)
+void Model::StartModelingFor(QList<double> K, QList<double> angles)
 {
     qDebug() << Q_FUNC_INFO;
     clearCSVFiles();
 
     QMap<QString,QVariant> tempMap(staticParams);
-
-    if (dt > 1e-7){
-        tempMap["Modeling dt"] = dt;
-    }
 
     QMap<QString,double> dynamicData;
     double a = sqrt(pow((*params->find("Rock MeshD")).toDouble(), 2) - pow((*params->find("LA dH")).toDouble(), 2));

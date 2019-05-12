@@ -30,10 +30,16 @@ InitialModelingFrame::InitialModelingFrame(QWidget *parent):
     field_layout->addWidget(m_modelFrame,1,0,1,2);
 
     m_StartModelingButton = new QPushButton("StartModeling",this);
+    m_StartModelingButton->setEnabled(false);
     field_layout->addWidget(m_StartModelingButton,2,0,1,2);
 
     connect(m_StartModelingButton, SIGNAL(clicked()),
             this, SLOT(StartModeling()));
+    connect(m_rocketFrame, SIGNAL(setModelingButtonOn()),
+            this, SLOT(turnOnModelingButton()));
+
+    connect(this, SIGNAL(moveToRocketDBParameters(QList<QVariant>*)),
+            m_rocketFrame, SLOT(setDBParameters(QList<QVariant>*)));
 }
 
 QMap<QString, QVariant> InitialModelingFrame::getInitialParametrs() // all parametrs from frame
@@ -81,4 +87,9 @@ void InitialModelingFrame::StartModeling()
 {
     QMap<QString, QVariant>* map = new QMap<QString, QVariant>(getInitialParametrs());
     emit startModelingPressed(map);
+}
+
+void InitialModelingFrame::turnOnModelingButton()
+{
+    m_StartModelingButton->setEnabled(true);
 }

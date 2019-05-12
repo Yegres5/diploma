@@ -11,14 +11,17 @@ class dataBaseParser : public QObject
 {
     Q_OBJECT
 public:
-    explicit dataBaseParser(QString dbDriver = "QMYSQL", QString dbHostName = "127.0.0.1", int dbPort = 3306,
+    dataBaseParser(QString dbDriver = "QMYSQL", QString dbHostName = "127.0.0.1", int dbPort = 3306,
                             QString dbUserName = "root", QString password = "root", QObject *parent = nullptr);
 
+    dataBaseParser(QList<QVariant>* data, QObject *parent = nullptr);
 
-    bool pushNewRocket(QMap<QString, QVariant> parameters);
+
+    int pushNewRocket(QMap<QString, QVariant> parameters);
     bool deleteRow(int row);
     bool changeRocket(QMap<QString, QVariant> parameters, int row);
     QList<QList<QVariant>> parseCloumns(QStringList columnName, int id = -1);
+    bool checkConnect();
 
 private:
     QSqlDatabase db;

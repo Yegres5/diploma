@@ -17,7 +17,7 @@ public:
     Model(QMap<QString, QVariant>* iniParam, QObject *parent = nullptr);
 public slots:
     void StartModeling();
-    void StartModelingFor(QList<double> K, QList<double> angles, double dt);
+    void StartModelingFor(QList<double> K, QList<double> angles);
     void writeCoordToCSV(QMap<QString,  QVariant>* coord);
     void clearCSVFiles();
 signals:

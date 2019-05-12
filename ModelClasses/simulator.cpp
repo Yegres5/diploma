@@ -44,13 +44,14 @@ void simulator::startSimulate(double Ky, double Kz)
                          target,
                          Ky,Kz,
                          params->find("Rock explode_dist").value().toDouble(),
-                         params->find("Modeling sightMaxValue").value().toDouble(),
+                         params->find("Modeling MaxModelingAngle").value().toDouble(),
                          params->find("Modeling rocketAltitude").value().toDouble(),
-                         3.6,
-                         0.2,
-                         0.0314,
-                         0.0314,
-                         0.476);
+                         params->find("Rock Length").value().toDouble(),
+                         params->find("Rock Diameter").value().toDouble(),
+                         params->find("Rock Ae")->toDouble(),
+                         params->find("Rock Sm").value().toDouble(),
+                         params->find("Rock Ln").value().toDouble(),
+                         params->find("Rock NyMax").value().toDouble());
 
     connect(missile,SIGNAL(targetGetReached(int)),
             this, SLOT(swap(int)));

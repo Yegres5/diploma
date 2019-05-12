@@ -14,6 +14,19 @@ dataBaseParser::dataBaseParser(QString dbDriver, QString dbHostName, int dbPort,
     ChangeDBName("programmDB");
 }
 
+dataBaseParser::dataBaseParser(QList<QVariant> *data, QObject *parent) : QObject (parent),
+    db(QSqlDatabase::addDatabase(data->first().toString()))
+{
+    if (data != nullptr){
+        QList<QVariant>::iterator it = data->begin();
+        db.setHostName((it + 1)->toString());
+        db.setPort((it + 2)->toInt());
+        db.setUserName((it + 3)->toString());
+        db.setPassword((it + 4)->toString());
+        ChangeDBName("programmDB");
+    }
+}
+
 void dataBaseParser::ChangeDBName(QString name)
 {
     db.setDatabaseName(name);
@@ -54,9 +67,22 @@ QList<QList<QVariant> > dataBaseParser::parseCloumns(QStringList columnName, int
               msgBox.setText(query.lastError().text());
               msgBox.exec();
           }
-          db.close();
     }
+    db.close();
     return list;
+}
+
+bool dataBaseParser::checkConnect()
+{
+    if (!db.open()){
+        QMessageBox msgBox;
+        msgBox.setText(db.lastError().text());
+        msgBox.exec();
+        db.close();
+        return false;
+    }else{
+        return true;
+    }
 }
 
 bool dataBaseParser::deleteRow(int row)
@@ -69,9 +95,11 @@ bool dataBaseParser::deleteRow(int row)
             QMessageBox msgBox;
             msgBox.setText(query.lastError().text());
             msgBox.exec();
+            db.close();
             return false;
         }
     }
+    db.close();
     return true;
 }
 
@@ -99,13 +127,15 @@ bool dataBaseParser::changeRocket(QMap<QString, QVariant> parameters, int row)
             QMessageBox msgBox;
             msgBox.setText(query.lastError().text());
             msgBox.exec();
+            db.close();
             return false;
         }
     }
+    db.close();
     return true;
 }
 
-bool dataBaseParser::pushNewRocket(QMap<QString, QVariant> parameters)
+int dataBaseParser::pushNewRocket(QMap<QString, QVariant> parameters)
 {
     if (db.open()){
         QSqlQuery query(db);
@@ -128,10 +158,26 @@ bool dataBaseParser::pushNewRocket(QMap<QString, QVariant> parameters)
             QMessageBox msgBox;
             msgBox.setText(query.lastError().text());
             msgBox.exec();
-            return false;
+            db.close();
+            return -1;
+        }
+
+        query.prepare("SELECT ID FROM programmDB.Rockets WHERE NAME = :name");
+        query.bindValue(":name",parameters.find("name")->toString());
+
+        if(!query.exec()){
+            db.close();
+            QMessageBox msgBox;
+            msgBox.setText(query.lastError().text());
+            msgBox.exec();
+            db.close();
+            return -1;
+        }else{
+            query.next();
+            db.close();
+            return query.value(0).toInt();
         }
     }
-    return true;
+    db.close();
+    return 0;
 }
-
-//SELECT * FROM programmDB.Rockets WHERE ID = 3;
