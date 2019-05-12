@@ -186,8 +186,17 @@
        <property name="layoutDirection">
         <enum>Qt::LeftToRight</enum>
        </property>
+       <property name="inputMask">
+        <string/>
+       </property>
        <property name="text">
-        <string>127.0.0.1</string>
+        <string>192.168.0.10</string>
+       </property>
+       <property name="maxLength">
+        <number>32767</number>
+       </property>
+       <property name="placeholderText">
+        <string/>
        </property>
       </widget>
      </item>

@@ -19,7 +19,7 @@ dataBaseParser::dataBaseParser(QList<QVariant> *data, QObject *parent) : QObject
 {
     if (data != nullptr){
         QList<QVariant>::iterator it = data->begin();
-        db.setHostName((it + 1)->toString());
+        db.setHostName( ((it + 1)->toString() != "") ? (it + 1)->toString() : (it + 1)->toString());
         db.setPort((it + 2)->toInt());
         db.setUserName((it + 3)->toString());
         db.setPassword((it + 4)->toString());
@@ -141,7 +141,6 @@ int dataBaseParser::pushNewRocket(QMap<QString, QVariant> parameters)
         QSqlQuery query(db);
         query.prepare("INSERT INTO `programmDB`.`Rockets` (`NAME`, `IMAGE`, `Length`, `Diameter`, `Ae`, `Sm`, `Ln`, `Nymax`, `ExplodeDistance`, `MaxAngle`) "
                       "VALUES (:name, :image, :length, :diameter, :ae, :sm, :ln, :nymax, :explodeDist, :maxAngle)");
-
         query.bindValue(":name", parameters.find("name")->toString());
         query.bindValue(":image", parameters.find("image")->toByteArray());
         query.bindValue(":length", parameters.find("length")->toString());
@@ -161,7 +160,6 @@ int dataBaseParser::pushNewRocket(QMap<QString, QVariant> parameters)
             db.close();
             return -1;
         }
-
         query.prepare("SELECT ID FROM programmDB.Rockets WHERE NAME = :name");
         query.bindValue(":name",parameters.find("name")->toString());
 

@@ -194,6 +194,8 @@
  <tabstops>
   <tabstop>LineEdit_V</tabstop>
   <tabstop>LineEdit_teta</tabstop>
+  <tabstop>LineEdit_MeshD</tabstop>
+  <tabstop>pushButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>

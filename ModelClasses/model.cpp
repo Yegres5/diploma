@@ -54,7 +54,6 @@ struct pairOfAngles{
 
 void Model::StartModeling()
 {
-    //QMap<double, QList<double>> possibleLambda;    // delta, QList<double> lambda
     QList<pairOfAngles> possibleAngleValues;
 
     for (double delta(0);
@@ -91,7 +90,6 @@ void Model::StartModeling()
                 dynamicData.insert("Rocket ky", Ky);
                 dynamicData.insert("Rocket kz", Kz);
                 dynamicData.insert("LA needed angle", 2*M_PI-angles.delta);
-                qDebug() << Q_FUNC_INFO << "LOOP " << Ky << "___" << Kz;
 
                 QMap<QString, QVariant> data(staticParams);
 
@@ -134,7 +132,6 @@ void Model::StartModeling()
 
 void Model::StartModelingFor(QList<double> K, QList<double> angles)
 {
-    qDebug() << Q_FUNC_INFO;
     clearCSVFiles();
 
     QMap<QString,QVariant> tempMap(staticParams);
@@ -161,13 +158,8 @@ void Model::StartModelingFor(QList<double> K, QList<double> angles)
 
     connect(sim, SIGNAL(sendCoordinates(QMap<QString,  QVariant>*)),
             this, SLOT(writeCoordToCSV(QMap<QString, QVariant>*)));
-
-    qDebug() <<Q_FUNC_INFO <<  "K = " << K << "N_y = " << angles;
-    qDebug() << Q_FUNC_INFO << "simulate start";
     emit startSimulate(K.first(),K.last());
-
     delete sim;
-    qDebug() << Q_FUNC_INFO << "simulate deleted";
 }
 
 void Model::writeCoordToCSV(QMap<QString, QVariant>* coord)

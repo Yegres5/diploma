@@ -87,6 +87,4 @@ void MainWindow::start_modeling(QMap<QString, QVariant>* parametrs)
     parametrs->insert("Rock z",0);
     AcceptableK* window = new AcceptableK(parametrs, this, Qt::Window);
     window->show();
-    window->
-
 }

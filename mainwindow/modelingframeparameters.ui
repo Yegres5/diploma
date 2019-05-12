@@ -510,13 +510,16 @@
  </widget>
  <tabstops>
   <tabstop>lineEdit_dt</tabstop>
-  <tabstop>lineEdit_sightMaxValue</tabstop>
-  <tabstop>lineEdit_countSightAngles</tabstop>
-  <tabstop>lineEdit_countSpeedAngles</tabstop>
   <tabstop>lineEdit_rocketAltitude</tabstop>
   <tabstop>lineEdit_Ky_0</tabstop>
   <tabstop>lineEdit_Ky_1</tabstop>
   <tabstop>lineEdit_dKy</tabstop>
+  <tabstop>lineEdit_Kz_0</tabstop>
+  <tabstop>lineEdit_Kz_1</tabstop>
+  <tabstop>lineEdit_dKz</tabstop>
+  <tabstop>lineEdit_sightMaxValue</tabstop>
+  <tabstop>lineEdit_countSpeedAngles</tabstop>
+  <tabstop>lineEdit_countSightAngles</tabstop>
  </tabstops>
  <resources/>
  <connections/>

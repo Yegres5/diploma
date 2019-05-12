@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>688</width>
+    <width>838</width>
     <height>356</height>
    </rect>
   </property>
@@ -16,10 +16,16 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="2">
     <widget class="QPushButton" name="button_draw_ny">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="font">
       <font>
        <pointsize>16</pointsize>
       </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
      </property>
      <property name="text">
       <string>n_y(t) graph</string>
@@ -38,6 +44,9 @@
       <font>
        <pointsize>16</pointsize>
       </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
      </property>
      <property name="text">
       <string>Find optimal plan</string>
@@ -106,6 +115,9 @@
        <pointsize>18</pointsize>
       </font>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -153,6 +165,9 @@
       <font>
        <pointsize>16</pointsize>
       </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
      </property>
      <property name="text">
       <string>n_z(t) graph</string>
