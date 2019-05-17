@@ -47,6 +47,8 @@ DBRocketForm::DBRocketForm(QList<QVariant> *dbData, QWidget *parent) :
 
     ui->graphicsView_Image->fitInView(ui->graphicsView_Image->scene()->sceneRect(), Qt::KeepAspectRatio);
 
+    ui->graphicsView_Image->setStyleSheet("background: transparent; border-width: 0px; border-style: solid");
+
     ui->tableWidget_Parameters->setRowCount(9);
     ui->tableWidget_Parameters->setColumnCount(1);
     ui->tableWidget_Parameters->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("Parameters")));
@@ -106,17 +108,22 @@ void DBRocketForm::on_listWidget_Rockets_itemPressed(QListWidgetItem *item)
 
     QGraphicsPixmapItem* PixItem = new QGraphicsPixmapItem((QPixmap::fromImage(vec.at(2).value<QImage>())));
 
+    QBuffer buffer(&ui->graphicsView_Image->imageFullSize);
+    buffer.open(QIODevice::WriteOnly);
+    vec.at(2).value<QImage>().save(&buffer, "PNG");
+    buffer.close();
+
     QGraphicsScene* scene = new QGraphicsScene;
     ui->graphicsView_Image->setScene( scene );
     scene->addItem( PixItem );
     PixItem->setPos(0,0);
     ui->graphicsView_Image->show();
 
-    if (!vec.at(2).isNull()){
-        ui->graphicsView_Image->imageFullSize = vec.at(2).toByteArray();
-        ui->graphicsView_Image->scene()->removeItem(ui->graphicsView_Image->scene()->items().first());
-        ui->graphicsView_Image->scene()->addItem(PixItem);
-    }
+//    if (!vec.at(2).isNull()){
+//        ui->graphicsView_Image->imageFullSize = vec.at(2).toByteArray();
+//        ui->graphicsView_Image->scene()->removeItem(ui->graphicsView_Image->scene()->items().first());
+//        ui->graphicsView_Image->scene()->addItem(PixItem);
+//    }
 
     vec.removeAt(2);
     vec.removeAt(0);
