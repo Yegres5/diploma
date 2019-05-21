@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>338</width>
-    <height>186</height>
+    <height>152</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,127 +44,7 @@
       <bool>false</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="3" column="0">
-       <layout class="QHBoxLayout" name="Layout_n_pitch_max">
-        <item>
-         <widget class="QLabel" name="label_n_pitch_max">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>16</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>n pitch max</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="LineEdit_n_pitch_max">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>16</pointsize>
-           </font>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="0">
-       <layout class="QHBoxLayout" name="Layout_V">
-        <item>
-         <widget class="QLabel" name="label_V">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>16</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>V</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="LineEdit_V">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>16</pointsize>
-           </font>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="0">
-       <layout class="QHBoxLayout" name="Layout_dH">
-        <item>
-         <widget class="QLabel" name="label_dH">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>16</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>dH</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="LineEdit_dH">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>16</pointsize>
-           </font>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="4" column="0">
+      <item row="2" column="0" colspan="2">
        <layout class="QHBoxLayout" name="Layout_t_manouver_delay">
         <item>
          <widget class="QLabel" name="label_t_manouver_delay">
@@ -206,13 +86,92 @@
         </item>
        </layout>
       </item>
+      <item row="1" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="Layout_n_pitch_max">
+        <item>
+         <widget class="QLabel" name="label_n_pitch_max">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>n pitch max</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="LineEdit_n_pitch_max">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="Layout_V">
+        <item>
+         <widget class="QLabel" name="label_V">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>V</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="LineEdit_V">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>LineEdit_dH</tabstop>
   <tabstop>LineEdit_V</tabstop>
   <tabstop>LineEdit_n_pitch_max</tabstop>
   <tabstop>LineEdit_t_manouver_delay</tabstop>

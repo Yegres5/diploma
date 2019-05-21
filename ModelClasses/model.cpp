@@ -44,6 +44,7 @@ Model::Model(QMap<QString, QVariant> *iniParam, QObject *parent):
     }
     staticParams.insert("LA teta", 0);
     staticParams.insert("Rock psi",0);
+
 }
 
 struct pairOfAngles{
@@ -82,9 +83,9 @@ void Model::StartModeling()
             for (auto& angles : possibleAngleValues) {
                 QMap<QString, QVariant> dynamicData;
 
-                double a = sqrt(pow((*params->find("Rock MeshD")).toDouble(), 2) - pow((*params->find("LA dH")).toDouble(), 2));
+                double a = sqrt(pow((*params->find("Rock MeshD")).toDouble(), 2) - pow((*params->find("Rock dH")).toDouble(), 2));
                 dynamicData.insert("LA x", a*cos(angles.delta));
-                dynamicData.insert("LA y", (*params->find("LA dH")).toDouble());
+                dynamicData.insert("LA y", (*params->find("Rock dH")).toDouble());
                 dynamicData.insert("LA z", a*sin(angles.delta));
                 dynamicData.insert("LA psi", angles.lambda);
                 dynamicData.insert("Rocket ky", Ky);
@@ -137,9 +138,9 @@ void Model::StartModelingFor(QList<double> K, QList<double> angles)
     QMap<QString,QVariant> tempMap(staticParams);
 
     QMap<QString,double> dynamicData;
-    double a = sqrt(pow((*params->find("Rock MeshD")).toDouble(), 2) - pow((*params->find("LA dH")).toDouble(), 2));
+    double a = sqrt(pow((*params->find("Rock MeshD")).toDouble(), 2) - pow((*params->find("Rock dH")).toDouble(), 2));
     dynamicData.insert("LA x", a*cos(angles.first()*M_PI/180));
-    dynamicData.insert("LA y", (*params->find("LA dH")).toDouble());
+    dynamicData.insert("LA y", (*params->find("Rock dH")).toDouble());
     dynamicData.insert("LA z", a*sin(angles.first()*M_PI/180));
     dynamicData.insert("LA psi", angles.last()/180*M_PI);
     dynamicData.insert("Rocket Ky", K.first());
