@@ -49,7 +49,7 @@ DBRocketForm::DBRocketForm(QList<QVariant> *dbData, QWidget *parent) :
 
     ui->graphicsView_Image->setStyleSheet("background: transparent; border-width: 0px; border-style: solid");
 
-    ui->tableWidget_Parameters->setRowCount(9);
+    ui->tableWidget_Parameters->setRowCount(10);
     ui->tableWidget_Parameters->setColumnCount(1);
     ui->tableWidget_Parameters->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("Parameters")));
     ui->tableWidget_Parameters->setVerticalHeaderItem(0,new QTableWidgetItem(tr("Name")));
@@ -61,8 +61,9 @@ DBRocketForm::DBRocketForm(QList<QVariant> *dbData, QWidget *parent) :
     ui->tableWidget_Parameters->setVerticalHeaderItem(6,new QTableWidgetItem(tr("NyMax")));
     ui->tableWidget_Parameters->setVerticalHeaderItem(7,new QTableWidgetItem(tr("ExplodeDistance")));
     ui->tableWidget_Parameters->setVerticalHeaderItem(8,new QTableWidgetItem(tr("MaxAngle")));
+    ui->tableWidget_Parameters->setVerticalHeaderItem(9,new QTableWidgetItem(tr("MaxTime")));
 
-    for (int i(0); i<9; i++){
+    for (int i(0); i<10; i++){
         ui->tableWidget_Parameters->setItem(i,0, new QTableWidgetItem());
     }
 
@@ -84,6 +85,7 @@ DBRocketForm::~DBRocketForm()
         data->insert("Rock NyMax", ui->tableWidget_Parameters->item(6,0)->text().toDouble());
         data->insert("Rock explode_dist", ui->tableWidget_Parameters->item(7,0)->text().toDouble());
         data->insert("Modeling MaxModelingAngle", ui->tableWidget_Parameters->item(8,0)->text().toDouble());
+        data->insert("Modeling max time", ui->tableWidget_Parameters->item(9,0)->text().toDouble());
         emit sendRocketData(data);
     }
     delete DB_Parser;
@@ -148,6 +150,7 @@ void DBRocketForm::on_button_Change_Selected_clicked()
     data.insert("nymax", ui->tableWidget_Parameters->item(6,0)->text());
     data.insert("explodeDist", ui->tableWidget_Parameters->item(7,0)->text());
     data.insert("maxAngle", ui->tableWidget_Parameters->item(8,0)->text());
+    data.insert("maxTime", ui->tableWidget_Parameters->item(9,0)->text());
     data.insert("image", ui->graphicsView_Image->imageFullSize);
     DB_Parser->changeRocket(data, ui->listWidget_Rockets->selectedItems().first()->data(Qt::UserRole).toList().first().toInt());
 }
@@ -175,6 +178,7 @@ void DBRocketForm::on_button_Create_New_clicked()
         data.insert("nymax", ui->tableWidget_Parameters->item(6,0)->text());
         data.insert("explodeDist", ui->tableWidget_Parameters->item(7,0)->text());
         data.insert("maxAngle", ui->tableWidget_Parameters->item(8,0)->text());
+        data.insert("maxTime", ui->tableWidget_Parameters->item(9,0)->text());
 
         QImage image(":/images/No_image_available.png");
 

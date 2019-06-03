@@ -108,7 +108,7 @@ bool dataBaseParser::changeRocket(QMap<QString, QVariant> parameters, int row)
     if (db.open()){
         QSqlQuery query(db);
         query.prepare("UPDATE `programmDB`.`Rockets` SET `NAME` = :name, `IMAGE` = :image, `Length` = :length, `Diameter` = :diameter, `Ae` = :ae, `Sm` = :sm, `Ln` = :ln,"
-                      " `Nymax` = :nymax, `ExplodeDistance` = :explodeDist, `MaxAngle` = :maxAngle WHERE (`ID` = :id);");
+                      " `Nymax` = :nymax, `ExplodeDistance` = :explodeDist, `MaxAngle` = :maxAngle, `MaxTime` = :maxTime WHERE (`ID` = :id);");
 
         query.bindValue(":name", parameters.find("name")->toByteArray());
         query.bindValue(":image", parameters.find("image")->toByteArray());
@@ -120,6 +120,7 @@ bool dataBaseParser::changeRocket(QMap<QString, QVariant> parameters, int row)
         query.bindValue(":nymax", parameters.find("nymax")->toString());
         query.bindValue(":explodeDist", parameters.find("explodeDist")->toString());
         query.bindValue(":maxAngle", parameters.find("maxAngle")->toString());
+        query.bindValue(":maxTime", parameters.find("maxTime")->toString());
         query.bindValue(":id", row);
 
         if(!query.exec()){
@@ -139,8 +140,8 @@ int dataBaseParser::pushNewRocket(QMap<QString, QVariant> parameters)
 {
     if (db.open()){
         QSqlQuery query(db);
-        query.prepare("INSERT INTO `programmDB`.`Rockets` (`NAME`, `IMAGE`, `Length`, `Diameter`, `Ae`, `Sm`, `Ln`, `Nymax`, `ExplodeDistance`, `MaxAngle`) "
-                      "VALUES (:name, :image, :length, :diameter, :ae, :sm, :ln, :nymax, :explodeDist, :maxAngle)");
+        query.prepare("INSERT INTO `programmDB`.`Rockets` (`NAME`, `IMAGE`, `Length`, `Diameter`, `Ae`, `Sm`, `Ln`, `Nymax`, `ExplodeDistance`, `MaxAngle`,`MaxTime`) "
+                      "VALUES (:name, :image, :length, :diameter, :ae, :sm, :ln, :nymax, :explodeDist, :maxAngle, :maxTime)");
         query.bindValue(":name", parameters.find("name")->toString());
         query.bindValue(":image", parameters.find("image")->toByteArray());
         query.bindValue(":length", parameters.find("length")->toString());
@@ -151,6 +152,7 @@ int dataBaseParser::pushNewRocket(QMap<QString, QVariant> parameters)
         query.bindValue(":nymax", parameters.find("nymax")->toString());
         query.bindValue(":explodeDist", parameters.find("explodeDist")->toString());
         query.bindValue(":maxAngle", parameters.find("maxAngle")->toString());
+        query.bindValue(":maxTime", parameters.find("maxTime")->toString());
 
         if(!query.exec()){
             db.close();

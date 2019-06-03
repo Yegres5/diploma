@@ -118,7 +118,7 @@ void simulator::update()
         MaxAngleOfSight = missile->getAngleOfSight();
     }
 
-    if (current_t > 200){
+    if (current_t > params->find("Modeling max time")->toDouble()){
         swap(1);
     }
 }

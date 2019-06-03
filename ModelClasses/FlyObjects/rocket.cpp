@@ -187,6 +187,7 @@ void Rocket::CalculatingDragForce()
 
     double Cx0 = Cd_body + Cd_base + Cd_base_powered + Cd_body_wave;
 
+    //m S
     double drag_force = Cx0*0.026*q();
     double drag_acceleration = drag_force/175;
     n_xv -= drag_acceleration/_g;

@@ -42,6 +42,7 @@ Model::Model(QMap<QString, QVariant> *iniParam, QObject *parent):
                       "Rock Ae",
                       "Rock Sm",
                       "Rock Ln",
+                      "Modeling max time",
                       "Rock NyMax"});
 
     for (auto& it : str){
