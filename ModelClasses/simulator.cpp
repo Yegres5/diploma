@@ -20,7 +20,6 @@ simulator::simulator(QMap<QString, QVariant> *iniParam):
 #include <QDebug>
 void simulator::startSimulate(double Ky, double Kz)
 {
-
     current_t = 0;
     target = new LA(params->find("LA x").value().toDouble(),
                     params->find("LA y").value().toDouble(),
@@ -33,7 +32,8 @@ void simulator::startSimulate(double Ky, double Kz)
                     0,
                     params->find("LA pitch max").value().toDouble(),
                     params->find("LA t delay").value().toDouble(),
-                    params->find("LA needed angle").value().toDouble());//deltaAngle LA needed angle
+                    params->find("LA needed angle").value().toDouble(),
+                    params->find("LA angleForSnake").value().toDouble());//deltaAngle LA needed angle
 
     missile = new Rocket(params->find ("Rock x").value().toDouble(),
                          params->find ("Rock y").value().toDouble(),

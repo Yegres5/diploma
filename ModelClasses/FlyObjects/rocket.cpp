@@ -177,7 +177,7 @@ void Rocket::CheckTargetGetReached()
 
 void Rocket::CalculatingDragForce()
 {
-    double Cd_body = 0.054*(l/d)*pow( M()/(q()*l), 0.2);
+    double Cd_body = 0.053*(l/d)*pow( M()/(q()*l), 0.2);
 
     double Cd_base = 0.25/M();
 

@@ -12,6 +12,12 @@
 
 #include "simulator.h"
 
+struct pairOfAngles{
+    double delta;
+    double lambda;
+    pairOfAngles(double delta, double lambda):delta(delta/180*M_PI),lambda(lambda/180*M_PI){}
+};
+
 Model::Model(QMap<QString, QVariant> *iniParam, QObject *parent):
     QObject(parent),
     params(iniParam)
@@ -20,6 +26,7 @@ Model::Model(QMap<QString, QVariant> *iniParam, QObject *parent):
                       "LA v",
                       "LA pitch max",
                       "LA t delay",
+                      "LA angleForSnake",
                       "Rock x",
                       "Rock y",
                       "Rock z",
@@ -44,14 +51,7 @@ Model::Model(QMap<QString, QVariant> *iniParam, QObject *parent):
     }
     staticParams.insert("LA teta", 0);
     staticParams.insert("Rock psi",0);
-
 }
-
-struct pairOfAngles{
-    double delta;
-    double lambda;
-    pairOfAngles(double delta, double lambda):delta(delta/180*M_PI),lambda(lambda/180*M_PI){}
-};
 
 void Model::StartModeling()
 {

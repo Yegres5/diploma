@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>338</width>
-    <height>152</height>
+    <height>186</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,6 +44,46 @@
       <bool>false</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="Layout_V">
+        <item>
+         <widget class="QLabel" name="label_V">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>V</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="LineEdit_V">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
       <item row="2" column="0" colspan="2">
        <layout class="QHBoxLayout" name="Layout_t_manouver_delay">
         <item>
@@ -126,10 +166,10 @@
         </item>
        </layout>
       </item>
-      <item row="0" column="0" colspan="2">
-       <layout class="QHBoxLayout" name="Layout_V">
+      <item row="3" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="Layout_snakeAngle">
         <item>
-         <widget class="QLabel" name="label_V">
+         <widget class="QLabel" name="label_t_manouver_delay_2">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -138,11 +178,12 @@
           </property>
           <property name="font">
            <font>
+            <family>.SF NS Text</family>
             <pointsize>16</pointsize>
            </font>
           </property>
           <property name="text">
-           <string>V</string>
+           <string>snake angle</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -150,7 +191,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="LineEdit_V">
+         <widget class="QLineEdit" name="LineEdit_snakeAngle">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -159,6 +200,7 @@
           </property>
           <property name="font">
            <font>
+            <family>.SF NS Text</family>
             <pointsize>16</pointsize>
            </font>
           </property>

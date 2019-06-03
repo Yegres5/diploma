@@ -29,7 +29,7 @@ InitialModelingFrame::InitialModelingFrame(QWidget *parent):
     m_modelFrame = new modelingFrameParameters(this);
     field_layout->addWidget(m_modelFrame,1,0,1,2);
 
-    m_StartModelingButton = new QPushButton("StartModeling",this);
+    m_StartModelingButton = new QPushButton(tr("StartModeling"),this);
     m_StartModelingButton->setEnabled(false);
     field_layout->addWidget(m_StartModelingButton,2,0,1,2);
 

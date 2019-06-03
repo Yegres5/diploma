@@ -27,7 +27,7 @@ protected:
 public:
     LA(double x,double y,double z,double V,double n_xv,
        double n_yv,double teta,double psi,double gamma,
-       double n_manouver, double tManouver, double deltaAngle,
+       double n_manouver, double tManouver, double deltaAngle, double angleForSnake,
        const char* name = "LA");
 
     explicit LA(QObject *parent = nullptr);
